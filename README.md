@@ -34,9 +34,3 @@ Our team communicates through Discord. Feel free to join our Discord server to e
 
 5. **Juston Portillo**
    - Role: Data Modeler
-
-## How to Contribute
-
-We welcome contributions from the community! If you're interested in contributing to WanderWorks, please follow our [contribution guidelines](CONTRIBUTING.md) to get started.
-
-Thank you for being a part of the WanderWorks journey! 🌍✈️
