@@ -4,7 +4,7 @@ Welcome to the WanderWorks project repository! This is where our team collaborat
 
 ## Project Description
 
-WanderWorks is an application that aims to revolutionize the way people experience and document their travels. Our goal is to provide users with a seamless platform that enhances their travel experiences, making it easier to capture and share memories.
+WanderWorks is a web-application that aims to revolutionize the way people plan and experience their travels. Our goal is to provide users with a seamless platform that enhances their travel experiences, making it easier to capture magical memories.
 
 ## Repository Location
 
