@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { Row, Col, Typography, Card } from 'antd';
-import { useAuth } from '../context/authContext';
  
 const Home = () => {
   const { Title, Paragraph } = Typography;
