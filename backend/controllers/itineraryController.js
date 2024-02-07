@@ -1,4 +1,3 @@
-// controllers/itineraryController.js
 import * as itineraryModel from '../models/itineraryModel.js';
 import { createItinerary as createItineraryModel } from '../models/itineraryModel.js'; 
 
@@ -6,6 +5,17 @@ import { createItinerary as createItineraryModel } from '../models/itineraryMode
 export const getAllItineraries = async (req, res) => {
   try {
     const list = await itineraryModel.getAllItineraries();
+    res.send(list);
+  } catch (error) {
+    console.error('Error fetching Itinerary data:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+export const getAllUserItineraries = async (req, res) => {
+  try {
+
+    const list = await itineraryModel.getUserItineraries(req.params.id);
     res.send(list);
   } catch (error) {
     console.error('Error fetching Itinerary data:', error);

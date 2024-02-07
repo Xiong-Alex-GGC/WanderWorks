@@ -81,7 +81,7 @@ const DemoMap = () => {
   
     return (
       <>
-        <div ref={mapRef} style={{ width: '60%', height: '20vh' }} />
+        <div ref={mapRef} style={{ width: '100%', height: '100vh' }} />
       </>
     );
   };

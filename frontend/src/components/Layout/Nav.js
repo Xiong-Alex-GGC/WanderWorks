@@ -29,12 +29,27 @@ const NavBar = () => {
         <div className="logo">WonderWorks</div>
 
 
+        {
+            userLoggedIn
+            ?
+            <>
+            <Menu.Item key="home" icon={<HomeOutlined />}>
+                <Link to="Dashboard">
+                    Home
+                </Link>
+            </Menu.Item>
+             </>
+            :
+            <>
+            <Menu.Item key="home" icon={<HomeOutlined />}>
+                <Link to="">
+                    Home
+                </Link>
+            </Menu.Item>
+            </>
+        }
       
-        <Menu.Item key="home" icon={<HomeOutlined />}>
-            <Link to="">
-                Home
-            </Link>
-        </Menu.Item>
+
 
         <Menu.Item key="explore" icon={<AppstoreOutlined />}>
             Explore

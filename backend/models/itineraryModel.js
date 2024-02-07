@@ -1,11 +1,16 @@
-// models/itineraryModel.js
-import { addDoc, collection, getDocs, updateDoc, doc, getDoc } from 'firebase/firestore';
+import { addDoc, collection, getDocs, updateDoc, doc, getDoc, query, where } from 'firebase/firestore';
 import db from '../firebaseConfig.js';
 
 const itinCollection = collection(db, 'Itinerary');
 
 export const getAllItineraries = async () => {
   const snapshot = await getDocs(itinCollection);
+  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+};
+
+export const getUserItineraries = async (userID) => {
+  const queryItin = query(itinCollection, where('userID', '==', userID));
+  const snapshot = await getDocs(queryItin);
   return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 };
 
