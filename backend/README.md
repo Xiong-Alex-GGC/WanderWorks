@@ -2,6 +2,11 @@
 npm install
 nodemon app.js
 
+if youre getting an error about script not being allowed
+open powershell and run the command below then re-run nodemon app.js:
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+
+
 console should display starting node app.js / firebase connection successful / Up & running
 
 testing API setup:
