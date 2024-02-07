@@ -1,6 +1,7 @@
 // controllers/activityController.js
 import * as activityModel from '../models/activityModel.js';
 
+//Retrieves all activities from the db and returns it
 export const getAllActivities = async (req, res) => {
   try {
     const list = await activityModel.getAllActivities();
@@ -11,6 +12,7 @@ export const getAllActivities = async (req, res) => {
   }
 };
 
+//creates a new activity
 export const createActivity = async (req, res) => {
   try {
     const data = req.body;
@@ -24,6 +26,7 @@ export const createActivity = async (req, res) => {
   }
 };
 
+//updates a new activity
 export const updateActivity = async (req, res) => {
   try {
     const id = req.body.id;
@@ -37,6 +40,7 @@ export const updateActivity = async (req, res) => {
   }
 };
 
+//retrieves an activity by its Id
 export const getActivityById = async (req, res) => {
   const id = req.params.id;
 
