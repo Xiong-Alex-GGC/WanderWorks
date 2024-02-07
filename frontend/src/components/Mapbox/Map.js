@@ -15,7 +15,7 @@ const UserMap = () => {
         <Map
             mapboxAccessToken= {mapboxToken}
             style={{
-                width: "100%",
+                width: "60%",
                 height: "30vh",
             }}
             mapStyle="mapbox://styles/mapbox/standard"

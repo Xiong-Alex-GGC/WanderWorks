@@ -1,5 +1,7 @@
 // controllers/itineraryController.js
 import * as itineraryModel from '../models/itineraryModel.js';
+import { createItinerary as createItineraryModel } from '../models/itineraryModel.js'; 
+
 
 export const getAllItineraries = async (req, res) => {
   try {
@@ -16,8 +18,11 @@ export const createItinerary = async (req, res) => {
     const data = req.body;
     console.log("Data of Itinerary ", data);
 
-    await itineraryModel.createItinerary(data);
-    res.send({ msg: "Itinerary Added" });
+    // Assuming createItineraryModel returns the ID
+    const createdItineraryID = await createItineraryModel(data);
+
+    // Send the ID as part of the response
+    res.json({ msg: "Itinerary Added", id: createdItineraryID });
   } catch (error) {
     console.error('Error creating Itinerary data:', error);
     res.status(500).json({ error: 'Internal Server Error' });

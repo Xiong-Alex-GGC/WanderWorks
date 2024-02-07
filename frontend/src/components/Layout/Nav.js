@@ -46,9 +46,19 @@ const NavBar = () => {
         {
             userLoggedIn
             ?
-            <Menu.Item >
+            <>
+                <Menu.Item >
                 <Button onClick={() => {signUserOut().then(() => {navigate("/")})}}>Sign Out</Button>
-            </Menu.Item>
+                </Menu.Item>
+
+                <Menu.Item >
+                    <Link to="NewItinerary">
+                        <Button type="primary">
+                            New Adventure
+                        </Button>
+                    </Link>
+                </Menu.Item>
+            </>
             :
             <>
 

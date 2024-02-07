@@ -10,7 +10,15 @@ export const getAllItineraries = async () => {
 };
 
 export const createItinerary = async (data) => {
-  await addDoc(itinCollection, data);
+  try {
+    const docRef = await addDoc(itinCollection, data);
+    // Fetch the ID from the document reference
+    return docRef.id;
+  } catch (error) {
+    // Handle errors
+    console.error('Error creating itinerary:', error);
+    throw error; // Rethrow the error to handle it at the calling site if needed
+  }
 };
 
 export const updateItinerary = async (id, data) => {
