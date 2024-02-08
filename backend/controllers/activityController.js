@@ -4,8 +4,8 @@ import * as activityModel from '../models/activityModel.js';
 //Retrieves all activities from the db and returns it
 export const getAllActivities = async (req, res) => {
   try {
-    const list = await activityModel.getAllActivities();
-    res.send(list);
+    const list = await activityModel.getAllActivities(); //create a list of all the activity documents in the collection
+    res.send(list); //res is essentially a return statement
   } catch (error) {
     console.error('Error fetching Activity data:', error);
     res.status(500).json({ error: 'Internal Server Error' });
