@@ -56,6 +56,7 @@ const Itinerary = () => {
             <hr />
             <h3>Activities</h3>
             <button onClick={openActivityForm}>New Activity</button>
+            //Buttons for adding travel/transportation plans and hotel reservations are needed
             <hr />
             {showActivityForm && (
               <div className="modal">

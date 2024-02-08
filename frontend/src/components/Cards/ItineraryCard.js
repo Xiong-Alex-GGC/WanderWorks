@@ -19,7 +19,7 @@ const textStyle = {
   color: '#666',
 };
 
-const ItineraryCard = ({ id, tripName, startDate, endDate }) => {
+const ItineraryCard = ({ id, tripName, startDate, endDate }) => { //renders the itinerary data
     return (
       <Link to={`/Itinerary/${id}`}>
         <div style={cardStyle}>

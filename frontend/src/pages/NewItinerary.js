@@ -19,10 +19,18 @@ const NewItinerary = () => {
     e.preventDefault();
   
     try {
+      //ensure the start date isn't before the current date
+
+      //ensure the end date isn't before the start date
+
+      //ensure required fields aren't empty
+      
       const response = await axios.post('http://localhost:4000/api/create-itinerary', {
         tripName: tripName,
+        location: location,
         startDate: startDate,
         endDate: endDate,
+        budget: budget,
         userID: currentUser.uid
       });
   
@@ -55,6 +63,15 @@ const NewItinerary = () => {
         />
         <br/>
 
+        <label>Location:</label> //attempt to rework as location name, and have the field double as a searchbar for mapbox; store address separately
+        <br />
+        <input
+          type="text"
+          value={location}
+          onChange={(e) => setTripName(e.target.value)}
+        />
+        <br/>
+
         <label>Start Date:</label>
         <DatePicker
           selected={startDate}
@@ -66,6 +83,16 @@ const NewItinerary = () => {
           selected={endDate}
           onChange={(date) => setEndDate(date)}
         />
+
+        <h3>Want to keep track of your budget for this trip? Add your ideal maximum spendings here!</h3>
+        <label>Budget (optional):</label>
+        <br />
+        <input
+          type="number"
+          value={budget}
+          onChange={(e) => setTripName(e.target.value)}
+        />
+        <br/>
 
         <button type="submit">Create Itinerary</button>
       </form>

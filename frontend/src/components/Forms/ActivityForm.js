@@ -17,7 +17,7 @@ const ActivityForm = ({ itineraryData, onClose }) => {
     event.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:4000/api/create-activity', {
+      const response = await axios.post('http://localhost:4000/api/create-activity', { //the response after sending a request to the backend
         "name": activityName,
         "date": activityDate,
         "startTime": startTime,
@@ -76,7 +76,8 @@ const ActivityForm = ({ itineraryData, onClose }) => {
       <div>
         <label>
           Tags (custom):
-          <input type="text" value={tags} onChange={(e) => setTags(e.target.value)} />
+          <input type="text" value={tags} onChange={(e) => setTags(e.target.value)} //change to process as a set of tags;
+          //user should ideally hit enter, not submitting the form, and then rendering the tag as a removable item
         </label>
       </div>
       <div>
