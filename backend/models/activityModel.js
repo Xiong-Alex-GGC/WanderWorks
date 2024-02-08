@@ -2,19 +2,19 @@
 import { addDoc, collection, getDocs, updateDoc, doc, getDoc } from 'firebase/firestore';
 import db from '../firebaseConfig.js';
 
-const activityCollection = collection(db, 'Activity');
+const activityCollection = collection(db, 'Activity'); //connecting to the database by specifying table name
 
-export const getAllActivities = async () => {
-  const snapshot = await getDocs(activityCollection);
-  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+export const getAllActivities = async () => { //get is, well, getting; post is writing to the database
+  const snapshot = await getDocs(activityCollection); //get current snapshot of the collection
+  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })); //returns the data to whatever is calling it
 };
 
 export const createActivity = async (data) => {
-  await addDoc(activityCollection, data);
+  await addDoc(activityCollection, data); //add document to the collection
 };
 
 export const updateActivity = async (id, data) => {
-  await updateDoc(doc(activityCollection, id), data);
+  await updateDoc(doc(activityCollection, id), data); //update a pre-existing document
 };
 
 export const getActivityById = async (id) => {
