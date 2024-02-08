@@ -1,7 +1,7 @@
 // controllers/activityController.js
 import * as activityModel from '../models/activityModel.js';
 
-//Retrieves all activities from the db and returns it
+//Retriseves all activities from the db and returns it
 export const getAllActivities = async (req, res) => {
   try {
     const list = await activityModel.getAllActivities(); //create a list of all the activity documents in the collection
@@ -11,6 +11,18 @@ export const getAllActivities = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+export const getItineraryActivities = async (req, res) => {
+  try {
+
+    const list = await activityModel.getAllItineraryActivities(req.params.id);
+    res.send(list);
+  } catch (error) {
+    console.error('Error fetching Itinerary data:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 
 //creates a new activity
 export const createActivity = async (req, res) => {
@@ -54,6 +66,25 @@ export const getActivityById = async (req, res) => {
     }
   } catch (error) {
     console.error('Error fetching specific Activity data:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+//deleteActivity
+export const deleteActivity = async (req, res) => {
+  const userID = req.body.userID; 
+  const activityID = req.body.activityID;
+
+  try {
+    const deletionResult = await activityModel.deleteActivity(activityID);
+
+    if (deletionResult) {
+      res.send({ msg: "Activity Deleted" });
+    } else {
+      res.status(404).json({ error: 'Activity not found' });
+    }
+  } catch (error) {
+    console.error('Error deleting Activity data:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
