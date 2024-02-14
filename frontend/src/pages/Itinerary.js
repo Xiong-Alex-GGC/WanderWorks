@@ -84,3 +84,7 @@ const Itinerary = () => {
 };
 
 export default Itinerary;
+
+
+//Notes
+//Buttons for adding travel/transportation plans and hotel reservations are needed
