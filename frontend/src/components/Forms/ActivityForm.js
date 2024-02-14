@@ -76,7 +76,7 @@ const ActivityForm = ({ itineraryData, onClose }) => {
       <div>
         <label>
           Tags (custom):
-          <input type="text" value={tags} onChange={(e) => setTags(e.target.value)} //change to process as a set of tags;
+          <input type="text" value={tags} onChange={(e) => setTags(e.target.value)} /> //change to process as a set of tags;
           //user should ideally hit enter, not submitting the form, and then rendering the tag as a removable item
         </label>
       </div>

@@ -7,23 +7,29 @@ import DatePicker from 'react-datepicker';
 
 const NewItinerary = () => {
   const [tripName, setTripName] = useState('');
+  const [location, setLocation] = useState('');
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const { currentUser } = useAuth();
   const [isCreated, setIsCreated] = useState (false);
+  const [budget, setBudget] = useState('');
   const [tripID, setTripID] = useState ("");
-
-
+  
+  const [error, setError] = useState('');
 
   const submitItinerary = async (e) => {
-    e.preventDefault();
-  
+    e.preventDefault(); //what does this do?
+    
+    //ensure the start date isn't before the current date
+    var curDate = new Date().getDate();
+    if(startDate < curDate) {
+      setError('You cannot set the start date to before today');
+      return;
+    } else if(startDate < endDate.getDate()) { //ensure the end date isn't before the start date
+      setError('The end date cannot be before the start date');
+      return;
+    }
     try {
-      //ensure the start date isn't before the current date
-
-      //ensure the end date isn't before the start date
-
-      //ensure required fields aren't empty
       
       const response = await axios.post('http://localhost:4000/api/create-itinerary', {
         tripName: tripName,
@@ -38,7 +44,9 @@ const NewItinerary = () => {
       await setTripID(response.data.id);
       await setIsCreated(true);
       console.log('API Response:', response.data);
-    
+      
+      //clear any previous errors
+      setError('');
     } catch (error) {
       // Handle errors (e.g., show an error message)
       console.error('Error posting data:', error);
@@ -54,7 +62,7 @@ const NewItinerary = () => {
       <h2>New Itinerary</h2>
 
       <form onSubmit={submitItinerary}>
-        <label>Trip Name:</label>
+        <label>Trip Name (Required):</label>
         <br />
         <input
           type="text"
@@ -63,22 +71,22 @@ const NewItinerary = () => {
         />
         <br/>
 
-        <label>Location:</label> //attempt to rework as location name, and have the field double as a searchbar for mapbox; store address separately
+        <label>Location (Required):</label>
         <br />
         <input
           type="text"
           value={location}
-          onChange={(e) => setTripName(e.target.value)}
+          onChange={(e) => setLocation(e.target.value)}
         />
         <br/>
 
-        <label>Start Date:</label>
+        <label>Start Date (Required):</label>
         <DatePicker
           selected={startDate}
           onChange={(date) => setStartDate(date)}
         />
 
-        <label>End Date:</label>
+        <label>End Date (Required):</label>
         <DatePicker
           selected={endDate}
           onChange={(date) => setEndDate(date)}
@@ -90,10 +98,10 @@ const NewItinerary = () => {
         <input
           type="number"
           value={budget}
-          onChange={(e) => setTripName(e.target.value)}
+          onChange={(e) => setBudget(e.target.value)}
         />
         <br/>
-
+        {error && <p style = {{color: 'red' }}>{error}</p>}
         <button type="submit">Create Itinerary</button>
       </form>
 
@@ -102,3 +110,10 @@ const NewItinerary = () => {
 };
 
 export default NewItinerary;
+
+//Notes:
+/*
+  allow the user to choose a location in mapbox and then auto-fill the location field
+
+
+*/
