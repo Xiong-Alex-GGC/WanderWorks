@@ -12,7 +12,7 @@ const Home = () => {
       <Row gutter={[16, 16]}>
         <Col span={24}>
           <Card>
-            <Title>Welcome to Wonder Works</Title>
+            <Title>Welcome to Wander Works</Title>
             <Paragraph>
               Plan your perfect trip with ease. Create and organize your itineraries,
               explore new destinations, and make your travel experiences memorable.

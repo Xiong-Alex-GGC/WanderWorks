@@ -22,10 +22,10 @@ const NewItinerary = () => {
     
     //ensure the start date isn't before the current date
     var curDate = new Date().getDate();
-    if(startDate < curDate) {
+    if(startDate.getDate() < curDate) {
       setError('You cannot set the start date to before today');
       return;
-    } else if(startDate < endDate.getDate()) { //ensure the end date isn't before the start date
+    } else if(startDate.getDate() > endDate.getDate()) { //ensure the end date isn't before the start date
       setError('The end date cannot be before the start date');
       return;
     }
