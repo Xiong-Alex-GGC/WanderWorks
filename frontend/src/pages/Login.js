@@ -1,62 +1,61 @@
 import React, { useState } from 'react';
-import {Navigate, Link } from 'react-router-dom';
-
-import { signInWithEmail, signInWithGoogle} from '../firebase/auth';
+import { Navigate } from 'react-router-dom';
+import { signInWithEmail, signInWithGoogle } from '../firebase/auth';
 import { useAuth } from '../context/authContext';
+import LoginForm from '../components/Forms/LoginForm';
 
-import { Row, Col, Typography, Card } from 'antd';
-
-
-
-const { Title, Paragraph } = Typography;
+import {
+  AuthContainer,
+  FormRow,
+  ImgCol,
+  FormCol,
+} from '../styles/Auth-Styles';
 
 const Login = () => {
   const { userLoggedIn } = useAuth();
-
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState ("");
-  const [isSigningIn, setIsSigningIn] = useState (false);
-  const [errorMessage, setErrorMessage] = useState ("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isSigningIn, setIsSigningIn] = useState(false);
 
   const onEmailSignIn = async (e) => {
     e.preventDefault();
-    if(!isSigningIn) {
+    if (!isSigningIn) {
       setIsSigningIn(true);
       await signInWithEmail(email, password);
     }
-
-  }
+  };
 
   const onGoogleSignIn = (e) => {
     e.preventDefault();
-    if(!isSigningIn) {
+    if (!isSigningIn) {
       setIsSigningIn(true);
-      signInWithGoogle().catch(err => {
+      signInWithGoogle().catch((err) => {
         setIsSigningIn(false);
-      })
+      });
     }
-  }
+  };
 
   return (
-    <div className="home-container">
+    <AuthContainer fluid>
+      {userLoggedIn && <Navigate to={'/Dashboard'} replace={true} />}
+      
+      <FormRow>  
+        {userLoggedIn && <Navigate to={'/Dashboard'} replace={true} />}
 
-      {userLoggedIn && (<Navigate to={'/Dashboard'} replace={true} />)} 
+        <ImgCol />
 
-
-      <input placeholder = "Email"
-      onChange={(e) => setEmail(e.target.value)}/>
-
-      <input placeholder = "Password"
-      type="password"
-      onChange={(e) => setPassword(e.target.value)}/>
-
-      <button onClick={onEmailSignIn}>Sign In</button>
-      <button onClick={onGoogleSignIn}>Sign In With Google</button>
-
-
-      {/* <button onClick={logout}>Logout</button> */}
-
-    </div>
+        <FormCol>
+          <LoginForm
+            onEmailSignIn={onEmailSignIn}
+            onGoogleSignIn={onGoogleSignIn}
+            email={email}
+            setEmail={setEmail}
+            password={password}
+            setPassword={setPassword}
+          />
+        </FormCol>
+      </FormRow>
+    </AuthContainer>
   );
 };
 

@@ -3,6 +3,14 @@ import { useState } from "react";
 import { signUpWithEmailandPassword, signInWithGoogle } from "../firebase/auth";
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/authContext';
+import SignupForm from '../components/Forms/SignupForm';
+
+import {
+  AuthContainer,
+  FormRow,
+  ImgCol,
+  FormCol,
+} from '../styles/Auth-Styles';
 
 
 
@@ -49,42 +57,49 @@ const SignUp = () => {
     }
 
   return (
-    <div className="home-container">
+
+    <AuthContainer fluid>
       {userLoggedIn && (<Navigate to={'/Dashboard'} replace={true} />)}
-      <Row gutter={[16, 16]}>
-        <Col span={24}>
-          <Card>
-            <Title>SignUp</Title>
-            <Paragraph>
-              Plan your perfect trip with ease. Create and organize your itineraries,
-              explore new destinations, and make your travel experiences memorable.
-            </Paragraph>
-          </Card>
-        </Col>
-      </Row>
+      <FormRow>
+        <ImgCol />
+        <FormCol>
+          <SignupForm 
+            signUp={signUp}
+            signUpWithGoogle={signUpWithGoogle}
+            email={email}
+            setEmail={setEmail}
+            password={password}
+            setPassword={setPassword}
+          />
+        </FormCol>
+      </FormRow>
+    </AuthContainer>
 
-      <Row gutter={[16, 16]}>
-        <Col span={12}>
-          <Card>
-            <div>
-                <input placeholder = "Email"
-                onChange={(e) => setEmail(e.target.value)}/>
+    // <div className="home-container">
+    //   {userLoggedIn && (<Navigate to={'/Dashboard'} replace={true} />)}
 
-                <input placeholder = "Password"
-                type="password"
-                onChange={(e) => setPassword(e.target.value)}/>
 
-                <button onClick={signUp}>Sign Up</button>
 
-                <button onClick={signUpWithGoogle}>Sign Up With Google</button>
+    //   <Row gutter={[16, 16]}>
+    //     <Col span={12}>
+    //       <Card>
+    //         <div>
+    //             <input placeholder = "Email"
+    //             onChange={(e) => setEmail(e.target.value)}/>
 
-            </div>
-          </Card>
-        </Col>
-      </Row>
+    //             <input placeholder = "Password"
+    //             type="password"
+    //             onChange={(e) => setPassword(e.target.value)}/>
+
+    //             <button onClick={signUp}>Sign Up</button>
+
+    //             <button onClick={signUpWithGoogle}>Sign Up With Google</button>
+
+    //         </div>
+
 
       
-    </div>
+    // </div>
   );
 };
 
