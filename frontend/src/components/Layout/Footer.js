@@ -1,17 +1,17 @@
 import React from 'react';
-import { Layout, Row, Col } from 'antd';
-
-const { Footer } = Layout;
+import { Container, Row, Col } from 'react-bootstrap';
 
 const AppFooter = () => {
   return (
-    <Footer style={{ textAlign: 'center' }}>
-      <Row>
-        <Col span={24}>
-          <p>WonderWorks &copy; {new Date().getFullYear()}</p>
-        </Col>
-      </Row>
-    </Footer>
+    <footer className="bg-light text-center">
+      <Container>
+        <Row>
+          <Col>
+            <p>WanderWorks &copy; {new Date().getFullYear()}</p>
+          </Col>
+        </Row>
+      </Container>
+    </footer>
   );
 };
 
