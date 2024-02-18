@@ -5,9 +5,9 @@ const AppFooter = () => {
   return (
     <footer className="bg-light text-center">
       <Container>
-        <Row>
+        <Row className='pt-1'>
           <Col>
-            <p>WanderWorks &copy; {new Date().getFullYear()}</p>
+            <p> &copy; WanderWork {new Date().getFullYear()}. Plan With Us!</p>
           </Col>
         </Row>
       </Container>

@@ -9,11 +9,14 @@ const NavBar = () => {
     const { userLoggedIn } = useAuth();
 
     return (
-        <Navbar bg="light" expand="lg">
-            <Navbar.Brand href="#home">WanderWorks</Navbar.Brand>
+        <Navbar bg="light" expand="lg" className='p-2'>
+            <Nav.Link as={Link} to={userLoggedIn ? "Dashboard" : ""}>
+                <Navbar.Brand>WanderWork</Navbar.Brand>
+            </Nav.Link>
+            
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
-                <Nav className="mr-auto">
+                <Nav className="me-auto">
                     <Nav.Link as={Link} to={userLoggedIn ? "Dashboard" : ""}>Home</Nav.Link>
                     <Nav.Link href="#explore">Explore</Nav.Link>
                     <Nav.Link href="#features">Features</Nav.Link>
@@ -28,10 +31,10 @@ const NavBar = () => {
                 ) : (
                     <>
                         <Nav.Link as={Link} to="Login">
-                            <Button variant="primary">Login</Button>
+                            <Button variant="outline-primary">Login</Button>
                         </Nav.Link>
                         <Nav.Link as={Link} to="Signup">
-                            <Button variant="primary">Sign Up</Button>
+                            <Button variant="primary" className='mx-3'>Sign Up</Button>
                         </Nav.Link>
                     </>
                 )}
