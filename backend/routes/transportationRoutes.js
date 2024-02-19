@@ -4,11 +4,11 @@ import * as transportationController from '../controllers/transportationControll
 const router = express.Router();
 
 //routes the controller to a specific url to request/resonse
-//router.get('/activities', activityController.getAllActivities);
-//router.get('/activities/:id', activityController.getItineraryActivities);
+router.get('/transportations', transportationController.getAllTransportations);
+router.get('/transportations/:id', transportationController.getItineraryTransportations);
 router.post('/create-transportation', transportationController.createTransportation);
-//router.post('/update-activity', activityController.updateActivity);
-//router.get('/transportation/:id', transportationController.getTransporationById);
-//router.delete('/delete-activity', activityController.deleteActivity);
+router.post('/update-transportation', transportationController.updateTransportation);
+router.get('/transportation/:id', transportationController.getTransporationById);
+router.delete('/delete-transportation', transportationController.deleteTransportation);
 
 export default router;
