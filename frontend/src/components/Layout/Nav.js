@@ -1,105 +1,46 @@
-// NavBar.js
-
 import React from 'react';
-import { Layout, Menu, Button } from 'antd';
-import {
-  HomeOutlined,
-  AppstoreOutlined,
-  HeartOutlined,
-  UserOutlined,
-  LoginOutlined,
-  UserAddOutlined,
-} from '@ant-design/icons';
-
+import { Navbar, Nav, Button } from 'react-bootstrap';
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from '../../context/authContext';
 import { signUserOut } from '../../firebase/auth';
- 
-
-
-const { Header } = Layout;
 
 const NavBar = () => {
     const navigate = useNavigate();
     const { userLoggedIn } = useAuth();
-  return (
-    <Header>
-        <Menu theme="dark" mode="horizontal" style={{ flexGrow: 1 }}>
 
-        <div className="logo">WonderWorks</div>
-
-
-        {
-            userLoggedIn
-            ?
-            <>
-            <Menu.Item key="home" icon={<HomeOutlined />}>
-                <Link to="Dashboard">
-                    Home
-                </Link>
-            </Menu.Item>
-             </>
-            :
-            <>
-            <Menu.Item key="home" icon={<HomeOutlined />}>
-                <Link to="">
-                    Home
-                </Link>
-            </Menu.Item>
-            </>
-        }
-      
-
-
-        <Menu.Item key="explore" icon={<AppstoreOutlined />}>
-            Explore
-        </Menu.Item>
-        <Menu.Item key="features" icon={<HeartOutlined />}>
-            Features
-        </Menu.Item>
-
-        {
-            userLoggedIn
-            ?
-            <>
-                <Menu.Item >
-                <Button onClick={() => {signUserOut().then(() => {navigate("/")})}}>Sign Out</Button>
-                </Menu.Item>
-
-                <Menu.Item >
-                    <Link to="NewItinerary">
-                        <Button type="primary">
-                            New Adventure
-                        </Button>
-                    </Link>
-                </Menu.Item>
-            </>
-            :
-            <>
-
-                <Menu.Item >
-                    <Link to="Login">
-                        <Button type="primary" icon={<LoginOutlined />}>
-                            Login
-                        </Button>
-                    </Link>
-                </Menu.Item>
-
-                <Menu.Item>
-                    <Link to="Signup">
-                        <Button type="primary" icon={<LoginOutlined />}>
-                            Sign Up
-                        </Button>
-                    </Link>
-                </Menu.Item>
+    return (
+        <Navbar bg="light" expand="lg" className='p-2'>
+            <Nav.Link as={Link} to={userLoggedIn ? "Dashboard" : ""}>
+                <Navbar.Brand>WanderWork</Navbar.Brand>
+            </Nav.Link>
             
-            </>
-
-        }
-
-        </Menu>
-    </Header>
-  );
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Collapse id="basic-navbar-nav">
+                <Nav className="me-auto">
+                    <Nav.Link as={Link} to={userLoggedIn ? "Dashboard" : ""}>Home</Nav.Link>
+                    <Nav.Link href="#explore">Explore</Nav.Link>
+                    <Nav.Link href="#features">Features</Nav.Link>
+                </Nav>
+                {userLoggedIn ? (
+                    <>
+                        <Button variant="outline-danger" onClick={() => {signUserOut().then(() => {navigate("/")})}}>Sign Out</Button>
+                        <Nav.Link as={Link} to="NewItinerary">
+                            <Button variant="primary">New Adventure</Button>
+                        </Nav.Link>
+                    </>
+                ) : (
+                    <>
+                        <Nav.Link as={Link} to="Login">
+                            <Button variant="outline-primary">Login</Button>
+                        </Nav.Link>
+                        <Nav.Link as={Link} to="Signup">
+                            <Button variant="primary" className='mx-3'>Sign Up</Button>
+                        </Nav.Link>
+                    </>
+                )}
+            </Navbar.Collapse>
+        </Navbar>
+    );
 };
 
 export default NavBar;
