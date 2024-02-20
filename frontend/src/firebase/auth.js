@@ -46,6 +46,26 @@ export const signUserOut = () => {
     
 };
 
+export const signUpWithEmailAndPassword = async (email, password) => {
+    try {
+        const result = await createUserWithEmailAndPassword(auth, email, password);
+        await sendEmailVerification(auth.currentUser); // Send verification email
+        return result;
+    } catch (error) {
+        console.error("Error signing up:", error);
+        throw error;
+    }
+};
+
+export const sendVerificationEmail = async () => {
+    try {
+        await sendEmailVerification(auth.currentUser); // Send verification email
+    } catch (error) {
+        console.error("Error sending verification email:", error);
+        throw error;
+    }
+};
+
 
 
 
