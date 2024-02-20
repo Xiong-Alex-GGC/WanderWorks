@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { auth, googleProvider } from "./firebase";
 import { 
-    GoogleAuthProvider, 
+    GoogleAuthProvider,
+    FacebookAuthProvider, 
     createUserWithEmailAndPassword, 
     sendEmailVerification, 
     sendPasswordResetEmail, 
@@ -27,8 +28,22 @@ export const signInWithGoogle = async () => {
     return result;
 };
 
+export const signInWithFacebook = async () => {
+    const provider = new FacebookAuthProvider();
+    try {
+        const result = await signInWithPopup(auth, provider);
+        return result;
+    } catch (error) {
+        // Handle error
+        console.error("Error signing in with Facebook:", error);
+        throw error;
+    }
+};
+
 export const signUserOut = () => {
     return auth.signOut();
+
+    
 };
 
 
