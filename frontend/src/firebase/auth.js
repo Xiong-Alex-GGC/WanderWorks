@@ -66,14 +66,14 @@ export const sendVerificationEmail = async () => {
     }
 };
 
-export const sendPasswordResetEmail = async (email) => {
-    try {
-        await sendPasswordResetEmail(auth, email);
-    } catch (error) {
-        console.error("Error sending password reset email:", error);
-        throw error;
-    }
-};
+// export const sendPasswordResetEmail = async (email) => {
+//     try {
+//         await sendPasswordResetEmail(auth, email);
+//     } catch (error) {
+//         console.error("Error sending password reset email:", error);
+//         throw error;
+//     }
+// };
 
 
 
