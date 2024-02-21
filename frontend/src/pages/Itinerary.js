@@ -5,17 +5,7 @@ import DemoMap from '../components/Mapbox/DemoMap';
 import ActivityForm from '../components/Forms/ActivityForm';
 import ActivityContainer from '../components/Containers/ActivityContainer';
 
-const containerStyle = {
-  display: 'flex',
-};
-
-const leftContainerStyle = {
-  flex: 1,
-};
-
-const rightContainerStyle = {
-  flex: 1,
-};
+import { Container, Row, Col } from 'react-bootstrap';
 
 const Itinerary = () => {
   const { id } = useParams();
@@ -43,48 +33,59 @@ const Itinerary = () => {
     setShowActivityForm(false);
   };
 
-
-
   return (
-    <div style={containerStyle}>
-      <div style={leftContainerStyle}>
-        {itineraryData ? (
-          <>
-            <h1>Trip Name: {itineraryData.tripName}</h1>
-            <p>Start Date: {itineraryData.startDate}</p>
-            <p>End Date: {itineraryData.endDate}</p>
-            <hr />
-            <h3>Activities</h3>
-            <button onClick={openActivityForm}>New Activity</button>
-            <hr />
-            {showActivityForm && (
-              <div className="modal">
-                <div className="modal-content">
-                  <span className="close" onClick={closeActivityForm}>&times;</span>
-                  <ActivityForm itineraryData={itineraryData} onClose={closeActivityForm} />
+    <Row>
+      {itineraryData ? (
+        <>
+          <Col>
+            <Row style={{height: '100vh'}}>
+              <Col xs={3} style={{ backgroundColor: '#f1f1f1', borderRight: '1px solid #ccc' }}>
+                Sidebar
+              </Col>
+              <Col>
+                <Row style={{height: '150px', backgroundColor: '#f4f4f4', borderBottom: '1px solid #ccc'}}>
+                  image goes here
+                </Row>
+                <div style={{
+                  margin: '-60px 30px 30px 30px',
+                  backgroundColor: 'pink',
+                  borderRadius: '10px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  padding: '20px',
+                }}>
+                  <h6>{itineraryData.tripName}</h6>
                 </div>
-              </div>
-            )}
-            <hr />
 
-            <ActivityContainer itineraryData={itineraryData} />
+                {/* <p>Start Date: {itineraryData.startDate}</p>
+                <p>End Date: {itineraryData.endDate}</p> */}
 
+                <hr />
 
+                <h3>Activities</h3>
+                <button onClick={openActivityForm}>New Activity</button>
+                <hr />
+                {showActivityForm && (
+                  <ActivityForm itineraryData={itineraryData} onClose={closeActivityForm} />
+                )}
 
-          </>
-        ) : (
+                <ActivityContainer itineraryData={itineraryData} />
+              </Col>
+            </Row>
+          </Col>
+
+          <Col>
+            <DemoMap />
+          </Col>
+        </>
+      ) : (
+        <Col>
           <p>Loading itinerary data...</p>
-        )}
-      </div>
-      <div style={rightContainerStyle}>
-        {itineraryData && <DemoMap />}
-      </div>
-    </div>
+        </Col>
+      )}
+    </Row>
   );
 };
 
 export default Itinerary;
-
-
-//Notes
-//Buttons for adding travel/transportation plans and hotel reservations are needed
