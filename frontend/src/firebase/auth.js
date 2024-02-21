@@ -2,7 +2,8 @@ import { useState } from "react";
 import { auth, googleProvider } from "./firebase";
 import { 
     GoogleAuthProvider,
-    FacebookAuthProvider, 
+    FacebookAuthProvider,
+    MicrosoftAuthProvider,
     createUserWithEmailAndPassword, 
     sendEmailVerification, 
     sendPasswordResetEmail, 
@@ -36,6 +37,17 @@ export const signInWithFacebook = async () => {
     } catch (error) {
         // Handle error
         console.error("Error signing in with Facebook:", error);
+        throw error;
+    }
+};
+
+export const signInWithMicrosoft = async () => {
+    const provider = new MicrosoftAuthProvider(); // Create a MicrosoftAuthProvider instance
+    try {
+        const result = await signInWithPopup(auth, provider);
+        return result;
+    } catch (error) {
+        console.error("Error signing in with Microsoft:", error);
         throw error;
     }
 };
