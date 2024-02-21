@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
+import ActivityLocationSuggestion from '../Mapbox/ActivityLocationSuggeston';
 
 const ActivityForm = ({ itineraryData, onClose }) => {
   const [activityName, setActivityName] = useState('');
@@ -41,8 +42,17 @@ const ActivityForm = ({ itineraryData, onClose }) => {
     }
   };
 
+  const closeForum = () => {
+    onClose();
+  }
+
+  const handleLocationSelect = (selectedLocation) => {
+    setLocation(selectedLocation);
+  };
+
   return (
     <form onSubmit={handleSubmit}>
+      <button onClick={closeForum}>Close</button>
       <div>
         <label>
           Activity Name:
@@ -76,14 +86,13 @@ const ActivityForm = ({ itineraryData, onClose }) => {
       <div>
         <label>
           Tags (custom):
-          <input type="text" value={tags} onChange={(e) => setTags(e.target.value)} /> //change to process as a set of tags;
-          //user should ideally hit enter, not submitting the form, and then rendering the tag as a removable item
+          <input type="text" value={tags} onChange={(e) => setTags(e.target.value)} /> {/*change to process as a set of tags; */}
+          {/* user should ideally hit enter, not submitting the form, and then rendering the tag as a removable item */}
         </label>
       </div>
       <div>
         <label>
-          Location (Address):
-          <input type="text" value={location} onChange={(e) => setLocation(e.target.value)} />
+          <ActivityLocationSuggestion onSuggestionSelect={handleLocationSelect}/>
         </label>
       </div>
       <div>
