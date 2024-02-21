@@ -9,7 +9,7 @@ const NavBar = () => {
     const { userLoggedIn } = useAuth();
 
     return (
-        <Navbar bg="light" expand="lg" className='p-2'>
+        <Navbar bg="light" expand="lg" className='p-2 sticky-top'>
             <Nav.Link as={Link} to={userLoggedIn ? "Dashboard" : ""}>
                 <Navbar.Brand>WanderWork</Navbar.Brand>
             </Nav.Link>
