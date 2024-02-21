@@ -21,14 +21,15 @@ const NewItinerary = () => {
     e.preventDefault(); //what does this do?
     
     //ensure the start date isn't before the current date
-    var curDate = new Date().getDate();
-    if(startDate.getDate() < curDate) {
+    var curDate = new Date();
+    if (startDate.getTime() < curDate.getTime()) {
       setError('You cannot set the start date to before today');
       return;
-    } else if(startDate.getDate() > endDate.getDate()) { //ensure the end date isn't before the start date
+    } else if (startDate.getTime() > endDate.getTime()) {
       setError('The end date cannot be before the start date');
       return;
     }
+
     try {
       
       const response = await axios.post('http://localhost:4000/api/create-itinerary', {

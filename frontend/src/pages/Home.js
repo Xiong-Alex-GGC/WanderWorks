@@ -21,15 +21,6 @@ const Home = () => {
         <Subtitle>Map Integration</Subtitle>
         <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, 
           sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est.</p>
-      <Row gutter={[16, 16]}>
-        <Col span={24}>
-          <Card>
-            <Title>Welcome to Wander Works</Title>
-            <Paragraph>
-              Plan your perfect trip with ease. Create and organize your itineraries,
-              explore new destinations, and make your travel experiences memorable.
-            </Paragraph>
-          </Card>
         </Col>
         <Col className='px-5'>
         <Subtitle>Travel With Friends</Subtitle>

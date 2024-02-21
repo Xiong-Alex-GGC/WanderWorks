@@ -4,6 +4,8 @@ import axios from 'axios';
 import DemoMap from '../components/Mapbox/DemoMap';
 import ActivityForm from '../components/Forms/ActivityForm';
 import ActivityContainer from '../components/Containers/ActivityContainer';
+import TransportationForm from '../components/Forms/TransportationForm';
+import TransportationContainer from '../components/Containers/TransportationContainer';
 
 const containerStyle = {
   display: 'flex',
@@ -21,6 +23,7 @@ const Itinerary = () => {
   const { id } = useParams();
   const [itineraryData, setItineraryData] = useState(null);
   const [showActivityForm, setShowActivityForm] = useState(false);
+  const [showTransportationForm, setShowTransportationForm] = useState(false);
 
   useEffect(() => {
     const fetchItineraryData = async () => {
@@ -41,6 +44,14 @@ const Itinerary = () => {
 
   const closeActivityForm = () => {
     setShowActivityForm(false);
+  };
+
+  const openTransportationForm = () => {
+    setShowTransportationForm(true);
+  };
+
+  const closeTransportationForm = () => {
+    setShowTransportationForm(false);
   };
 
 
@@ -69,8 +80,22 @@ const Itinerary = () => {
 
             <ActivityContainer itineraryData={itineraryData} />
 
-
-
+            
+            <h3>Transportation</h3>
+            <button onClick={openTransportationForm}>New Transportation</button>
+            <hr />
+            {showTransportationForm && (
+              <div className="modal">
+                <div className="modal-content">
+                  <span className="close" onClick={closeTransportationForm}>&times;</span>
+                  <TransportationForm itineraryData={itineraryData} onClose={closeTransportationForm} />
+                </div>
+              </div>
+            )}
+            <hr />
+            
+            <TransportationContainer itineraryData={itineraryData} />
+            
           </>
         ) : (
           <p>Loading itinerary data...</p>
