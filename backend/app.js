@@ -4,6 +4,8 @@ import cors from 'cors';
 import itineraryRoutes from './routes/itineraryRoutes.js';
 import activityRoutes from './routes/activityRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import transportationRoutes from './routes/transportationRoutes.js';
+import accommodationRoutes from './routes/accommodationRoutes.js';
 
 
 
@@ -28,5 +30,7 @@ app.get("/", (req, res) => {
 app.use('/api', itineraryRoutes);
 app.use('/api', activityRoutes);
 app.use('/api', userRoutes);
+app.use('/api', transportationRoutes);
+app.use('/api', accommodationRoutes)
 //Checks if server is online localhost:4000
 app.listen(4000, () => console.log("Up & Running on port 4000"));
