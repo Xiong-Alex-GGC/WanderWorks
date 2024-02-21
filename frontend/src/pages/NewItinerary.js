@@ -5,6 +5,8 @@ import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/authContext';
 import DatePicker from 'react-datepicker';
 
+import ItineraryLocationSuggestion from '../components/Mapbox/ItineraryLocationSuggestion';
+
 const NewItinerary = () => {
   const [tripName, setTripName] = useState('');
   const [location, setLocation] = useState('');
@@ -22,7 +24,7 @@ const NewItinerary = () => {
     
     //ensure the start date isn't before the current date
     var curDate = new Date().getDate();
-    if(startDate.getDate() < curDate) {
+    if(startDate.getDate() > curDate) {
       setError('You cannot set the start date to before today');
       return;
     } else if(startDate.getDate() > endDate.getDate()) { //ensure the end date isn't before the start date
@@ -32,11 +34,11 @@ const NewItinerary = () => {
     try {
       
       const response = await axios.post('http://localhost:4000/api/create-itinerary', {
-        tripName: tripName,
+        tripName: location,
         location: location,
         startDate: startDate,
         endDate: endDate,
-        budget: budget,
+        // budget: budget,
         userID: currentUser.uid
       });
   
@@ -53,6 +55,10 @@ const NewItinerary = () => {
     }
   };
 
+  const handleLocationSelect = (selectedLocation) => {
+    setLocation(selectedLocation);
+  };
+
 
   return (
     <div className="home-container">
@@ -62,23 +68,9 @@ const NewItinerary = () => {
       <h2>New Itinerary</h2>
 
       <form onSubmit={submitItinerary}>
-        <label>Trip Name (Required):</label>
-        <br />
-        <input
-          type="text"
-          value={tripName}
-          onChange={(e) => setTripName(e.target.value)}
-        />
-        <br/>
+        
+      <ItineraryLocationSuggestion onSuggestionSelect={handleLocationSelect} />
 
-        <label>Location (Required):</label>
-        <br />
-        <input
-          type="text"
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-        />
-        <br/>
 
         <label>Start Date (Required):</label>
         <DatePicker
@@ -91,7 +83,7 @@ const NewItinerary = () => {
           selected={endDate}
           onChange={(date) => setEndDate(date)}
         />
-
+{/* 
         <h3>Want to keep track of your budget for this trip? Add your ideal maximum spendings here!</h3>
         <label>Budget (optional):</label>
         <br />
@@ -100,7 +92,7 @@ const NewItinerary = () => {
           value={budget}
           onChange={(e) => setBudget(e.target.value)}
         />
-        <br/>
+        <br/> */}
         {error && <p style = {{color: 'red' }}>{error}</p>}
         <button type="submit">Create Itinerary</button>
       </form>
