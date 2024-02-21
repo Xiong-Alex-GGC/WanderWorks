@@ -20,3 +20,4 @@ const microsoftProvider = new OAuthProvider('microsoft.com');
 const db = getFirestore(app);
 
 export { auth, googleProvider,facebookProvider, microsoftProvider,db, app};
+//Andrew
