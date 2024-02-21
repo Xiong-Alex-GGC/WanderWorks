@@ -8,7 +8,7 @@ router.get('/transportations', transportationController.getAllTransportations);
 router.get('/transportations/:id', transportationController.getItineraryTransportations);
 router.post('/create-transportation', transportationController.createTransportation);
 router.post('/update-transportation', transportationController.updateTransportation);
-router.get('/transportation/:id', transportationController.getTransporationById);
+//router.get('/transportation/:id', transportationController.getTransporationById);
 router.delete('/delete-transportation', transportationController.deleteTransportation);
 
 export default router;
