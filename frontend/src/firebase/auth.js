@@ -78,6 +78,7 @@ export const sendVerificationEmail = async () => {
     }
 };
 
+
 // export const sendPasswordResetEmail = async (email) => {
 //     try {
 //         await sendPasswordResetEmail(auth, email);

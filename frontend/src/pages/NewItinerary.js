@@ -13,26 +13,29 @@ const NewItinerary = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const { currentUser } = useAuth();
-  const [isCreated, setIsCreated] = useState (false);
+  const [isCreated, setIsCreated] = useState(false);
   const [budget, setBudget] = useState('');
-  const [tripID, setTripID] = useState ("");
-  
+  const [tripID, setTripID] = useState("");
+
   const [error, setError] = useState('');
 
   const submitItinerary = async (e) => {
-    e.preventDefault(); //what does this do?
-    
-    //ensure the start date isn't before the current date
-    var curDate = new Date().getDate();
-    if(startDate.getDate() > curDate) {
+    e.preventDefault();
+
+    // ensure the start date isn't before the current date
+    var curDate = new Date();
+    var startDate = new Date(); // Assuming startDate and endDate are already defined elsewhere in your code
+    var endDate = new Date();
+
+    if (startDate.getTime() < curDate.getTime()) {
       setError('You cannot set the start date to before today');
       return;
-    } else if(startDate.getDate() > endDate.getDate()) { //ensure the end date isn't before the start date
+    } else if (startDate.getTime() > endDate.getTime()) {
       setError('The end date cannot be before the start date');
       return;
     }
     try {
-      
+
       const response = await axios.post('http://localhost:4000/api/create-itinerary', {
         tripName: location,
         location: location,
@@ -41,12 +44,12 @@ const NewItinerary = () => {
         // budget: budget,
         userID: currentUser.uid
       });
-  
+
       // Handle the response as needed (e.g., show a success message)
       await setTripID(response.data.id);
       await setIsCreated(true);
       console.log('API Response:', response.data);
-      
+
       //clear any previous errors
       setError('');
     } catch (error) {
@@ -62,14 +65,14 @@ const NewItinerary = () => {
 
   return (
     <div className="home-container">
-      
+
       {isCreated && (<Navigate to={`/Itinerary/${tripID}`} replace={true} />)}
 
       <h2>New Itinerary</h2>
 
       <form onSubmit={submitItinerary}>
-        
-      <ItineraryLocationSuggestion onSuggestionSelect={handleLocationSelect} />
+
+        <ItineraryLocationSuggestion onSuggestionSelect={handleLocationSelect} />
 
 
         <label>Start Date (Required):</label>
@@ -83,7 +86,7 @@ const NewItinerary = () => {
           selected={endDate}
           onChange={(date) => setEndDate(date)}
         />
-{/* 
+        {/* 
         <h3>Want to keep track of your budget for this trip? Add your ideal maximum spendings here!</h3>
         <label>Budget (optional):</label>
         <br />
@@ -93,7 +96,7 @@ const NewItinerary = () => {
           onChange={(e) => setBudget(e.target.value)}
         />
         <br/> */}
-        {error && <p style = {{color: 'red' }}>{error}</p>}
+        {error && <p style={{ color: 'red' }}>{error}</p>}
         <button type="submit">Create Itinerary</button>
       </form>
 
@@ -102,10 +105,3 @@ const NewItinerary = () => {
 };
 
 export default NewItinerary;
-
-//Notes:
-/*
-  allow the user to choose a location in mapbox and then auto-fill the location field
-
-
-*/
