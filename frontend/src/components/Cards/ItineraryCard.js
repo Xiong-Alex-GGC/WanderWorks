@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import axios from 'axios';
 
@@ -21,9 +21,8 @@ const textStyle = {
   color: '#666',
 };
 
-const ItineraryCard = ({ id, tripName, startDate, endDate }) => { //renders the itinerary data
+const ItineraryCard = ({ id, tripName, startDate, endDate, imgURL }) => { //renders the itinerary data
   const [isDeleted, setIsDeleted] = useState(false); // New state to track deletion
-
 
   const onDelete = async () => {
     try {
@@ -43,6 +42,10 @@ const ItineraryCard = ({ id, tripName, startDate, endDate }) => { //renders the 
 
   return (
     <div style={cardStyle}>
+      <div style={{ height: 150, backgroundColor: 'yellow', backgroundImage: `url(${imgURL})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+
+
+      </div>
 
       <Link to={`/Itinerary/${id}`}>
         <h2 style={headingStyle}>{tripName}</h2>
