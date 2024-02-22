@@ -41,16 +41,16 @@ export const signInWithFacebook = async () => {
     }
 };
 
-export const signInWithMicrosoft = async () => {
-    const provider = new MicrosoftAuthProvider(); // Create a MicrosoftAuthProvider instance
-    try {
-        const result = await signInWithPopup(auth, provider);
-        return result;
-    } catch (error) {
-        console.error("Error signing in with Microsoft:", error);
-        throw error;
-    }
-};
+// export const signInWithMicrosoft = async () => {
+//     const provider = new MicrosoftAuthProvider(); // Create a MicrosoftAuthProvider instance
+//     try {
+//         const result = await signInWithPopup(auth, provider);
+//         return result;
+//     } catch (error) {
+//         console.error("Error signing in with Microsoft:", error);
+//         throw error;
+//     }
+// };
 
 export const signUserOut = () => {
     return auth.signOut();

@@ -49,12 +49,12 @@ const Itinerary = () => {
       {itineraryData ? (
         <>
           <Col>
-            <Row style={{height: '100vh'}}>
+            <Row style={{ height: '100vh' }}>
               <Col xs={3} style={{ backgroundColor: '#f1f1f1', borderRight: '1px solid #ccc' }}>
                 Sidebar
               </Col>
               <Col>
-                <Row style={{height: '150px', backgroundColor: '#f4f4f4', borderBottom: '1px solid #ccc'}}>
+                <Row style={{ height: '150px', backgroundColor: '#f4f4f4', borderBottom: '1px solid #ccc' }}>
                   image goes here
                 </Row>
                 <div style={{
@@ -69,26 +69,6 @@ const Itinerary = () => {
                   <h6>{itineraryData.tripName}</h6>
                 </div>
 
-            
-            <h3>Transportation</h3>
-            <button onClick={openTransportationForm}>New Transportation</button>
-            <hr />
-            {showTransportationForm && (
-              <div className="modal">
-                <div className="modal-content">
-                  <span className="close" onClick={closeTransportationForm}>&times;</span>
-                  <TransportationForm itineraryData={itineraryData} onClose={closeTransportationForm} />
-                </div>
-              </div>
-            )}
-            <hr />
-            
-            <TransportationContainer itineraryData={itineraryData} />
-            
-          </>
-        ) : (
-                {/* <p>Start Date: {itineraryData.startDate}</p>
-                <p>End Date: {itineraryData.endDate}</p> */}
 
                 <hr />
 
@@ -100,6 +80,31 @@ const Itinerary = () => {
                 )}
 
                 <ActivityContainer itineraryData={itineraryData} />
+
+                <hr />
+
+                {showActivityForm && (
+                  <ActivityForm itineraryData={itineraryData} onClose={closeActivityForm} />
+                )}
+
+                {/* =========================== */}
+
+                <h3>Transportation</h3>
+                <button onClick={openTransportationForm}>New Transportation</button>
+                <hr />
+
+                {showTransportationForm && (
+
+                  <>
+                    <span className="close" onClick={closeTransportationForm}>&times;</span>
+                    <TransportationForm itineraryData={itineraryData} onClose={closeTransportationForm} />
+                    <hr />
+                  </>
+
+                )}
+
+                <TransportationContainer itineraryData={itineraryData} />
+
               </Col>
             </Row>
           </Col>
@@ -118,3 +123,5 @@ const Itinerary = () => {
 };
 
 export default Itinerary;
+
+
