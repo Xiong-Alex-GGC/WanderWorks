@@ -60,12 +60,12 @@ const Itinerary = () => {
       {itineraryData ? (
         <>
           <Col>
-            <Row style={{height: '100vh'}}>
+            <Row style={{ height: '100vh' }}>
               <Col xs={3} style={{ backgroundColor: '#f1f1f1', borderRight: '1px solid #ccc' }}>
                 Sidebar
               </Col>
               <Col>
-                <Row style={{height: '150px', backgroundColor: '#f4f4f4', borderBottom: '1px solid #ccc'}}>
+                <Row style={{ height: '150px', backgroundColor: '#f4f4f4', borderBottom: '1px solid #ccc' }}>
                   image goes here
                 </Row>
                 <div style={{
@@ -82,6 +82,7 @@ const Itinerary = () => {
 
                 {/* <p>Start Date: {itineraryData.startDate}</p>
                 <p>End Date: {itineraryData.endDate}</p> */}
+
 
                 <hr />
 
@@ -139,3 +140,4 @@ export default Itinerary;
 
 //Notes: In the end, accommodations should be rendered differentl- well everything should be rendered differently,
 //but an accommodation should not be rendered like an activity
+
