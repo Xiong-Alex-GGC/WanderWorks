@@ -54,17 +54,17 @@ const Itinerary = () => {
                 Sidebar
               </Col>
               <Col>
-                <Row style={{ height: '150px', backgroundColor: '#f4f4f4', borderBottom: '1px solid #ccc' }}>
-                  image goes here
+                <Row style={{ height: '150px', backgroundColor: '#f4f4f4', borderBottom: '1px solid #ccc', backgroundImage: `url(${itineraryData.imgURL})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
                 </Row>
                 <div style={{
-                  margin: '-60px 30px 30px 30px',
-                  backgroundColor: 'pink',
+                  margin: '-50px 40px 30px 40px',
+                  backgroundColor: '#f4f4f4',
                   borderRadius: '10px',
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
                   padding: '20px',
+                  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.5)'
                 }}>
                   <h6>{itineraryData.tripName}</h6>
                 </div>
@@ -87,7 +87,6 @@ const Itinerary = () => {
                   <ActivityForm itineraryData={itineraryData} onClose={closeActivityForm} />
                 )}
 
-                {/* =========================== */}
 
                 <h3>Transportation</h3>
                 <button onClick={openTransportationForm}>New Transportation</button>

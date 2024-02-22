@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Button, Alert, Container } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios'; // Import axios
 import ItineraryLocationSuggestion from '../Mapbox/ItineraryLocationSuggestion';
 import { useAuth } from '../../context/authContext';
+import { fetchDefaultPhotoByLocation } from '../../pexels/pexels';
 
 const ItineraryForm = ({ onTripIDReceived }) => {
     const [tripName, setTripName] = useState('');
@@ -13,8 +14,21 @@ const ItineraryForm = ({ onTripIDReceived }) => {
     const [endDate, setEndDate] = useState(new Date());
     const [budget, setBudget] = useState('');
     const { currentUser } = useAuth();
-
     const [error, setError] = useState('');
+
+    const [backgroundImage, setBackgroundImage] = useState(''); // State to hold the background image URL
+
+    useEffect(() => {
+      // Call the fetchPhotosByLocation function with the location
+      fetchDefaultPhotoByLocation(location)
+        .then(imageUrl => {
+          setBackgroundImage(imageUrl);
+          console.log(imageUrl);
+        })
+        .catch(error => {
+          console.error('Error fetching photos:', error);
+        });
+    }, [location]);
 
 
 
@@ -32,7 +46,8 @@ const ItineraryForm = ({ onTripIDReceived }) => {
                 location: location,
                 startDate: startDate,
                 endDate: endDate,
-                userID: currentUser.uid
+                userID: currentUser.uid,
+                imgURL: backgroundImage
             });
 
             // Return TripID
