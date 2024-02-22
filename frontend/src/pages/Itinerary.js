@@ -6,6 +6,8 @@ import ActivityForm from '../components/Forms/ActivityForm';
 import ActivityContainer from '../components/Containers/ActivityContainer';
 import TransportationForm from '../components/Forms/TransportationForm';
 import TransportationContainer from '../components/Containers/TransportationContainer';
+import AccommodationForm from '../components/Forms/AccommodationsForm';
+import AccommodationContainer from '../components/Containers/AccommodationContainer';
 
 import { Container, Row, Col } from 'react-bootstrap';
 
@@ -14,6 +16,7 @@ const Itinerary = () => {
   const [itineraryData, setItineraryData] = useState(null);
   const [showActivityForm, setShowActivityForm] = useState(false);
   const [showTransportationForm, setShowTransportationForm] = useState(false);
+  const [showAccommodationForm, setShowAccommodationForm] = useState(false);
 
   useEffect(() => {
     const fetchItineraryData = async () => {
@@ -44,6 +47,14 @@ const Itinerary = () => {
     setShowTransportationForm(false);
   };
 
+  const openAccommodationForm = () => {
+    setShowAccommodationForm(true);
+  };
+
+  const closeAccommodationForm = () => {
+    setShowAccommodationForm(false);
+  };
+
   return (
     <Row>
       {itineraryData ? (
@@ -69,24 +80,6 @@ const Itinerary = () => {
                   <h6>{itineraryData.tripName}</h6>
                 </div>
 
-            
-            <h3>Transportation</h3>
-            <button onClick={openTransportationForm}>New Transportation</button>
-            <hr />
-            {showTransportationForm && (
-              <div className="modal">
-                <div className="modal-content">
-                  <span className="close" onClick={closeTransportationForm}>&times;</span>
-                  <TransportationForm itineraryData={itineraryData} onClose={closeTransportationForm} />
-                </div>
-              </div>
-            )}
-            <hr />
-            
-            <TransportationContainer itineraryData={itineraryData} />
-            
-          </>
-        ) : (
                 {/* <p>Start Date: {itineraryData.startDate}</p>
                 <p>End Date: {itineraryData.endDate}</p> */}
 
@@ -100,6 +93,31 @@ const Itinerary = () => {
                 )}
 
                 <ActivityContainer itineraryData={itineraryData} />
+
+                <hr />
+
+                <h3>Transportation</h3>
+                <button onClick={openTransportationForm}>New Transportation</button>
+                <hr />
+                {showTransportationForm && (
+                    <TransportationForm itineraryData={itineraryData} onClose={closeTransportationForm} />
+                )}
+                <hr />
+                
+                <TransportationContainer itineraryData={itineraryData} />
+
+                <hr />
+
+                <h3>Accommodation</h3>
+                <button onClick={openAccommodationForm}>New Accommodation</button>
+                <hr />
+                {showAccommodationForm && (
+                    <AccommodationForm itineraryData={itineraryData} onClose={closeAccommodationForm} />
+                )}
+                <hr />
+                
+                <AccommodationContainer itineraryData={itineraryData} />
+
               </Col>
             </Row>
           </Col>
@@ -118,3 +136,6 @@ const Itinerary = () => {
 };
 
 export default Itinerary;
+
+//Notes: In the end, accommodations should be rendered differentl- well everything should be rendered differently,
+//but an accommodation should not be rendered like an activity

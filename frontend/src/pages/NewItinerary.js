@@ -71,7 +71,9 @@ const NewItinerary = () => {
       <h2>New Itinerary</h2>
 
       <form onSubmit={submitItinerary}>
-
+        <label>Trip Name (Required): </label>
+        <input type="text" value={tripName} onChange={(e) => setTripName(e.targetValue)} />
+        
         <ItineraryLocationSuggestion onSuggestionSelect={handleLocationSelect} />
 
 
