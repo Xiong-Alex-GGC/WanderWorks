@@ -41,6 +41,7 @@ export const signInWithFacebook = async () => {
     }
 };
 
+
 // export const signInWithMicrosoft = async () => {
 //     const provider = new MicrosoftAuthProvider(); // Create a MicrosoftAuthProvider instance
 //     try {
