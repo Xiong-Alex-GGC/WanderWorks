@@ -37,7 +37,7 @@ const NewItinerary = () => {
     try {
 
       const response = await axios.post('http://localhost:4000/api/create-itinerary', {
-        tripName: location,
+        tripName: tripName,
         location: location,
         startDate: startDate,
         endDate: endDate,
@@ -72,19 +72,30 @@ const NewItinerary = () => {
 
       <form onSubmit={submitItinerary}>
 
-        <ItineraryLocationSuggestion onSuggestionSelect={handleLocationSelect} />
+        <label>Trip Name (Required):</label>
+        <br />
+        <input
+          type="text"
+          placeholder='Name your Trip'
+          value={tripName}
+          onChange={(e) => setTripName(e.target.value)}
+          required
+        />
 
+        <ItineraryLocationSuggestion onSuggestionSelect={handleLocationSelect} />
 
         <label>Start Date (Required):</label>
         <DatePicker
           selected={startDate}
           onChange={(date) => setStartDate(date)}
+          required
         />
 
         <label>End Date (Required):</label>
         <DatePicker
           selected={endDate}
           onChange={(date) => setEndDate(date)}
+          required
         />
         {/* 
         <h3>Want to keep track of your budget for this trip? Add your ideal maximum spendings here!</h3>
