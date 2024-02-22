@@ -8,7 +8,7 @@ export const getAllTransportations = async () => { //get is, well, getting; post
   return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })); //returns the data to whatever is calling it
 };
 
-export const getAllItineraryTransportation = async (itinID) => {
+export const getAllItineraryTransportations = async (itinID) => {
   const queryItin = query(transportationCollection, where('itineraryID', '==', itinID));
   const snapshot = await getDocs(queryItin);
   return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
