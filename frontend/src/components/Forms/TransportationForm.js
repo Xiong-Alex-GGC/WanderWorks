@@ -31,6 +31,7 @@ const TransportationForm = ({ itineraryData, onClose }) => {
       try {
         const response = await axios.post('http://localhost:4000/api/create-transportation', { //the response after sending a request to the backend
           "name": transportationName,
+          "type": type,
           "departureDate": departureDate,
           "departureTime": departureTime,
           "arrivalTime": arrivalTime,
@@ -100,7 +101,7 @@ const TransportationForm = ({ itineraryData, onClose }) => {
               <option value="publicTranspo">Public Transportation Pass</option>
             </select>
           </label>
-          {renderTransportationFields()}
+          {renderAdditionalFields()}
         </div>
         <div>
           <label>

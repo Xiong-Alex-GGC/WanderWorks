@@ -84,7 +84,6 @@ const NewItinerary = () => {
 
         <ItineraryLocationSuggestion onSuggestionSelect={handleLocationSelect} />
 
-
         <label>Start Date (Required):</label>
         <DatePicker
           selected={startDate}
@@ -117,10 +116,3 @@ const NewItinerary = () => {
 };
 
 export default NewItinerary;
-
-//Notes:
-/*
-  allow the user to choose a location in mapbox and then auto-fill the location field
-
-
-*/
