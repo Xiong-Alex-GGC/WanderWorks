@@ -78,16 +78,24 @@ export const sendVerificationEmail = async () => {
     }
 };
 
-// export const sendPasswordResetEmail = async (email) => {
-//     try {
-//         await sendPasswordResetEmail(auth, email);
-//     } catch (error) {
-//         console.error("Error sending password reset email:", error);
-//         throw error;
-//     }
-// };
+ export const sendPasswordResetEmail = async (email) => {
+    try {
+         await sendPasswordResetEmail(auth, email);
+   } catch (error) {
+       console.error("Error sending password reset email:", error);
+        throw error;
+    }
+};
 
-
+export const updatePassword = async (newPassword) => {
+    try {
+        const user = auth.currentUser;
+        await updatePassword(user, newPassword);
+    } catch (error) {
+        console.error("Error updating password:", error);
+        throw error;
+    }
+};
 
 
 
