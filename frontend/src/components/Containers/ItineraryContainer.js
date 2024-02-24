@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ItineraryCard from '../Cards/ItineraryCard';
 import { useAuth } from '../../context/authContext';
-
+import Carousel from 'react-multi-carousel';
+import 'react-multi-carousel/lib/styles.css';
 
 const ItineraryContainer = () => {
   const [itineraries, setItineraries] = useState([]);
@@ -12,7 +13,8 @@ const ItineraryContainer = () => {
     const fetchItineraries = async () => {
       try {
         const response = await axios.get(`http://localhost:4000/api/itineraries/${currentUser.uid}`);
-        setItineraries(response.data);
+        const sortedItineraries = response.data.sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
+        setItineraries(sortedItineraries);
       } catch (error) {
         console.error('Error fetching itineraries:', error);
       }
@@ -21,31 +23,38 @@ const ItineraryContainer = () => {
     fetchItineraries();
   }, []);
 
+  const responsive = {
+    superLargeDesktop: {
+      breakpoint: { max: 4000, min: 1450 },
+      items: 4
+    },
+    desktop: {
+      breakpoint: { max: 1450, min: 1024 },
+      items: 3
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 700 },
+      items: 2
+    },
+    mobile: {
+      breakpoint: { max: 700, min: 0 },
+      items: 1
+    }
+  };
+
   return (
-    <div>
-        <h1>Your Itineraries</h1>
-        <div className="itinerary-container">
-      {itineraries.map((itinerary) => (
-        <ItineraryCard key={itinerary.id} {...itinerary} />
-      ))}
-
-        <style jsx>{`
-            .itinerary-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            margin: 20px;
-            border: '1px solid #ccc';
-            padding: '15px';
-            margin: '10px';
-            borderRadius: '8px';
-            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)';
-            backgroundColor: '#fff';
-            }
-      `}</style>
-
-    </div>
-    </div>
+    <>
+      <h2>Your Itineraries</h2>
+      <div style={{ backgroundColor: '#f4f4f4', paddingTop: 20, paddingLeft: 30 }}>
+        <Carousel 
+        responsive={responsive}
+        >
+          {itineraries.map((itinerary) => (
+            <ItineraryCard key={itinerary.id} {...itinerary} />
+          ))}
+        </Carousel>
+      </div>
+    </>
   );
 };
 
