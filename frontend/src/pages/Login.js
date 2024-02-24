@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import { signInWithEmail, signInWithGoogle } from '../firebase/auth';
+import { signInWithEmail, signInWithGoogle,signInWithFacebook, signInWithMicrosoft } from '../firebase/auth';
 import { useAuth } from '../context/authContext';
 import LoginForm from '../components/Forms/LoginForm';
 
@@ -35,6 +35,26 @@ const Login = () => {
     }
   };
 
+  const onFacebookSignIn = (e) => {
+    e.preventDefault();
+    if (!isSigningIn) {
+      setIsSigningIn(true);
+      signInWithFacebook().catch((err) => {
+        setIsSigningIn(false);
+      });
+    }
+  };
+
+  const onMicrosoftSignIn = (e) => {
+    e.preventDefault();
+    if (!isSigningIn) {
+      setIsSigningIn(true);
+      signInWithMicrosoft().catch((err) => {
+        setIsSigningIn(false);
+      });
+    }
+  };
+
   return (
     <AuthContainer fluid>
       {userLoggedIn && <Navigate to={'/Dashboard'} replace={true} />}
@@ -48,6 +68,8 @@ const Login = () => {
           <LoginForm
             onEmailSignIn={onEmailSignIn}
             onGoogleSignIn={onGoogleSignIn}
+            onFacebookSignIn={onFacebookSignIn} 
+            onMicrosoftSignIn={onMicrosoftSignIn} 
             email={email}
             setEmail={setEmail}
             password={password}

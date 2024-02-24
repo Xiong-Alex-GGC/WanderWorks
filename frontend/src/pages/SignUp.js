@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState } from "react";
-import { signUpWithEmailandPassword, signInWithGoogle } from "../firebase/auth";
+import { signUpWithEmailandPassword, signInWithGoogle,signInWithFacebook, signInWithMicrosoft } from "../firebase/auth";
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/authContext';
 import SignupForm from '../components/Forms/SignupForm';
@@ -56,6 +56,32 @@ const SignUp = () => {
   
     }
 
+    const signUpWithFacebook = async (e) => {
+      e.preventDefault();
+      if(!isRegistering) {
+        setIsRegistering(true);
+        try {
+          await signInWithFacebook();
+        } catch (err) {
+          setIsRegistering(false);
+          console.error(err);
+        }
+      }
+    }
+
+    const signUpWithMicrosoft = async (e) => {
+      e.preventDefault();
+      if(!isRegistering) {
+        setIsRegistering(true);
+        try {
+          await signInWithMicrosoft();
+        } catch (err) {
+          setIsRegistering(false);
+          console.error(err);
+        }
+      }
+    }
+
   return (
 
     <AuthContainer fluid>
@@ -66,6 +92,8 @@ const SignUp = () => {
           <SignupForm 
             signUp={signUp}
             signUpWithGoogle={signUpWithGoogle}
+            signUpWithFacebook={signUpWithFacebook}  
+            signUpWithMicrosoft={signUpWithMicrosoft}
             email={email}
             setEmail={setEmail}
             password={password}
