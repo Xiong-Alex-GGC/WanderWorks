@@ -10,7 +10,7 @@ const firebaseConfig = {
   messagingSenderId: "190469468391",
   appId: "1:190469468391:web:c9528ebc38b2b9ac28f242",
   measurementId: "G-T5XG15PNE0"
-};
+}; 
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -20,3 +20,4 @@ const microsoftProvider = new OAuthProvider('microsoft.com');
 const db = getFirestore(app);
 
 export { auth, googleProvider,facebookProvider, microsoftProvider,db, app};
+//Andrewg
