@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { auth, googleProvider } from "./firebase";
+import { createUserWithEmailAndPassword, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword } from "firebase/auth";
 import { 
     GoogleAuthProvider,
     FacebookAuthProvider,
-    MicrosoftAuthProvider,
+    OAuthProvider,
     createUserWithEmailAndPassword, 
     sendEmailVerification, 
     sendPasswordResetEmail, 
@@ -18,8 +19,17 @@ export const signUpWithEmailandPassword = async (email, password) => {
     return createUserWithEmailAndPassword(auth, email, password);
 };
 
-export const signInWithEmail = (email, password) => {
-    return signInWithEmailAndPassword(auth, email, password);
+// export const signInWithEmail = (email, password) => {
+//     return signInWithEmailAndPassword(auth, email, password);
+// };
+export const signInWithEmail = async (email, password) => {
+    try {
+        const result = await signInWithEmailAndPassword(auth, email, password);
+        return result;
+    } catch (error) {
+        console.error("Error signing in:", error);
+        throw error;
+    }
 };
 
 export const signInWithGoogle = async () => {
@@ -42,15 +52,17 @@ export const signInWithFacebook = async () => {
 };
 
 export const signInWithMicrosoft = async () => {
-    const provider = new MicrosoftAuthProvider(); // Create a MicrosoftAuthProvider instance
+    const microsoftProvider = new OAuthProvider('microsoft.com'); // Create Microsoft OAuthProvider instance
     try {
-        const result = await signInWithPopup(auth, provider);
-        return result;
+      const result = await signInWithPopup(auth, microsoftProvider); // Sign in with Microsoft using signInWithPopup
+      // Handle successful sign-in
+      return result;
     } catch (error) {
-        console.error("Error signing in with Microsoft:", error);
-        throw error;
+      // Handle sign-in error
+      console.error("Error signing in with Microsoft:", error);
+      throw error;
     }
-};
+  };
 
 export const signUserOut = () => {
     return auth.signOut();
