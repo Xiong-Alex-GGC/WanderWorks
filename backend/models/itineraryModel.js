@@ -1,4 +1,4 @@
-import { addDoc, collection, getDocs, updateDoc, doc, getDoc, query, where } from 'firebase/firestore';
+import { addDoc, collection, getDocs, updateDoc, doc, getDoc, query, where, deleteDoc } from 'firebase/firestore';
 import db from '../firebaseConfig.js';
 
 const itinCollection = collection(db, 'Itinerary');
@@ -33,4 +33,17 @@ export const updateItinerary = async (id, data) => {
 export const getItineraryById = async (id) => {
   const docSnapshot = await getDoc(doc(itinCollection, id));
   return docSnapshot.exists() ? { id: docSnapshot.id, ...docSnapshot.data() } : null;
+};
+
+export const deleteItinerary = async (itineraryID) => {
+
+  //checks if itinerary exists
+  const itineraryDoc = await getDoc(doc(itinCollection, itineraryID));
+
+  if (itineraryDoc.exists()) {
+    await deleteDoc(doc(itinCollection, itineraryID));
+    return true; // Deletion successful
+  }
+
+  return false; // Itinerary not found 
 };

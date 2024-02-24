@@ -99,6 +99,7 @@ export const sendVerificationEmail = async () => {
     }
 };
 
+
 export const updatePassword = async (newPassword) => {
     try {
         const user = auth.currentUser;
