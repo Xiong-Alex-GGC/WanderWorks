@@ -10,6 +10,7 @@ import { fetchDefaultPhotoByLocation } from '../../pexels/pexels';
 const ItineraryForm = ({ onTripIDReceived }) => {
     const [tripName, setTripName] = useState('');
     const [location, setLocation] = useState('');
+    const [coords, setCoords] = useState('');
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
     const [budget, setBudget] = useState('');
@@ -23,7 +24,6 @@ const ItineraryForm = ({ onTripIDReceived }) => {
       fetchDefaultPhotoByLocation(location)
         .then(imageUrl => {
           setBackgroundImage(imageUrl);
-          console.log(imageUrl);
         })
         .catch(error => {
           console.error('Error fetching photos:', error);
@@ -44,6 +44,7 @@ const ItineraryForm = ({ onTripIDReceived }) => {
             const response = await axios.post('http://localhost:4000/api/create-itinerary', {
                 tripName: tripName,
                 location: location,
+                coords: coords,
                 startDate: startDate,
                 endDate: endDate,
                 userID: currentUser.uid,
@@ -62,6 +63,11 @@ const ItineraryForm = ({ onTripIDReceived }) => {
     const handleLocationSelect = (selectedLocation) => {
         setLocation(selectedLocation);
     };
+
+    const handleLocationCoords = (locationCoords) => {
+        setCoords(locationCoords);
+    };
+
 
 
     return (
@@ -94,7 +100,7 @@ const ItineraryForm = ({ onTripIDReceived }) => {
                     />
                 </Form.Group>
 
-                <ItineraryLocationSuggestion onSuggestionSelect={handleLocationSelect} />
+                <ItineraryLocationSuggestion addressSelect={handleLocationSelect} coordsSelect={handleLocationCoords} />
 
                 <Form.Group className="mb-3">
                     <Form.Label>Start Date:</Form.Label>

@@ -1,6 +1,6 @@
 import { useAuth } from "../context/authContext";
 import MapWithRoute from "../components/Mapbox/MapWithRoute";
-import UserMap from "../components/Mapbox/Map";
+import DashboardMap from "../components/Mapbox/DashboardMap";
 import DemoMap from "../components/Mapbox/DemoMap";
 import ItineraryContainer from "../components/Containers/ItineraryContainer";
 import DashboardCalendar from "../components/Calendar/DashboardCalendar";
@@ -15,14 +15,16 @@ const Dashboard = () => {
                 Hello {currentUser.displayName ? currentUser.displayName : currentUser.email}, you are now logged in 
             </div>
 
+            <ItineraryContainer />
+
+
             {/*To be deleted, only here to demo */}
-            <UserMap />
+            <DashboardMap />
             <hr/>
             <DashboardCalendar />
 
             <hr/>
 
-            <ItineraryContainer />
 
         </>
     )
