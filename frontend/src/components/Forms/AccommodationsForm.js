@@ -57,7 +57,7 @@ const AccommodationsForm = ({ itineraryData, onClose }) => {
           <div>
             <label>
               Name:
-              <input type="text" value={accommodationnName} onChange={(e) => setAccommodationName(e.target.value)} />
+              <input type="text" value={accommodationName} onChange={(e) => setAccommodationName(e.target.value)} />
             </label>
           </div>
           <div>

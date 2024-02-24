@@ -1,111 +1,39 @@
-import React from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
-import { useState } from "react";
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/authContext';
-import DatePicker from 'react-datepicker';
-
-import ItineraryLocationSuggestion from '../components/Mapbox/ItineraryLocationSuggestion';
+import { Container } from 'react-bootstrap';
+import ItineraryForm from '../components/Forms/ItineraryForm';
+import ItinBackground from '../images/ItinBackground.jpg';
 
 const NewItinerary = () => {
-  const [tripName, setTripName] = useState('');
-  const [location, setLocation] = useState('');
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
   const { currentUser } = useAuth();
-  const [isCreated, setIsCreated] = useState (false);
-  const [budget, setBudget] = useState('');
-  const [tripID, setTripID] = useState ("");
-  
+  const [isCreated, setIsCreated] = useState(false);
   const [error, setError] = useState('');
+  const [tripID, setTripID] = useState(null);
 
-  const submitItinerary = async (e) => {
-    e.preventDefault(); //what does this do?
-    
-    //ensure the start date isn't before the current date
-    var curDate = new Date().getDate();
-    if(startDate.getDate() > curDate) {
-      setError('You cannot set the start date to before today');
-      return;
-    } else if(startDate.getDate() > endDate.getDate()) { //ensure the end date isn't before the start date
-      setError('The end date cannot be before the start date');
-      return;
-    }
-    try {
-      
-      const response = await axios.post('http://localhost:4000/api/create-itinerary', {
-        tripName: location,
-        location: location,
-        startDate: startDate,
-        endDate: endDate,
-        // budget: budget,
-        userID: currentUser.uid
-      });
-  
-      // Handle the response as needed (e.g., show a success message)
-      await setTripID(response.data.id);
-      await setIsCreated(true);
-      console.log('API Response:', response.data);
-      
-      //clear any previous errors
-      setError('');
-    } catch (error) {
-      // Handle errors (e.g., show an error message)
-      console.error('Error posting data:', error);
-    }
+  const itineraryCreated = (itineraryID) => {
+    setTripID(itineraryID);
   };
-
-  const handleLocationSelect = (selectedLocation) => {
-    setLocation(selectedLocation);
-  };
-
 
   return (
-    <div className="home-container">
+    <div style={{ 
+      height: '90vh',
+      width: '100%',
+      display: 'flex',
+      alignItems: 'center', 
+      justifyContent: 'center', 
+      backgroundImage: `url(${ItinBackground})`, // Use the imported image variable here
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
       
-      {isCreated && (<Navigate to={`/Itinerary/${tripID}`} replace={true} />)}
+      }}>
 
-      <h2>New Itinerary</h2>
+      {tripID && <Navigate to={`/Itinerary/${tripID}`} replace={true} />}
 
-      <form onSubmit={submitItinerary}>
-        
-      <ItineraryLocationSuggestion onSuggestionSelect={handleLocationSelect} />
-
-
-        <label>Start Date (Required):</label>
-        <DatePicker
-          selected={startDate}
-          onChange={(date) => setStartDate(date)}
-        />
-
-        <label>End Date (Required):</label>
-        <DatePicker
-          selected={endDate}
-          onChange={(date) => setEndDate(date)}
-        />
-{/* 
-        <h3>Want to keep track of your budget for this trip? Add your ideal maximum spendings here!</h3>
-        <label>Budget (optional):</label>
-        <br />
-        <input
-          type="number"
-          value={budget}
-          onChange={(e) => setBudget(e.target.value)}
-        />
-        <br/> */}
-        {error && <p style = {{color: 'red' }}>{error}</p>}
-        <button type="submit">Create Itinerary</button>
-      </form>
-
+      <ItineraryForm onTripIDReceived={itineraryCreated} />
     </div>
   );
 };
 
 export default NewItinerary;
-
-//Notes:
-/*
-  allow the user to choose a location in mapbox and then auto-fill the location field
-
-
-*/

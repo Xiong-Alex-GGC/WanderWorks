@@ -68,3 +68,20 @@ export const getItineraryById = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+export const deleteItinerary = async (req, res) => {
+  const itineraryID = req.body.itineraryID;
+
+  try {
+    const deletionResult = await itineraryModel.deleteItinerary(itineraryID);
+
+    if (deletionResult) {
+      res.send({ msg: "Itinerary Deleted" });
+    } else {
+      res.status(404).json({ error: 'Itinerary not found' });
+    }
+  } catch (error) {
+    console.error('Error deleting Itinerary data:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
