@@ -3,6 +3,8 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 import ActivityLocationSuggestion from '../Mapbox/ActivityLocationSuggeston';
+import { Row, Col, Button } from 'react-bootstrap';
+import { ActRow, ActColLeft, ActColRight } from '../../styles/Forms-Styles';
 
 const ActivityForm = ({ itineraryData, onClose }) => {
   const [activityName, setActivityName] = useState('');
@@ -51,60 +53,78 @@ const ActivityForm = ({ itineraryData, onClose }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <button onClick={closeForum}>Close</button>
-      <div>
-        <label>
-          Activity Name:
-          <input type="text" value={activityName} onChange={(e) => setActivityName(e.target.value)} />
-        </label>
-      </div>
-      <div>
-        <label>
-          Date:
-          <DatePicker selected={activityDate} onChange={(date) => setActivityDate(date)} />
-        </label>
-      </div>
-      <div>
-        <label>
-          Start Time:
-          <input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
-        </label>
-      </div>
-      <div>
-        <label>
-          End Time:
-          <input type="time" value={endTime} onChange={(e) => setEndTime(e.target.value)} />
-        </label>
-      </div>
-      <div>
-        <label>
-          Expenses:
-          <input type="text" value={expenses} onChange={(e) => setExpenses(e.target.value)} />
-        </label>
-      </div>
-      <div>
-        <label>
-          Tags (custom):
-          <input type="text" value={tags} onChange={(e) => setTags(e.target.value)} /> {/*change to process as a set of tags; */}
-          {/* user should ideally hit enter, not submitting the form, and then rendering the tag as a removable item */}
-        </label>
-      </div>
-      <div>
-        <label>
-          <ActivityLocationSuggestion onSuggestionSelect={handleLocationSelect}/>
-        </label>
-      </div>
-      <div>
-        <label>
-          Notes:
-          <br />
-          <textarea value={notes} onChange={(e) => setNotes(e.target.value)} />
-        </label>
-      </div>
-      <button type="submit">Submit</button>
+    <form style={{ background: '#ecf7fc', textAlign: 'center', padding: '10px 0px 10px 0px' }} onSubmit={handleSubmit}>
+        <h3>Activity Form</h3>
+        <ActRow>
+            <ActColLeft sm={5}>
+                Activity Name:
+            </ActColLeft>
+            <ActColRight sm={7}>
+                <input type="text" value={activityName} onChange={(e) => setActivityName(e.target.value)} />
+            </ActColRight>
+        </ActRow>
+        <ActRow>
+            <ActColLeft sm={5}>
+                Date:
+            </ActColLeft>
+            <ActColRight sm={7}>
+                <DatePicker selected={activityDate} onChange={(date) => setActivityDate(date)} />
+            </ActColRight>
+        </ActRow>
+        <ActRow>
+            <ActColLeft sm={5}>
+                Start Time:
+            </ActColLeft>
+            <ActColRight sm={7}>
+                <input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
+            </ActColRight>
+        </ActRow>
+        <ActRow>
+            <ActColLeft sm={5}>
+                End Time:
+            </ActColLeft>
+            <ActColRight sm={7}>
+                <input type="time" value={endTime} onChange={(e) => setEndTime(e.target.value)} />
+            </ActColRight>
+        </ActRow>
+        <ActRow>
+            <ActColLeft sm={5}>
+                Expenses:
+            </ActColLeft>
+            <ActColRight sm={7}>
+                <input type="text" value={expenses} onChange={(e) => setExpenses(e.target.value)} />
+            </ActColRight>
+        </ActRow>
+        <ActRow>
+            <ActColLeft sm={5}>
+                Tags (custom):
+            </ActColLeft>
+            <ActColRight sm={7}>
+                <input type="text" value={tags} onChange={(e) => setTags(e.target.value)} /> {/*change to process as a set of tags; */}
+                {/* user should ideally hit enter, not submitting the form, and then rendering the tag as a removable item */}
+            </ActColRight>
+        </ActRow>
+        <ActRow>
+        <ActColLeft sm={5}>
+          Location (address):
+        </ActColLeft>
+        <ActColRight sm={7}>
+            <ActivityLocationSuggestion onSuggestionSelect={handleLocationSelect} />
+        </ActColRight>
+        </ActRow>
+        <ActRow>
+            <ActColLeft sm={5}>
+                Notes:
+            </ActColLeft>
+            <ActColRight sm={7}>
+                <textarea value={notes} onChange={(e) => setNotes(e.target.value)} />
+            </ActColRight>
+        </ActRow>
+        <Button type="submit" variant="outline-primary" className='mx-2'>Submit</Button>
+        <Button onClick={closeForum} variant="outline-primary" className='mx-2'>Close</Button>
     </form>
-  );
+);
+
 };
 
 export default ActivityForm;

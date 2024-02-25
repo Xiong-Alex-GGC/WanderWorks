@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import ItineraryCard from '../Cards/ItineraryCard';
+import ExploreCard from '../Cards/ExploreCard';
 import { useAuth } from '../../context/authContext';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import theme from '../../styles/theme';
 
-const ItineraryContainer = () => {
+const ExploreContainer = () => {
   const [itineraries, setItineraries] = useState([]);
   const { currentUser } = useAuth();
 
@@ -46,12 +46,11 @@ const ItineraryContainer = () => {
   return (
     <>
       <div style={{ backgroundColor: theme.colors.background, paddingTop: 20, paddingLeft: 30 }}>
-      <h2>Your Itineraries</h2>
         <Carousel 
         responsive={responsive}
         >
           {itineraries.map((itinerary) => (
-            <ItineraryCard key={itinerary.id} {...itinerary} />
+            <ExploreCard key={itinerary.id} {...itinerary} />
           ))}
         </Carousel>
       </div>
@@ -59,4 +58,4 @@ const ItineraryContainer = () => {
   );
 };
 
-export default ItineraryContainer;
+export default ExploreContainer;

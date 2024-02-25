@@ -6,6 +6,7 @@ import SignUp from '../pages/SignUp';
 import Dashboard from '../pages/Dashboard';
 import NewItinerary from '../pages/NewItinerary';
 import Itinerary from '../pages/Itinerary';
+import Explore from '../pages/Explore';
 
 
 const router = createBrowserRouter(
@@ -16,6 +17,7 @@ const router = createBrowserRouter(
             <Route path="/Signup" element={<SignUp />} />
             <Route path="/Login" element={<Login />} />
             <Route path="/Dashboard" element={<Dashboard />} />
+            <Route path="/Explore" element={<Explore />} />
             <Route path="/NewItinerary" element={<NewItinerary />} />
             <Route path="/Itinerary/:id" element={<Itinerary />} />
 

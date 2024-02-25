@@ -51,6 +51,10 @@ const TransportationForm = ({ itineraryData, onClose }) => {
       }
     };
 
+    const closeForum = () => {
+      onClose();
+    }
+
     //Render additional fields as needed
     const renderAdditionalFields = () => {
       if(type == 'plane' || type == 'train') {
@@ -123,6 +127,7 @@ const TransportationForm = ({ itineraryData, onClose }) => {
           </label>
         </div>
         <button type="submit">Submit</button>
+        <button onClick={closeForum}>Close</button>
       </form>
     );
   };

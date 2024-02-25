@@ -49,8 +49,6 @@ const ActivityLocationSuggestion = ({ onSuggestionSelect  }) => {
 
   return (
     <div>
-      <label>Location (Address):</label>
-      <br />
       <input
         type="text"
         value={address}
