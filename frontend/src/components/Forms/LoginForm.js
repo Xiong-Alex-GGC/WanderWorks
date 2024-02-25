@@ -19,7 +19,7 @@ import {
   SeparatorText
 } from '../../styles/Auth-Styles';
 
-const LoginForm = ({ onEmailSignIn, onGoogleSignIn, email, setEmail, password, setPassword }) => {
+const LoginForm = ({ onEmailSignIn, onGoogleSignIn,onFacebookSignIn,onMicrosoftSignIn, email, setEmail, password, setPassword }) => {
   return (
     <StyledContainer>
       <StyledForm>
@@ -65,14 +65,17 @@ const LoginForm = ({ onEmailSignIn, onGoogleSignIn, email, setEmail, password, s
             <GoogleIcon />
           </IconButton>
 
-          <IconButton variant="" onClick={onGoogleSignIn} color="#4267B2">
+          <IconButton variant="" onClick={onFacebookSignIn} color="#4267B2">
             <FacebookIcon />
           </IconButton>
 
-          <IconButton variant="" onClick={onGoogleSignIn} color="#00A4EF">
+          <IconButton variant="" onClick={onMicrosoftSignIn} color="#00A4EF">
             <MicrosoftIcon />
           </IconButton>
         </IconsContainer>
+        <p>
+          <StyledLink to="/ForgotPassword">Forgot Password?</StyledLink>
+        </p>
       </StyledForm>
     </StyledContainer>
   );

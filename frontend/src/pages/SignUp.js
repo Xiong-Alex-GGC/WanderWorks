@@ -58,7 +58,7 @@ const SignUp = () => {
 
     const signUpWithFacebook = async (e) => {
       e.preventDefault();
-      if(!isRegistering) {
+      if (!isRegistering) {
         setIsRegistering(true);
         try {
           await signInWithFacebook();
@@ -67,11 +67,11 @@ const SignUp = () => {
           console.error(err);
         }
       }
-    }
-
+    };
+  
     const signUpWithMicrosoft = async (e) => {
       e.preventDefault();
-      if(!isRegistering) {
+      if (!isRegistering) {
         setIsRegistering(true);
         try {
           await signInWithMicrosoft();
@@ -80,7 +80,7 @@ const SignUp = () => {
           console.error(err);
         }
       }
-    }
+    };
 
   return (
 
@@ -92,7 +92,7 @@ const SignUp = () => {
           <SignupForm 
             signUp={signUp}
             signUpWithGoogle={signUpWithGoogle}
-            signUpWithFacebook={signUpWithFacebook}  
+            signUpWithFacebook={signUpWithFacebook}
             signUpWithMicrosoft={signUpWithMicrosoft}
             email={email}
             setEmail={setEmail}

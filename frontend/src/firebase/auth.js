@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { auth, googleProvider } from "./firebase";
-import { createUserWithEmailAndPassword, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword } from "firebase/auth";
 import { 
     GoogleAuthProvider,
     FacebookAuthProvider,
@@ -90,9 +89,10 @@ export const sendVerificationEmail = async () => {
     }
 };
 
- export const sendPasswordResetEmail = async (email) => {
+ export const sendUserPasswordResetEmail = async (email) => {
     try {
          await sendPasswordResetEmail(auth, email);
+         console.log("Link Sent!");
    } catch (error) {
        console.error("Error sending password reset email:", error);
         throw error;
@@ -100,7 +100,7 @@ export const sendVerificationEmail = async () => {
 };
 
 
-export const updatePassword = async (newPassword) => {
+export const updateUserPassword = async (newPassword) => {
     try {
         const user = auth.currentUser;
         await updatePassword(user, newPassword);

@@ -6,6 +6,8 @@ import SignUp from '../pages/SignUp';
 import Dashboard from '../pages/Dashboard';
 import NewItinerary from '../pages/NewItinerary';
 import Itinerary from '../pages/Itinerary';
+import ResetPassword from '../pages/ResetPassword';
+import ForgotPassword from '../pages/ForgotPassword';
 
 
 const router = createBrowserRouter(
@@ -18,6 +20,8 @@ const router = createBrowserRouter(
             <Route path="/Dashboard" element={<Dashboard />} />
             <Route path="/NewItinerary" element={<NewItinerary />} />
             <Route path="/Itinerary/:id" element={<Itinerary />} />
+            <Route path="/ForgotPassword" element={<ForgotPassword/>} />
+            <Route path="/ResetPassword" element={<ResetPassword />} />
 
         </Route>
     )
