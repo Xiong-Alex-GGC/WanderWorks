@@ -40,7 +40,7 @@ const DashboardMap = () => {
 
     return (
 
-        <div style={{ width: '100%' }}>
+        <div style={{ width: '100%' , paddingTop: 20, paddingLeft: 30}}>
             <h2>Your Journey</h2>
             <div style={{
                 fontSize: 12,

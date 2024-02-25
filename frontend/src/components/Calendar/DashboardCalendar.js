@@ -197,9 +197,8 @@ const DashboardCalendar = () => {
 
     return (
         <>
-
-            <h1 style={{ margin: '5%' }}>Shedule Overview</h1>
-
+        <div>
+            <h2 style={{ paddingTop: 20, paddingLeft: 30  }}>Shedule Overview</h2>
             <ComponentContainer>
                 <CalendarContainer>
                     <InformationCol xs={4}>
@@ -238,7 +237,7 @@ const DashboardCalendar = () => {
                     </CalendarCol>
                 </CalendarContainer>
             </ComponentContainer>
-
+            </div>
         </>
     );
 };

@@ -15,6 +15,7 @@ export const HCarouselItem = styled(Carousel.Item)`
 
 export const HCarouseImage = styled(Image)`
     height: 100%;
+    width: 100%;
     object-fit: cover;
 `;
 

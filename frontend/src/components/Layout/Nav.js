@@ -1,8 +1,9 @@
 import React from 'react';
-import { Navbar, Nav, Button } from 'react-bootstrap';
+import { Navbar, Nav, Button, Image } from 'react-bootstrap';
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from '../../context/authContext';
 import { signUserOut } from '../../firebase/auth';
+import avatar1 from '../../images/Avatar1.png';
 
 const NavBar = () => {
     const navigate = useNavigate();
@@ -18,14 +19,17 @@ const NavBar = () => {
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="me-auto">
                     <Nav.Link as={Link} to={userLoggedIn ? "Dashboard" : ""}>Home</Nav.Link>
-                    <Nav.Link href="#explore">Explore</Nav.Link>
+                    <Nav.Link as={Link} to="Explore">Explore</Nav.Link>
                     <Nav.Link href="#features">Features</Nav.Link>
                 </Nav>
                 {userLoggedIn ? (
                     <>
                         <Button variant="outline-danger" onClick={() => {signUserOut().then(() => {navigate("/")})}}>Sign Out</Button>
                         <Nav.Link as={Link} to="NewItinerary">
-                            <Button variant="primary">New Adventure</Button>
+                            <Button variant="primary" className='mx-3'>New Adventure</Button>
+                        </Nav.Link>
+                        <Nav.Link as={Link} to="Dashboard">
+                            <Image src={avatar1} alt="Avatar" style={{ width: '40px', height: '40px' }}/>
                         </Nav.Link>
                     </>
                 ) : (

@@ -52,8 +52,13 @@ const AccommodationsForm = ({ itineraryData, onClose }) => {
       }
     };
 
+    const closeForum = () => {
+      onClose();
+    }
+
     return (
         <form onSubmit={handleSubmit}>
+          <button onClick={closeForum}>Close</button>
           <div>
             <label>
               Name:

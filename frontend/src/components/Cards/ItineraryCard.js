@@ -3,9 +3,6 @@ import { Link } from "react-router-dom";
 import axios from 'axios';
 import { Row, Col } from 'react-bootstrap';
 
-
-
-
 const ItineraryCard = ({ id, tripName, startDate, endDate, imgURL, location }) => { //renders the itinerary data
   const [isDeleted, setIsDeleted] = useState(false); // New state to track deletion
 
@@ -81,7 +78,7 @@ const ItineraryCard = ({ id, tripName, startDate, endDate, imgURL, location }) =
       <Link to={`/Itinerary/${id}`} style={{textDecoration: 'none'}}>
         <Row style={{
           height: 200,
-          backgroundColor: 'yellow',
+          backgroundColor: 'gray',
           backgroundImage: `url(${imgURL})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',

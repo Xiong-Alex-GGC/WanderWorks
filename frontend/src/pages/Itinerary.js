@@ -75,7 +75,7 @@ const Itinerary = () => {
                   flexDirection: 'column',
                   alignItems: 'center',
                   padding: '20px',
-                  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.5)'
+                  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.5)',
                 }}>
                   <h6>{itineraryData.tripName}</h6>
                 </div>
