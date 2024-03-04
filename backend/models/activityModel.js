@@ -1,6 +1,7 @@
 // models/activityModel.js
 import { addDoc, collection, getDocs, updateDoc, doc, getDoc, query, where, deleteDoc } from 'firebase/firestore';
 import db from '../firebaseConfig.js';
+import * as itineraryController from '../controllers/itineraryController.js';
 
 const activityCollection = collection(db, 'Activity'); //connecting to the database by specifying table name
 
@@ -16,10 +17,19 @@ export const getAllItineraryActivities = async (itinID) => {
 };
 
 export const createActivity = async (data) => {
+  const itinID = data.itineraryID;
+  await itineraryController.addExpenses(itinID, data.expense);
   await addDoc(activityCollection, data); //add document to the collection
 };
 
 export const updateActivity = async (id, data) => {
+  const itinID = data.itineraryID;
+  //get the before and after expenses
+  const activityData = getActivityById(id);
+  const beforeExpense = activityData.expense;
+  const afterExpense = data.expense;
+  const expenseChange = afterExpense - beforeExpense;
+  itineraryController.addExpenses(itinID, expenseChange);
   await updateDoc(doc(activityCollection, id), data); //update a pre-existing document
 };
 
@@ -35,6 +45,12 @@ export const deleteActivity = async (activityID) => {
   const activityDoc = await getDoc(doc(activityCollection, activityID));
 
   if (activityDoc.exists()) {
+    //first remove the expense
+    const activityData = getActivityById(id);
+    const expense = -1 * activityData.expense; //by multiplying by -1, "adding" the expense actually subtracts it
+    const itinID = activityData.itineraryID;
+    itineraryController.addExpenses(itinID, expense);
+    
     await deleteDoc(doc(activityCollection, activityID));
     return true; // Deletion successful
   }

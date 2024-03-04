@@ -1,5 +1,6 @@
 import React from 'react';
 import { useState } from "react";
+import { Alert } from 'react-bootstrap';
 import { signUpWithEmailandPassword, signInWithGoogle } from "../firebase/auth";
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/authContext';
@@ -25,6 +26,7 @@ const SignUp = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState ("");
     const [isRegistering, setIsRegistering] = useState("");
+    const [error, setError] = useState('');
 
     const { userLoggedIn } = useAuth();
 
@@ -39,6 +41,7 @@ const SignUp = () => {
         } catch (err) {
             setIsRegistering(false);
             console.error(err);
+            setError(err);
         }
       }
   
@@ -71,6 +74,7 @@ const SignUp = () => {
             password={password}
             setPassword={setPassword}
           />
+          {error && <Alert variant="danger">{error}</Alert>}
         </FormCol>
       </FormRow>
     </AuthContainer>

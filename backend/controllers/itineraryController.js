@@ -85,3 +85,26 @@ export const deleteItinerary = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+export const addExpenses = async (id, expense) => {
+    try {
+    const itineraryData = await itineraryModel.getItineraryById(id);
+    const startExpenses = itineraryData.totalExpenses;
+    const newExpenses = startExpenses + expense;
+    const data = {
+      totalExpenses: newExpenses
+    };
+    await itineraryModel.updateItinerary(id, data);
+    //res.send({ msg: "Expense tracked for itinerary"});
+    console.log("Hopefully this worked?");
+  } catch (error) {
+    console.error('Error updating itinerary with tracked expense:', error);
+    //res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
+
+/*
+export const removeExpenses = async (id, expense) => {
+
+}
+*/

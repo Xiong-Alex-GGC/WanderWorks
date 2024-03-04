@@ -23,10 +23,17 @@ const TransportationForm = ({ itineraryData, onClose }) => {
     const [expenses, setExpenses] = useState('');
     const [confirmationEmail, setConfirmationEmail] = useState('');
     const [notes, setNotes] = useState('');
-    //const [error, setError] = useState('');
+    const [error, setError] = useState('');
   
     const handleSubmit = async (event) => {
       event.preventDefault();
+
+      numericExpense = parseFloat(expenses); //this form will be removed, anyway
+      
+      if(isNaN(numericExpense) || numericExpense < 0) {
+        setError('Please enter a valid positive number.');
+        return; //should also ensure numbers are used in the backend
+      }
   
       try {
         const response = await axios.post('http://localhost:4000/api/create-transportation', { //the response after sending a request to the backend
@@ -35,7 +42,7 @@ const TransportationForm = ({ itineraryData, onClose }) => {
           "departureDate": departureDate,
           "departureTime": departureTime,
           "arrivalTime": arrivalTime,
-          "expense": expenses,
+          "expense": numericExpense,
           "notes": notes,
           "itineraryID": itineraryData.id
         });
@@ -108,6 +115,7 @@ const TransportationForm = ({ itineraryData, onClose }) => {
             Expenses:
             <input type="number" value={expenses} onChange={(e) => setExpenses(e.target.value)} />
           </label>
+          {error && <Alert variant="danger">{error}</Alert>}
         </div>
         <div>
           <label>

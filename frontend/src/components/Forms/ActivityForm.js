@@ -7,6 +7,7 @@ import ActivityLocationSuggestion from '../Mapbox/ActivityLocationSuggeston';
 const ActivityForm = ({ itineraryData, onClose }) => {
   const [activityName, setActivityName] = useState('');
   const [activityDate, setActivityDate] = useState(new Date());
+  const [type, setActivityType] = useState('');
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
   const [expenses, setExpenses] = useState('');
@@ -17,13 +18,26 @@ const ActivityForm = ({ itineraryData, onClose }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    let numericExpense = null;
+    if(expenses !== '') {
+      numericExpense = parseFloat(expenses);
+
+      if(isNaN(numericExpense) || numericExpense < 0) {
+        setError('Please enter a valid positive number for expenses');
+        return;
+      }
+    }
+
+    //Check date to ensure it's within the confines of the itinerary it's on
+
     try {
       const response = await axios.post('http://localhost:4000/api/create-activity', { //the response after sending a request to the backend
         "name": activityName,
         "date": activityDate,
+        "type": type,
         "startTime": startTime,
         "endTime": endTime,
-        "expense": expenses,
+        "expense": numericExpense,
         
         "tags": tags,
         "address": location,
@@ -66,6 +80,22 @@ const ActivityForm = ({ itineraryData, onClose }) => {
         </label>
       </div>
       <div>
+      <label>
+            Type:
+            <select
+              value={type}
+              onChange={(e) => setActivityType(e.target.value)}
+            >
+              <option value="">Select</option>
+              <option value="transportation">Major Transportation</option>
+              <option value="museum">Museum</option>
+              <option value="restaurant">Restaurant</option>
+              <option value="tour">Tour</option>
+              <option value="other">Other</option>
+            </select>
+          </label>
+      </div>
+      <div>
         <label>
           Start Time:
           <input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
@@ -80,7 +110,7 @@ const ActivityForm = ({ itineraryData, onClose }) => {
       <div>
         <label>
           Expenses:
-          <input type="text" value={expenses} onChange={(e) => setExpenses(e.target.value)} />
+          <input type="number" value={expenses} onChange={(e) => setExpenses(e.target.value)} />
         </label>
       </div>
       <div>
