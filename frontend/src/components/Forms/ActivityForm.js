@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Form, Button, Alert, Container } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
@@ -14,6 +15,8 @@ const ActivityForm = ({ itineraryData, onClose }) => {
   const [tags, setTags] = useState('');
   const [location, setLocation] = useState('');
   const [notes, setNotes] = useState('');
+
+  const [error, setError] = useState('');
 
   const handleSubmit = async (event) => {
     event.preventDefault();

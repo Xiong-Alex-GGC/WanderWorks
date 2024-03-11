@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
+import { Form, Button, Alert, Container } from 'react-bootstrap';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 
@@ -28,7 +29,7 @@ const TransportationForm = ({ itineraryData, onClose }) => {
     const handleSubmit = async (event) => {
       event.preventDefault();
 
-      numericExpense = parseFloat(expenses); //this form will be removed, anyway
+      let numericExpense = parseFloat(expenses); //this form will be removed, anyway
       
       if(isNaN(numericExpense) || numericExpense < 0) {
         setError('Please enter a valid positive number.');

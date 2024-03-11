@@ -18,6 +18,11 @@ export const getAllItineraryActivities = async (itinID) => {
 
 export const createActivity = async (data) => {
   const itinID = data.itineraryID;
+  //ensure new activity is within the confines of the itinerary start and end dates
+
+  //ensure new activity does not overlap with other activities
+
+  //throw an error if one of the fail conditions above is met, otherwise complete request
   await itineraryController.addExpenses(itinID, data.expense);
   await addDoc(activityCollection, data); //add document to the collection
 };
@@ -46,7 +51,7 @@ export const deleteActivity = async (activityID) => {
 
   if (activityDoc.exists()) {
     //first remove the expense
-    const activityData = getActivityById(id);
+    const activityData = getActivityById(activityID);
     const expense = -1 * activityData.expense; //by multiplying by -1, "adding" the expense actually subtracts it
     const itinID = activityData.itineraryID;
     itineraryController.addExpenses(itinID, expense);

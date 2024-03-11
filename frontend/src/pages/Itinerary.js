@@ -98,18 +98,6 @@ const Itinerary = () => {
 
                 <hr />
 
-                <h3>Transportation</h3>
-                <button onClick={openTransportationForm}>New Transportation</button>
-                <hr />
-                {showTransportationForm && (
-                    <TransportationForm itineraryData={itineraryData} onClose={closeTransportationForm} />
-                )}
-                <hr />
-                
-                <TransportationContainer itineraryData={itineraryData} />
-
-                <hr />
-
                 <h3>Accommodation</h3>
                 <button onClick={openAccommodationForm}>New Accommodation</button>
                 <hr />
@@ -146,5 +134,17 @@ export default Itinerary;
 //Notes: In the end, accommodations should be rendered differentl- well everything should be rendered differently,
 //but an accommodation should not be rendered like an activity
 
+/*
+<h3>Transportation</h3>
+  <button onClick={openTransportationForm}>New Transportation</button>
+  <hr />
+    {showTransportationForm && (
+    <TransportationForm itineraryData={itineraryData} onClose={closeTransportationForm} />
+    )}
+  <hr />
+
+<TransportationContainer itineraryData={itineraryData} />
+*/
+              
 
 
