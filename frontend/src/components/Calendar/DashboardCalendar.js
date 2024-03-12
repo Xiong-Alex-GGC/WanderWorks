@@ -23,6 +23,9 @@ import { Link } from 'react-router-dom';
 
 
 const DashboardCalendar = () => {
+
+    
+
     // Get current date
     const currentDate = new Date();
 
@@ -71,6 +74,8 @@ const DashboardCalendar = () => {
             currentDatePointer = addDays(currentDatePointer, 1);
         }
         calendarWeeks.push(currentWeek);
+
+        
     }
 
     // Handle day click
