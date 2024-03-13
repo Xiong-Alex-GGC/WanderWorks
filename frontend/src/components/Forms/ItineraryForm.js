@@ -35,10 +35,23 @@ const ItineraryForm = ({ onTripIDReceived }) => {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
+        //convert budget to a float
+        let numericBudget = null;
+        if(budget !== '') {
+            numericBudget = parseFloat(budget);
+
+            if(isNaN(numericBudget) || numericBudget < 0) {
+                setError('Please enter a valid positive budget');
+                return;
+            }
+        }
+        
+        //const curDate = new Date();
         if (endDate < startDate) {
             setError("End date cannot be before the start date");
             return; // Exit the function early
         }
+        //check the current date
 
         try {
             const response = await axios.post('http://localhost:4000/api/create-itinerary', {
@@ -47,8 +60,12 @@ const ItineraryForm = ({ onTripIDReceived }) => {
                 coords: coords,
                 startDate: startDate,
                 endDate: endDate,
+
+                budget: numericBudget,
+                totalExpenses: 0,
                 userID: currentUser.uid,
                 imgURL: backgroundImage
+
             });
 
             // Return TripID
@@ -118,6 +135,16 @@ const ItineraryForm = ({ onTripIDReceived }) => {
                         className="form-control"
                         selected={endDate}
                         onChange={(date) => setEndDate(date)}
+                        required
+                    />
+                </Form.Group>
+
+                <Form.Group className="mb-3">
+                    <Form.Label>Budget: $</Form.Label>
+                    <Form.Control
+                        type="number"
+                        value={budget}
+                        onChange={(e) => setBudget(e.target.value)}
                         required
                     />
                 </Form.Group>

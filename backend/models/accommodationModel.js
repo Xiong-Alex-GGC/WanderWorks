@@ -15,11 +15,26 @@ export const getAllItineraryAccommodations = async (itinID) => {
 };
 
 export const createAccommodation = async (data) => {
+  //ensure the accommodation is within the confines of the itinerary start and end dates
+
+  //ensure the accommodation does not overlap with other accommodations (for some reason)
+
+
+  //throw an error if one of the fail conditions above is met, otherwise complete request
+  const itinID = data.itineraryID;
+  await itineraryController.addExpenses(itinID, data.expenses); 
   await addDoc(accommodationCollection, data); //add document to the collection
 };
 
 export const updateAccommodation = async (id, data) => {
-await updateDoc(doc(accommodationCollection, id), data); //update a pre-existing document
+  const itinID = data.itineraryID;
+  //get before and after expenses
+  const accommodationData = getAccommodationById(id);
+  const beforeExpense = accommodationData.expense;
+  const afterExpense = data.expenses;
+  const expenseChange = afterExpense - beforeExpense;
+  itineraryController.addExpenses(itinID, expenseChange);
+  await updateDoc(doc(accommodationCollection, id), data); //update a pre-existing document
 };
 
 export const getAccommodationById = async (id) => {
@@ -34,9 +49,15 @@ export const deleteAccommodation = async (accommodationID) => {
   const accommodationDoc = await getDoc(doc(accommodationCollection, accommodationID));
 
   if (accommodationDoc.exists()) {
+    //first remove the expense
+    const accommodationData = getAccommodationById(accommodationID);
+    const expense = -1 * accommodationData.expenses;
+    const itinID = accommodationData.itineraryID;
+    itineraryController.addExpenses(itinID, expense);
+    
     await deleteDoc(doc(accommodationCollection, accommodationID));
     return true; // Deletion successful
   }
 
-  return false; // Transportation not found 
+  return false; // Accommodation not found 
 };

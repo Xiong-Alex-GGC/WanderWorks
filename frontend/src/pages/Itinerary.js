@@ -23,6 +23,7 @@ const Itinerary = () => {
       try {
         const response = await axios.get(`http://localhost:4000/api/itinerary/${id}`);
         setItineraryData(response.data);
+        //
       } catch (error) {
         console.error('Error fetching itinerary data:', error);
       }
@@ -97,18 +98,6 @@ const Itinerary = () => {
 
                 <hr />
 
-                <h3>Transportation</h3>
-                <button onClick={openTransportationForm}>New Transportation</button>
-                <hr />
-                {showTransportationForm && (
-                    <TransportationForm itineraryData={itineraryData} onClose={closeTransportationForm} />
-                )}
-                <hr />
-                
-                <TransportationContainer itineraryData={itineraryData} />
-
-                <hr />
-
                 <h3>Accommodation</h3>
                 <button onClick={openAccommodationForm}>New Accommodation</button>
                 <hr />
@@ -134,6 +123,26 @@ const Itinerary = () => {
       )}
     </Row>
   );
+
+  const calculateRemainingBudget = () => {
+    //
+  }
 };
 
 export default Itinerary;
+
+//Notes: In the end, accommodations should be rendered differentl- well everything should be rendered differently,
+//but an accommodation should not be rendered like an activity
+
+/*
+<h3>Transportation</h3>
+  <button onClick={openTransportationForm}>New Transportation</button>
+  <hr />
+    {showTransportationForm && (
+    <TransportationForm itineraryData={itineraryData} onClose={closeTransportationForm} />
+    )}
+  <hr />
+
+<TransportationContainer itineraryData={itineraryData} />
+*/
+
