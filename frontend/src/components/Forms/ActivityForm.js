@@ -4,6 +4,8 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 import ActivityLocationSuggestion from '../Mapbox/ActivityLocationSuggeston';
+import { Row, Col, Button } from 'react-bootstrap';
+import { ActRow, ActColLeft, ActColRight } from '../../styles/Forms-Styles';
 
 const ActivityForm = ({ itineraryData, onClose }) => {
   const [activityName, setActivityName] = useState('');
@@ -137,7 +139,8 @@ const ActivityForm = ({ itineraryData, onClose }) => {
       </div>
       <button type="submit">Submit</button>
     </form>
-  );
+);
+
 };
 
 export default ActivityForm;

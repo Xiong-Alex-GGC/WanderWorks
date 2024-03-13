@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from "react";
 import { Alert } from 'react-bootstrap';
-import { signUpWithEmailandPassword, signInWithGoogle } from "../firebase/auth";
+import { signUpWithEmailandPassword, signInWithGoogle,signInWithFacebook, signInWithMicrosoft } from "../firebase/auth";
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/authContext';
 import SignupForm from '../components/Forms/SignupForm';
@@ -59,6 +59,32 @@ const SignUp = () => {
   
     }
 
+    const signUpWithFacebook = async (e) => {
+      e.preventDefault();
+      if(!isRegistering) {
+        setIsRegistering(true);
+        try {
+          await signInWithFacebook();
+        } catch (err) {
+          setIsRegistering(false);
+          console.error(err);
+        }
+      }
+    }
+
+    const signUpWithMicrosoft = async (e) => {
+      e.preventDefault();
+      if(!isRegistering) {
+        setIsRegistering(true);
+        try {
+          await signInWithMicrosoft();
+        } catch (err) {
+          setIsRegistering(false);
+          console.error(err);
+        }
+      }
+    }
+
   return (
 
     <AuthContainer fluid>
@@ -69,6 +95,8 @@ const SignUp = () => {
           <SignupForm 
             signUp={signUp}
             signUpWithGoogle={signUpWithGoogle}
+            signUpWithFacebook={signUpWithFacebook}  
+            signUpWithMicrosoft={signUpWithMicrosoft}
             email={email}
             setEmail={setEmail}
             password={password}
@@ -79,31 +107,6 @@ const SignUp = () => {
       </FormRow>
     </AuthContainer>
 
-    // <div className="home-container">
-    //   {userLoggedIn && (<Navigate to={'/Dashboard'} replace={true} />)}
-
-
-
-    //   <Row gutter={[16, 16]}>
-    //     <Col span={12}>
-    //       <Card>
-    //         <div>
-    //             <input placeholder = "Email"
-    //             onChange={(e) => setEmail(e.target.value)}/>
-
-    //             <input placeholder = "Password"
-    //             type="password"
-    //             onChange={(e) => setPassword(e.target.value)}/>
-
-    //             <button onClick={signUp}>Sign Up</button>
-
-    //             <button onClick={signUpWithGoogle}>Sign Up With Google</button>
-
-    //         </div>
-
-
-      
-    // </div>
   );
 };
 

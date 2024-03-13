@@ -1,16 +1,13 @@
 import { useState } from "react";
 import { auth, googleProvider } from "./firebase";
+import { createUserWithEmailAndPassword, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword } from "firebase/auth";
 import { 
     GoogleAuthProvider,
     FacebookAuthProvider,
-    MicrosoftAuthProvider,
-    createUserWithEmailAndPassword, 
-    sendEmailVerification, 
-    sendPasswordResetEmail, 
+    OAuthProvider, 
     signInWithPopup, 
     signOut, 
-    updatePassword, 
-    signInWithEmailAndPassword 
+    updatePassword 
 } from "firebase/auth";
 
 const specialCharacterRegex = /[!@#$%^&*(),.?":{}|<>]/;
@@ -25,8 +22,17 @@ export const signUpWithEmailandPassword = async (email, password) => {
     }
 };
 
-export const signInWithEmail = (email, password) => {
-    return signInWithEmailAndPassword(auth, email, password);
+// export const signInWithEmail = (email, password) => {
+//     return signInWithEmailAndPassword(auth, email, password);
+// };
+export const signInWithEmail = async (email, password) => {
+    try {
+        const result = await signInWithEmailAndPassword(auth, email, password);
+        return result;
+    } catch (error) {
+        console.error("Error signing in:", error);
+        throw error;
+    }
 };
 
 export const signInWithGoogle = async () => {
@@ -48,17 +54,18 @@ export const signInWithFacebook = async () => {
     }
 };
 
-
-// export const signInWithMicrosoft = async () => {
-//     const provider = new MicrosoftAuthProvider(); // Create a MicrosoftAuthProvider instance
-//     try {
-//         const result = await signInWithPopup(auth, provider);
-//         return result;
-//     } catch (error) {
-//         console.error("Error signing in with Microsoft:", error);
-//         throw error;
-//     }
-// };
+export const signInWithMicrosoft = async () => {
+    const microsoftProvider = new OAuthProvider('microsoft.com'); // Create Microsoft OAuthProvider instance
+    try {
+      const result = await signInWithPopup(auth, microsoftProvider); // Sign in with Microsoft using signInWithPopup
+      // Handle successful sign-in
+      return result;
+    } catch (error) {
+      // Handle sign-in error
+      console.error("Error signing in with Microsoft:", error);
+      throw error;
+    }
+  };
 
 export const signUserOut = () => {
     return auth.signOut();
@@ -86,12 +93,11 @@ export const sendVerificationEmail = async () => {
     }
 };
 
-
-// export const sendPasswordResetEmail = async (email) => {
+//  export const sendPasswordResetEmail = async (email) => {
 //     try {
-//         await sendPasswordResetEmail(auth, email);
-//     } catch (error) {
-//         console.error("Error sending password reset email:", error);
+//          await sendPasswordResetEmail(auth, email);
+//    } catch (error) {
+//        console.error("Error sending password reset email:", error);
 //         throw error;
 //     }
 // };
@@ -111,6 +117,7 @@ function verifyPassword(password) {
     }
     //an error isn't thrown, password is valid
 }
+
 
 
 

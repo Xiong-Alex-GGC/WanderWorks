@@ -3,11 +3,13 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Form, Dropdown } from 'react-bootstrap';
 
-const ItineraryLocationSuggestion = ({ onSuggestionSelect }) => {
+const ItineraryLocationSuggestion = ({ addressSelect, coordsSelect }) => {
   const [address, setAddress] = useState('');
+  const [coords, setCoords] = useState(null); // Changed to null instead of empty string
+
   const [suggestions, setSuggestions] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [blurTimeout, setBlurTimeout] = useState(null); // State to track blur timeout
+  const [blurTimeout, setBlurTimeout] = useState(null); 
 
   const handleInputChange = (event) => {
     const inputAddress = event.target.value;
@@ -31,24 +33,26 @@ const ItineraryLocationSuggestion = ({ onSuggestionSelect }) => {
         )}.json?access_token=` + mapboxToken
       );
 
-      // Extract suggestions from the response with specified place types
-      const filteredSuggestions = response.data.features.filter(
-        (feature) =>
-          ['country', 'region', 'province', 'state', 'district', 'place'].includes(
-            feature.place_type[0]
-          )
-      );
+      // Extract suggestions and coordinates from the response
+      const suggestionsList = response.data.features.map((feature) => {
+        return {
+          suggestion: feature.place_name,
+          coordinates: feature.center
+        };
+      });
 
-      const suggestionsList = filteredSuggestions.map((feature) => feature.place_name);
       setSuggestions(suggestionsList);
     } catch (error) {
       console.error('Error fetching suggestions:', error);
     }
   };
 
-  const handleSuggestionClick = (suggestion) => {
-    onSuggestionSelect(suggestion);
+  const handleSuggestionClick = (suggestion, coordinates) => {
+    addressSelect(suggestion);
+    coordsSelect(coordinates)
+
     setAddress(suggestion);
+    setCoords(coordinates); // Set coordinates
     setSuggestions([]);
     setShowDropdown(false);
   };
@@ -79,7 +83,7 @@ const ItineraryLocationSuggestion = ({ onSuggestionSelect }) => {
           placeholder="Enter the Address"
           value={address}
           onChange={handleInputChange}
-          onFocus={handleInputFocus} // Handle onFocus event
+          onFocus={handleInputFocus} 
           onBlur={handleInputBlur}
           required
         />
@@ -89,9 +93,9 @@ const ItineraryLocationSuggestion = ({ onSuggestionSelect }) => {
       {showDropdown && suggestions.length > 0 && (
         <Dropdown show>
           <Dropdown.Menu>
-            {suggestions.map((suggestion, index) => (
-              <Dropdown.Item key={index} onClick={() => handleSuggestionClick(suggestion)}>
-                {suggestion}
+            {suggestions.map((suggestionObj, index) => (
+              <Dropdown.Item key={index} onClick={() => handleSuggestionClick(suggestionObj.suggestion, suggestionObj.coordinates)}>
+                {suggestionObj.suggestion}
               </Dropdown.Item>
             ))}
           </Dropdown.Menu>
