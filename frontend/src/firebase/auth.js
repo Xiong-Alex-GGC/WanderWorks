@@ -3,7 +3,7 @@ import { auth, googleProvider } from "./firebase";
 import { 
     GoogleAuthProvider,
     FacebookAuthProvider,
-    OAuthProvider,
+    GithubAuthProvider,
     createUserWithEmailAndPassword, 
     sendEmailVerification, 
     sendPasswordResetEmail, 
@@ -50,18 +50,16 @@ export const signInWithFacebook = async () => {
     }
 };
 
-export const signInWithMicrosoft = async () => {
-    const microsoftProvider = new OAuthProvider('microsoft.com'); // Create Microsoft OAuthProvider instance
+export const signInWithGithub = async () => {
+    const provider = new GithubAuthProvider();
     try {
-      const result = await signInWithPopup(auth, microsoftProvider); // Sign in with Microsoft using signInWithPopup
-      // Handle successful sign-in
-      return result;
+        const result = await signInWithPopup(auth, provider);
+        return result;
     } catch (error) {
-      // Handle sign-in error
-      console.error("Error signing in with Microsoft:", error);
-      throw error;
+        console.error("Error signing in with GitHub:", error);
+        throw error;
     }
-  };
+}; 
 
 export const signUserOut = () => {
     return auth.signOut();

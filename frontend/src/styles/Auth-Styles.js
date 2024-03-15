@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import beachImage from '../images/beach.jpg';
 import { Link } from 'react-router-dom';
-import { FaGoogle, FaFacebook, FaMicrosoft } from 'react-icons/fa';
+import { FaGoogle, FaFacebook,FaGithub  } from 'react-icons/fa';
 import theme from './theme';
 
 
@@ -137,7 +137,7 @@ export const FacebookIcon = styled(FaFacebook)`
   color: #fff;
 `;
 
-export const MicrosoftIcon = styled(FaMicrosoft)`
+export const GithubIcon = styled(FaGithub)`
   color: #fff;
 `;
 

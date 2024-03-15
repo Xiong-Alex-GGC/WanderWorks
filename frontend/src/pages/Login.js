@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import { signInWithEmail, signInWithGoogle,signInWithFacebook, signInWithMicrosoft } from '../firebase/auth';
+import { signInWithEmail, signInWithGoogle, signInWithFacebook, signInWithGithub } from '../firebase/auth'; // Step 1: Import signInWithGithub
 import { useAuth } from '../context/authContext';
 import LoginForm from '../components/Forms/LoginForm';
 
@@ -21,11 +21,13 @@ const Login = () => {
     e.preventDefault();
     if (!isSigningIn) {
       setIsSigningIn(true);
-      await signInWithEmail(email, password);
+      await signInWithEmail(email, password).catch(err => {
+        setIsSigningIn(false); // Add catch to handle errors and stop the signing in process
+      });
     }
   };
 
-  const onGoogleSignIn = (e) => {
+  const onGoogleSignIn = async (e) => {
     e.preventDefault();
     if (!isSigningIn) {
       setIsSigningIn(true);
@@ -35,7 +37,7 @@ const Login = () => {
     }
   };
 
-  const onFacebookSignIn = (e) => {
+  const onFacebookSignIn = async (e) => {
     e.preventDefault();
     if (!isSigningIn) {
       setIsSigningIn(true);
@@ -45,11 +47,11 @@ const Login = () => {
     }
   };
 
-  const onMicrosoftSignIn = (e) => {
+  const onGithubSignIn = async (e) => {  
     e.preventDefault();
     if (!isSigningIn) {
       setIsSigningIn(true);
-      signInWithMicrosoft().catch((err) => {
+      signInWithGithub().catch((err) => {
         setIsSigningIn(false);
       });
     }
@@ -59,17 +61,15 @@ const Login = () => {
     <AuthContainer fluid>
       {userLoggedIn && <Navigate to={'/Dashboard'} replace={true} />}
       
-      <FormRow>  
-        {userLoggedIn && <Navigate to={'/Dashboard'} replace={true} />}
-
+      <FormRow>
         <ImgCol />
 
         <FormCol>
           <LoginForm
             onEmailSignIn={onEmailSignIn}
             onGoogleSignIn={onGoogleSignIn}
-            onFacebookSignIn={onFacebookSignIn} 
-            onMicrosoftSignIn={onMicrosoftSignIn} 
+            onFacebookSignIn={onFacebookSignIn}
+            onGithubSignIn={onGithubSignIn}  
             email={email}
             setEmail={setEmail}
             password={password}
