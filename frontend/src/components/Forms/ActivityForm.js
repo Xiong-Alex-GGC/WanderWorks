@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { Form, Button, Alert, Container } from 'react-bootstrap';
+import { Form, Button, Alert, Container,  Row, Col } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 import ActivityLocationSuggestion from '../Mapbox/ActivityLocationSuggeston';
-import { Row, Col, Button } from 'react-bootstrap';
 import { ActRow, ActColLeft, ActColRight } from '../../styles/Forms-Styles';
 
 const ActivityForm = ({ itineraryData, onClose }) => {
