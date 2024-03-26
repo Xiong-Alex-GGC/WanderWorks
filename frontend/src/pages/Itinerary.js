@@ -4,19 +4,19 @@ import axios from 'axios';
 import DemoMap from '../components/Mapbox/DemoMap';
 import ActivityForm from '../components/Forms/ActivityForm';
 import ActivityContainer from '../components/Containers/ActivityContainer';
-import TransportationForm from '../components/Forms/TransportationForm';
-import TransportationContainer from '../components/Containers/TransportationContainer';
 import AccommodationForm from '../components/Forms/AccommodationsForm';
 import AccommodationContainer from '../components/Containers/AccommodationContainer';
+import ExpenseForm from '../components/Forms/ExpenseForm';
 
 import { Container, Row, Col } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 const Itinerary = () => {
   const { id } = useParams();
   const [itineraryData, setItineraryData] = useState(null);
   const [showActivityForm, setShowActivityForm] = useState(false);
-  const [showTransportationForm, setShowTransportationForm] = useState(false);
   const [showAccommodationForm, setShowAccommodationForm] = useState(false);
+  const [showExpenseForm, setShowExpenseForm] = useState(false);
 
   useEffect(() => {
     const fetchItineraryData = async () => {
@@ -40,14 +40,6 @@ const Itinerary = () => {
     setShowActivityForm(false);
   };
 
-  const openTransportationForm = () => {
-    setShowTransportationForm(true);
-  };
-
-  const closeTransportationForm = () => {
-    setShowTransportationForm(false);
-  };
-
   const openAccommodationForm = () => {
     setShowAccommodationForm(true);
   };
@@ -55,6 +47,44 @@ const Itinerary = () => {
   const closeAccommodationForm = () => {
     setShowAccommodationForm(false);
   };
+
+  const openExpenseForm = () => {
+    setShowExpenseForm(true);
+  };
+
+  const closeExpenseForm = () => {
+    setShowExpenseForm(false);
+  };
+
+  const renderOverBudgetWarning = ({ remainingBudget }) => {
+    if(remainingBudget < 0) {
+      return (
+        <>
+          <p>You are expected to go over budget by {Math.abs(remainingBudget)}</p>
+        </>
+      );
+    } else {
+      return(<></>);
+    }
+  }
+
+  const calculateRemainingBudget = () => {
+    if(itineraryData.budget != null) {
+      const remainingBudget = itineraryData.budget - itineraryData.totalExpenses; //need to delete any itineraries where budget and totalExpenses are currently strings
+      return (
+        <>
+          <p>${remainingBudget} of ${itineraryData.budget} budget remaining</p>
+          {renderOverBudgetWarning(remainingBudget)}
+        </>
+      );
+    } else {
+      return (
+        <>
+          <p>You have spent ${itineraryData.totalExpenses} on this trip</p>
+        </>
+      );
+    }
+  }
 
   return (
     <Row>
@@ -83,8 +113,13 @@ const Itinerary = () => {
 
                 {/* <p>Start Date: {itineraryData.startDate}</p>
                 <p>End Date: {itineraryData.endDate}</p> */}
-
-
+                <div>
+                  {calculateRemainingBudget()}
+                </div>
+                
+                <div>
+                  <Link to={`/Expenses/${itineraryData.id}`}>Click here to see your additional expenses</Link>
+                </div>
                 <hr />
 
                 <h3>Activities</h3>
@@ -102,11 +137,19 @@ const Itinerary = () => {
                 <button onClick={openAccommodationForm}>New Accommodation</button>
                 <hr />
                 {showAccommodationForm && (
-                    <AccommodationForm itineraryData={itineraryData} onClose={closeAccommodationForm} />
+                  <AccommodationForm itineraryData={itineraryData} onClose={closeAccommodationForm} />
                 )}
                 <hr />
                 
                 <AccommodationContainer itineraryData={itineraryData} />
+
+                <hr />
+
+                <h5>Track Additional Purchase</h5>
+                <button onClick={openExpenseForm}>New Expense</button>
+                {showExpenseForm && (
+                  <ExpenseForm itineraryData={itineraryData} onClose={closeExpenseForm} />
+                )}
 
               </Col>
             </Row>
@@ -123,10 +166,7 @@ const Itinerary = () => {
       )}
     </Row>
   );
-
-  const calculateRemainingBudget = () => {
-    //
-  }
+  
 };
 
 export default Itinerary;

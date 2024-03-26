@@ -136,6 +136,7 @@ const ActivityForm = ({ itineraryData, onClose }) => {
           <textarea value={notes} onChange={(e) => setNotes(e.target.value)} />
         </label>
       </div>
+      {error && <Alert variant="danger">{error}</Alert>}
       <button type="submit">Submit</button>
     </form>
 );

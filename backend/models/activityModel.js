@@ -16,12 +16,36 @@ export const getAllItineraryActivities = async (itinID) => {
   return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 };
 
+export const isActivityOverlapping = (existingActivities, newActivity) => {
+  return existingActivities.some(activity => {
+    // Check for overlap using start and end times
+    const existingActivityDate = extractDate(activity.date);
+    const newActivityDate = extractDate(newActivity.date);
+
+    if(existingActivityDate != newActivityDate) {
+      return false;
+    } else return (
+      (newActivity.startTime >= activity.startTime && newActivity.startTime < activity.endTime) ||
+      (newActivity.endTime > activity.startTime && newActivity.endTime <= activity.endTime) ||
+      (newActivity.startTime <= activity.startTime && newActivity.endTime >= activity.endTime)
+    );
+  });
+};
+
+export const extractDate = (dateString) => {
+  return dateString.split('T')[0];
+}
+
 export const createActivity = async (data) => {
   const itinID = data.itineraryID;
   //ensure new activity is within the confines of the itinerary start and end dates
-
+  
   //ensure new activity does not overlap with other activities
-
+  const existingActivities = await getAllItineraryActivities(itinID);
+  if(isActivityOverlapping(existingActivities, data)) {
+    console.error('Activity overlaps with existing activity');
+    throw new error('Activity overlaps with existing activity');
+  }
   //throw an error if one of the fail conditions above is met, otherwise complete request
   await itineraryController.addExpenses(itinID, data.expense);
   await addDoc(activityCollection, data); //add document to the collection
@@ -62,3 +86,5 @@ export const deleteActivity = async (activityID) => {
 
   return false; // Activity not found 
 };
+
+//Forgot to create a new branch before commit
