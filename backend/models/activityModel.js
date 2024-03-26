@@ -86,3 +86,5 @@ export const deleteActivity = async (activityID) => {
 
   return false; // Activity not found 
 };
+
+//Forgot to create a new branch before commit
