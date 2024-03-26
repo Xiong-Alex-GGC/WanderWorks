@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { auth, googleProvider } from "./firebase";
-import { createUserWithEmailAndPassword, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword } from "firebase/auth";
 import { 
     GoogleAuthProvider,
     FacebookAuthProvider,
-    OAuthProvider, 
+    GithubAuthProvider,
+    createUserWithEmailAndPassword, 
+    sendEmailVerification, 
+    sendPasswordResetEmail, 
+    OAuthProvider,
     signInWithPopup, 
     signOut, 
     updatePassword 
@@ -54,18 +57,16 @@ export const signInWithFacebook = async () => {
     }
 };
 
-export const signInWithMicrosoft = async () => {
-    const microsoftProvider = new OAuthProvider('microsoft.com'); // Create Microsoft OAuthProvider instance
+export const signInWithGithub = async () => {
+    const provider = new GithubAuthProvider();
     try {
-      const result = await signInWithPopup(auth, microsoftProvider); // Sign in with Microsoft using signInWithPopup
-      // Handle successful sign-in
-      return result;
+        const result = await signInWithPopup(auth, provider);
+        return result;
     } catch (error) {
-      // Handle sign-in error
-      console.error("Error signing in with Microsoft:", error);
-      throw error;
+        console.error("Error signing in with GitHub:", error);
+        throw error;
     }
-  };
+}; 
 
 export const signUserOut = () => {
     return auth.signOut();
@@ -93,6 +94,25 @@ export const sendVerificationEmail = async () => {
     }
 };
 
+ export const sendUserPasswordResetEmail = async (email) => {
+    try {
+         await sendPasswordResetEmail(auth, email);
+         console.log("Link Sent!");
+   } catch (error) {
+       console.error("Error sending password reset email:", error);
+        throw error;
+    }
+};
+
+
+export const updateUserPassword = async (newPassword) => {
+    try {
+        const user = auth.currentUser;
+        await updatePassword(user, newPassword);
+    } catch (error) {
+        console.error("Error updating password:", error);
+        throw error;
+      
 //  export const sendPasswordResetEmail = async (email) => {
 //     try {
 //          await sendPasswordResetEmail(auth, email);

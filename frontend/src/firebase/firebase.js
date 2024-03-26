@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider,FacebookAuthProvider,OAuthProvider } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, FacebookAuthProvider, GithubAuthProvider } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -16,8 +16,8 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 const facebookProvider = new FacebookAuthProvider();
-const microsoftProvider = new OAuthProvider('microsoft.com');
+const githubProvider = new GithubAuthProvider(); // Add this line for GitHub
+
 const db = getFirestore(app);
 
-export { auth, googleProvider,facebookProvider, microsoftProvider,db, app};
-//Andrewg
+export { auth, googleProvider, facebookProvider, githubProvider, db, app }; 
