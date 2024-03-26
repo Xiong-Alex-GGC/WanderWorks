@@ -23,6 +23,9 @@ import { Link } from 'react-router-dom';
 
 
 const DashboardCalendar = () => {
+
+    
+
     // Get current date
     const currentDate = new Date();
 
@@ -58,8 +61,8 @@ const DashboardCalendar = () => {
     // Get the start and end dates of the calendar
     const startDate = startOfMonth(displayDate);
     const endDate = endOfMonth(displayDate);
-    const startCalendar = startOfWeek(startDate, { weekStartsOn: 1 }); // Monday
-    const endCalendar = endOfWeek(endDate, { weekStartsOn: 1 }); // Sunday
+    const startCalendar = startOfWeek(startDate);
+    const endCalendar = endOfWeek(endDate);
 
     // Generate calendar weeks
     const calendarWeeks = [];
@@ -71,6 +74,8 @@ const DashboardCalendar = () => {
             currentDatePointer = addDays(currentDatePointer, 1);
         }
         calendarWeeks.push(currentWeek);
+
+        
     }
 
     // Handle day click
@@ -89,6 +94,13 @@ const DashboardCalendar = () => {
 
         // Set the selected itinerary
         setSelectedItinerary(clickedItinerary);
+    };
+
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const month = date.toLocaleString('default', { month: 'short' }); // Get short month name (e.g., "Jan")
+        const day = date.getDate(); // Get day of the month
+        return `${month} ${day}`;
     };
 
     // Render calendar days as buttons
@@ -146,7 +158,7 @@ const DashboardCalendar = () => {
     // Function to render the weekday labels
     const renderWeekdayLabels = () => {
         // Get the start of the week (default is Sunday)
-        const startOfWeekDate = startOfWeek(new Date(), { weekStartsOn: 1 }); // Monday
+        const startOfWeekDate = startOfWeek(new Date());
 
         // Generate an array of weekday labels starting from Monday
         const weekdayLabels = Array.from({ length: 7 }, (_, i) => {
@@ -163,7 +175,7 @@ const DashboardCalendar = () => {
             </>
         );
     };
-    
+
     //
 
 
@@ -175,10 +187,12 @@ const DashboardCalendar = () => {
 
             return (
                 <div>
-                    <Link to={`/Itinerary/${selectedItinerary.id}`} style={{textDecoration: 'none', color: 'black', background: 'white', padding: 3}}>Open Itinerary</Link>
-                    <p>Itinerary Name: {selectedItinerary.tripName}</p>
-                    <p>Start Date: {selectedItinerary.startDate}</p>
-                    <p>End Date: {selectedItinerary.endDate}</p>
+                    <Link to={`/Itinerary/${selectedItinerary.id}`} style={{ textDecoration: 'none', color: 'black', background: 'white', padding: 3 }}>Open Itinerary</Link>
+                    <br/><br/>
+                    <p>{selectedItinerary.tripName}</p>
+                    <p>{selectedItinerary.location}</p>
+                    <p>Date: {formatDate(selectedItinerary.startDate)} - {formatDate(selectedItinerary.endDate)}</p>
+
                 </div>
             );
         } else {
@@ -188,9 +202,8 @@ const DashboardCalendar = () => {
 
     return (
         <>
-
-            <h1 style={{ margin: '5%' }}>Shedule Overview</h1>
-
+        <div>
+            <h2 style={{ paddingTop: 20, paddingLeft: 30  }}>Shedule Overview</h2>
             <ComponentContainer>
                 <CalendarContainer>
                     <InformationCol xs={4}>
@@ -204,7 +217,7 @@ const DashboardCalendar = () => {
                             {itineraryInformation()}
                         </Row>
 
-                        
+
                     </InformationCol>
 
                     <CalendarCol xs={8}>
@@ -229,7 +242,7 @@ const DashboardCalendar = () => {
                     </CalendarCol>
                 </CalendarContainer>
             </ComponentContainer>
-
+            </div>
         </>
     );
 };

@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider,FacebookAuthProvider,OAuthProvider } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, FacebookAuthProvider, GithubAuthProvider } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -10,13 +10,14 @@ const firebaseConfig = {
   messagingSenderId: "190469468391",
   appId: "1:190469468391:web:c9528ebc38b2b9ac28f242",
   measurementId: "G-T5XG15PNE0"
-};
+}; 
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 const facebookProvider = new FacebookAuthProvider();
-const microsoftProvider = new OAuthProvider('microsoft.com');
+const githubProvider = new GithubAuthProvider(); // Add this line for GitHub
+
 const db = getFirestore(app);
 
-export { auth, googleProvider,facebookProvider, microsoftProvider,db, app};
+export { auth, googleProvider, facebookProvider, githubProvider, db, app }; 

@@ -29,6 +29,9 @@ export const InformationCol = styled(Col)`
   background-color: ${theme.colors.secondary};
   color: white;
   overflow: hidden;
+  max-width: 200px;
+  min-width: 200px;
+
 `;
 
 export const CalendarCol = styled(Col)`

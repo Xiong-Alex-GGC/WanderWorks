@@ -7,6 +7,9 @@ import Dashboard from '../pages/Dashboard';
 import NewItinerary from '../pages/NewItinerary';
 import Itinerary from '../pages/Itinerary';
 import Expenses from '../pages/Expenses';
+import ResetPassword from '../pages/ResetPassword';
+import ForgotPassword from '../pages/ForgotPassword';
+//import Explore from '../pages/Explore';
 
 
 const router = createBrowserRouter(
@@ -17,12 +20,15 @@ const router = createBrowserRouter(
             <Route path="/Signup" element={<SignUp />} />
             <Route path="/Login" element={<Login />} />
             <Route path="/Dashboard" element={<Dashboard />} />
+            <Route path="/Explore" element={<Explore />} />
             <Route path="/NewItinerary" element={<NewItinerary />} />
             <Route path="/Itinerary/:id" element={<Itinerary />} />
             <Route path="/Expenses/:id" element={<Expenses />} />
+            <Route path="/ForgotPassword" element={<ForgotPassword/>} />
+            <Route path="/ResetPassword" element={<ResetPassword />} />
 
         </Route>
     )
 );
 
-export default router;
+export default router; 

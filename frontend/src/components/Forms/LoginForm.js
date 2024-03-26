@@ -7,19 +7,26 @@ import {
   StyledHeading,
   StyledLink,
   StyledButtonContainer,
-  StyledSeparator,
-  StyledOrText,
   IconsContainer,
   IconButton,
   GoogleIcon,
   FacebookIcon,
-  MicrosoftIcon,
+  GithubIcon, 
   SeparatorContainer,
   SeparatorLine,
-  SeparatorText
+  SeparatorText,
 } from '../../styles/Auth-Styles';
 
-const LoginForm = ({ onEmailSignIn, onGoogleSignIn, email, setEmail, password, setPassword }) => {
+const LoginForm = ({
+  onEmailSignIn,
+  onGoogleSignIn,
+  onFacebookSignIn,
+  onGithubSignIn, // Add the function prop for GitHub sign-in
+  email,
+  setEmail,
+  password,
+  setPassword,
+}) => {
   return (
     <StyledContainer>
       <StyledForm>
@@ -55,9 +62,9 @@ const LoginForm = ({ onEmailSignIn, onGoogleSignIn, email, setEmail, password, s
         </StyledButtonContainer>
 
         <SeparatorContainer>
-            <SeparatorLine />
-                <SeparatorText>or</SeparatorText>
-            <SeparatorLine />
+          <SeparatorLine />
+          <SeparatorText>or</SeparatorText>
+          <SeparatorLine />
         </SeparatorContainer>
 
         <IconsContainer>
@@ -65,14 +72,18 @@ const LoginForm = ({ onEmailSignIn, onGoogleSignIn, email, setEmail, password, s
             <GoogleIcon />
           </IconButton>
 
-          <IconButton variant="" onClick={onGoogleSignIn} color="#4267B2">
+          <IconButton variant="" onClick={onFacebookSignIn} color="#4267B2">
             <FacebookIcon />
           </IconButton>
 
-          <IconButton variant="" onClick={onGoogleSignIn} color="#00A4EF">
-            <MicrosoftIcon />
+          <IconButton variant="" onClick={onGithubSignIn} color="#333"> {/* Adjust GitHub button color if necessary */}
+            <GithubIcon />
           </IconButton>
         </IconsContainer>
+
+        <p>
+          <StyledLink to="/ForgotPassword">Forgot Password?</StyledLink>
+        </p>
       </StyledForm>
     </StyledContainer>
   );

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import { Form, Button, Alert, Container } from 'react-bootstrap';
-import 'react-datepicker/dist/react-datepicker.css';
+//import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 
 //Important Field:
@@ -58,6 +58,10 @@ const TransportationForm = ({ itineraryData, onClose }) => {
         console.error('Error creating transportation plan:', error);
       }
     };
+
+    const closeForum = () => {
+      onClose();
+    }
 
     //Render additional fields as needed
     const renderAdditionalFields = () => {
@@ -132,6 +136,7 @@ const TransportationForm = ({ itineraryData, onClose }) => {
           </label>
         </div>
         <button type="submit">Submit</button>
+        <button onClick={closeForum}>Close</button>
       </form>
     );
   };

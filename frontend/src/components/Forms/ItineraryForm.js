@@ -1,20 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Button, Alert, Container } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios'; // Import axios
 import ItineraryLocationSuggestion from '../Mapbox/ItineraryLocationSuggestion';
 import { useAuth } from '../../context/authContext';
+import { fetchDefaultPhotoByLocation } from '../../pexels/pexels';
 
 const ItineraryForm = ({ onTripIDReceived }) => {
     const [tripName, setTripName] = useState('');
     const [location, setLocation] = useState('');
+    const [coords, setCoords] = useState('');
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
     const [budget, setBudget] = useState('');
     const { currentUser } = useAuth();
-
     const [error, setError] = useState('');
+
+    const [backgroundImage, setBackgroundImage] = useState(''); // State to hold the background image URL
+
+    useEffect(() => {
+      // Call the fetchPhotosByLocation function with the location
+      fetchDefaultPhotoByLocation(location)
+        .then(imageUrl => {
+          setBackgroundImage(imageUrl);
+        })
+        .catch(error => {
+          console.error('Error fetching photos:', error);
+        });
+    }, [location]);
 
 
 
@@ -43,11 +57,15 @@ const ItineraryForm = ({ onTripIDReceived }) => {
             const response = await axios.post('http://localhost:4000/api/create-itinerary', {
                 tripName: tripName,
                 location: location,
+                coords: coords,
                 startDate: startDate,
                 endDate: endDate,
+
                 budget: numericBudget,
                 totalExpenses: 0,
-                userID: currentUser.uid
+                userID: currentUser.uid,
+                imgURL: backgroundImage
+
             });
 
             // Return TripID
@@ -62,6 +80,11 @@ const ItineraryForm = ({ onTripIDReceived }) => {
     const handleLocationSelect = (selectedLocation) => {
         setLocation(selectedLocation);
     };
+
+    const handleLocationCoords = (locationCoords) => {
+        setCoords(locationCoords);
+    };
+
 
 
     return (
@@ -94,7 +117,7 @@ const ItineraryForm = ({ onTripIDReceived }) => {
                     />
                 </Form.Group>
 
-                <ItineraryLocationSuggestion onSuggestionSelect={handleLocationSelect} />
+                <ItineraryLocationSuggestion addressSelect={handleLocationSelect} coordsSelect={handleLocationCoords} />
 
                 <Form.Group className="mb-3">
                     <Form.Label>Start Date:</Form.Label>

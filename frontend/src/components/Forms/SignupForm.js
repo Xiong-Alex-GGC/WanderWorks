@@ -13,14 +13,14 @@ import {
   IconButton,
   GoogleIcon,
   FacebookIcon,
-  MicrosoftIcon,
+  GithubIcon,
   SeparatorContainer,
   SeparatorLine,
   SeparatorText,
   NameContainer
 } from '../../styles/Auth-Styles';
 
-const SignupForm = ({ signUp, signUpWithGoogle, email, setEmail, password, setPassword, fName, lName }) => {
+const SignupForm = ({ signUp, signUpWithGoogle,signUpWithFacebook,signUpWithGithub, email, setEmail, password, setPassword, fName, lName }) => {
   return (
     <StyledContainer>
       <StyledForm>
@@ -90,12 +90,12 @@ const SignupForm = ({ signUp, signUpWithGoogle, email, setEmail, password, setPa
             <GoogleIcon />
           </IconButton>
 
-          <IconButton variant="" onClick={signUpWithGoogle} color="#4267B2">
+          <IconButton variant="" onClick={signUpWithFacebook} color="#4267B2">
             <FacebookIcon />
           </IconButton>
 
-          <IconButton variant="" onClick={signUpWithGoogle} color="#00A4EF">
-            <MicrosoftIcon />
+          <IconButton variant="" onClick={signUpWithGithub } color="#00A4EF">
+            < GithubIcon/>
           </IconButton>
         </IconsContainer>
       </StyledForm>

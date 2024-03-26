@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Form, Button, Alert, Container } from 'react-bootstrap';
+import { Form, Button, Alert, Container,  Row, Col } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 import ActivityLocationSuggestion from '../Mapbox/ActivityLocationSuggeston';
+import { ActRow, ActColLeft, ActColRight } from '../../styles/Forms-Styles';
 
 const ActivityForm = ({ itineraryData, onClose }) => {
   const [activityName, setActivityName] = useState('');
@@ -138,7 +139,8 @@ const ActivityForm = ({ itineraryData, onClose }) => {
       {error && <Alert variant="danger">{error}</Alert>}
       <button type="submit">Submit</button>
     </form>
-  );
+);
+
 };
 
 export default ActivityForm;
