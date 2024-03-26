@@ -1,5 +1,6 @@
 import { addDoc, collection, getDocs, updateDoc, doc, getDoc, query, where, deleteDoc } from 'firebase/firestore';
 import db from '../firebaseConfig.js';
+import * as itineraryController from '../controllers/itineraryController.js';
 
 const transportationCollection = collection(db, 'Transportation'); //connecting to the database by specifying table name
 
@@ -15,6 +16,10 @@ export const getAllItineraryTransportations = async (itinID) => {
 };
 
 export const createTransportation = async (data) => {
+  //take the expenses from the transportation data and add it to the itinerary document
+  //console.log("Testing to see if this works " + data.expense);
+  const itinID = data.itineraryID;
+  await itineraryController.addExpenses(itinID, data.expense);
   await addDoc(transportationCollection, data); //add document to the collection
 };
 
@@ -40,3 +45,4 @@ export const updateTransportation = async (id, data) => {
   
     return false; // Transportation not found 
   };
+

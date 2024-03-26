@@ -23,6 +23,7 @@ const Itinerary = () => {
       try {
         const response = await axios.get(`http://localhost:4000/api/itinerary/${id}`);
         setItineraryData(response.data);
+        //
       } catch (error) {
         console.error('Error fetching itinerary data:', error);
       }
@@ -75,7 +76,7 @@ const Itinerary = () => {
                   flexDirection: 'column',
                   alignItems: 'center',
                   padding: '20px',
-                  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.5)'
+                  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.5)',
                 }}>
                   <h6>{itineraryData.tripName}</h6>
                 </div>
@@ -94,18 +95,6 @@ const Itinerary = () => {
                 )}
 
                 <ActivityContainer itineraryData={itineraryData} />
-
-                <hr />
-
-                <h3>Transportation</h3>
-                <button onClick={openTransportationForm}>New Transportation</button>
-                <hr />
-                {showTransportationForm && (
-                    <TransportationForm itineraryData={itineraryData} onClose={closeTransportationForm} />
-                )}
-                <hr />
-                
-                <TransportationContainer itineraryData={itineraryData} />
 
                 <hr />
 
@@ -134,6 +123,26 @@ const Itinerary = () => {
       )}
     </Row>
   );
+
+  const calculateRemainingBudget = () => {
+    //
+  }
 };
 
 export default Itinerary;
+
+//Notes: In the end, accommodations should be rendered differentl- well everything should be rendered differently,
+//but an accommodation should not be rendered like an activity
+
+/*
+<h3>Transportation</h3>
+  <button onClick={openTransportationForm}>New Transportation</button>
+  <hr />
+    {showTransportationForm && (
+    <TransportationForm itineraryData={itineraryData} onClose={closeTransportationForm} />
+    )}
+  <hr />
+
+<TransportationContainer itineraryData={itineraryData} />
+*/
+

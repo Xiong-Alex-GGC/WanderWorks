@@ -10,6 +10,7 @@ import { fetchDefaultPhotoByLocation } from '../../pexels/pexels';
 const ItineraryForm = ({ onTripIDReceived }) => {
     const [tripName, setTripName] = useState('');
     const [location, setLocation] = useState('');
+    const [coords, setCoords] = useState('');
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
     const [budget, setBudget] = useState('');
@@ -23,7 +24,6 @@ const ItineraryForm = ({ onTripIDReceived }) => {
       fetchDefaultPhotoByLocation(location)
         .then(imageUrl => {
           setBackgroundImage(imageUrl);
-          console.log(imageUrl);
         })
         .catch(error => {
           console.error('Error fetching photos:', error);
@@ -35,19 +35,37 @@ const ItineraryForm = ({ onTripIDReceived }) => {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
+        //convert budget to a float
+        let numericBudget = null;
+        if(budget !== '') {
+            numericBudget = parseFloat(budget);
+
+            if(isNaN(numericBudget) || numericBudget < 0) {
+                setError('Please enter a valid positive budget');
+                return;
+            }
+        }
+        
+        //const curDate = new Date();
         if (endDate < startDate) {
             setError("End date cannot be before the start date");
             return; // Exit the function early
         }
+        //check the current date
 
         try {
             const response = await axios.post('http://localhost:4000/api/create-itinerary', {
                 tripName: tripName,
                 location: location,
+                coords: coords,
                 startDate: startDate,
                 endDate: endDate,
+
+                budget: numericBudget,
+                totalExpenses: 0,
                 userID: currentUser.uid,
                 imgURL: backgroundImage
+
             });
 
             // Return TripID
@@ -62,6 +80,11 @@ const ItineraryForm = ({ onTripIDReceived }) => {
     const handleLocationSelect = (selectedLocation) => {
         setLocation(selectedLocation);
     };
+
+    const handleLocationCoords = (locationCoords) => {
+        setCoords(locationCoords);
+    };
+
 
 
     return (
@@ -94,7 +117,7 @@ const ItineraryForm = ({ onTripIDReceived }) => {
                     />
                 </Form.Group>
 
-                <ItineraryLocationSuggestion onSuggestionSelect={handleLocationSelect} />
+                <ItineraryLocationSuggestion addressSelect={handleLocationSelect} coordsSelect={handleLocationCoords} />
 
                 <Form.Group className="mb-3">
                     <Form.Label>Start Date:</Form.Label>
@@ -112,6 +135,16 @@ const ItineraryForm = ({ onTripIDReceived }) => {
                         className="form-control"
                         selected={endDate}
                         onChange={(date) => setEndDate(date)}
+                        required
+                    />
+                </Form.Group>
+
+                <Form.Group className="mb-3">
+                    <Form.Label>Budget: $</Form.Label>
+                    <Form.Control
+                        type="number"
+                        value={budget}
+                        onChange={(e) => setBudget(e.target.value)}
                         required
                     />
                 </Form.Group>

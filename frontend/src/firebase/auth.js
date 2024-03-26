@@ -7,15 +7,22 @@ import {
     createUserWithEmailAndPassword, 
     sendEmailVerification, 
     sendPasswordResetEmail, 
+    OAuthProvider,
     signInWithPopup, 
     signOut, 
-    updatePassword, 
-    signInWithEmailAndPassword 
+    updatePassword 
 } from "firebase/auth";
 
+const specialCharacterRegex = /[!@#$%^&*(),.?":{}|<>]/;
+const numberRegex = /\d/;
 
 export const signUpWithEmailandPassword = async (email, password) => {
-    return createUserWithEmailAndPassword(auth, email, password);
+    try {
+        verifyPassword(password);
+        return createUserWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+        throw error;
+    }
 };
 
 // export const signInWithEmail = (email, password) => {
@@ -105,8 +112,32 @@ export const updateUserPassword = async (newPassword) => {
     } catch (error) {
         console.error("Error updating password:", error);
         throw error;
+      
+//  export const sendPasswordResetEmail = async (email) => {
+//     try {
+//          await sendPasswordResetEmail(auth, email);
+//    } catch (error) {
+//        console.error("Error sending password reset email:", error);
+//         throw error;
+//     }
+// };
+
+function verifyPassword(password) {
+    //check for special characters
+    if(!specialCharacterRegex.test(password)) {
+        throw "Your password must contain at least 1 special character";
     }
-};
+    //check for a number
+    else if(!numberRegex.test(password)) {
+        throw "Your password must contain at least 1 number";
+    }
+    //check for required length
+    else if (password.length < 8) {
+        throw "Your password must be at least 8 characters long";
+    }
+    //an error isn't thrown, password is valid
+}
+
 
 
 

@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
 import { signUpWithEmailandPassword, signInWithGoogle, signInWithFacebook, signInWithGithub } from "../firebase/auth"; // Import signInWithGithub
+  /*
+import React from 'react';
+import { useState } from "react";
+import { Alert } from 'react-bootstrap';
+import { signUpWithEmailandPassword, signInWithGoogle,signInWithFacebook, signInWithMicrosoft } from "../firebase/auth";
+*/
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/authContext';
 import SignupForm from '../components/Forms/SignupForm';
@@ -15,6 +21,7 @@ const SignUp = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isRegistering, setIsRegistering] = useState(false); // Should be false initially
+    const [error, setError] = useState('');
 
     const { userLoggedIn } = useAuth();
 
@@ -28,6 +35,7 @@ const SignUp = () => {
             console.error(err);
         } finally {
             setIsRegistering(false); // Ensure we reset isRegistering state
+            //setError(err);
         }
       }
     };

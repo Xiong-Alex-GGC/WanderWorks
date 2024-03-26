@@ -9,10 +9,8 @@ const Home = () => {
 
   return (
     <div className="home-container">
-      <Row>
-        <HomeCarousel />
-      </Row>
-      <Container style={{ backgroundColor: theme.colors.background, paddingTop: 40, paddingBottom: 40, paddingLeft: 50, paddingRight: 50}} fluid>
+      <HomeCarousel />
+      <Container style={{ backgroundColor: theme.colors.background, padding: '40px 50px'}} fluid>
       <Row>
         <h1 style={{ fontFamily: "Garamond, serif", fontWeight: "light", paddingLeft: 50 }}>Begin planning your next adventure with WanderWorks</h1>
       </Row>
@@ -43,7 +41,7 @@ const Home = () => {
       </Row>
     </Container>
     
-    <Container style={{ paddingTop: 40, paddingBottom: 40, paddingLeft: 70, paddingRight: 50}} fluid>
+    <Container style={{ padding: '40px 50px 40px 70px'}} fluid>
       <Row>
       <Col className="px-5">
         <Image src="https://picsum.photos/id/342/700/400" thumbnail/>
@@ -57,7 +55,7 @@ const Home = () => {
       </Row>
     </Container>
 
-    <Container style={{ backgroundColor: theme.colors.background, paddingBottom: 40, paddingLeft: 70, paddingRight: 50}} fluid>
+    <Container style={{ backgroundColor: theme.colors.background, padding: '0 50px 40px 70px' }} fluid>
       <Row className='pt-5'>
       <Col className="p-5">
       <Subtitle>Budget</Subtitle>
@@ -70,7 +68,7 @@ const Home = () => {
       </Row>
     </Container>
 
-    <Container style={{ paddingBottom: 40, paddingLeft: 70, paddingRight: 50}} fluid>
+    <Container style={{ padding: '0 50px 40px 70px' }} fluid>
       <Row className='pt-5'>
       <Col className="px-5">
         <Image src="https://picsum.photos/id/57/700/400" thumbnail/>
