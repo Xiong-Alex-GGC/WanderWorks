@@ -6,6 +6,7 @@ import SignUp from '../pages/SignUp';
 import Dashboard from '../pages/Dashboard';
 import NewItinerary from '../pages/NewItinerary';
 import Itinerary from '../pages/Itinerary';
+import Expenses from '../pages/Expenses';
 
 
 const router = createBrowserRouter(
@@ -18,6 +19,7 @@ const router = createBrowserRouter(
             <Route path="/Dashboard" element={<Dashboard />} />
             <Route path="/NewItinerary" element={<NewItinerary />} />
             <Route path="/Itinerary/:id" element={<Itinerary />} />
+            <Route path="/Expenses/:id" element={<Expenses />} />
 
         </Route>
     )

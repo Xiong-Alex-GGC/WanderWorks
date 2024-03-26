@@ -6,6 +6,7 @@ import activityRoutes from './routes/activityRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import transportationRoutes from './routes/transportationRoutes.js';
 import accommodationRoutes from './routes/accommodationRoutes.js';
+import expenseRoutes from './routes/expenseRoutes.js';
 
 
 
@@ -31,6 +32,7 @@ app.use('/api', itineraryRoutes);
 app.use('/api', activityRoutes);
 app.use('/api', userRoutes);
 app.use('/api', transportationRoutes);
-app.use('/api', accommodationRoutes)
+app.use('/api', accommodationRoutes);
+app.use('/api', expenseRoutes);
 //Checks if server is online localhost:4000
 app.listen(4000, () => console.log("Up & Running on port 4000"));
