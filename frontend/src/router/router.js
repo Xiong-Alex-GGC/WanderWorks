@@ -8,8 +8,8 @@ import NewItinerary from '../pages/NewItinerary';
 import Itinerary from '../pages/Itinerary';
 import ResetPassword from '../pages/ResetPassword';
 import ForgotPassword from '../pages/ForgotPassword';
-//import Explore from '../pages/Explore';
-
+import Explore from '../pages/Explore';
+import UserProfile from '../pages/UserProfile';
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -24,6 +24,7 @@ const router = createBrowserRouter(
             <Route path="/Itinerary/:id" element={<Itinerary />} />
             <Route path="/ForgotPassword" element={<ForgotPassword/>} />
             <Route path="/ResetPassword" element={<ResetPassword />} />
+            <Route path="/UserProfile" element={<UserProfile />} />
 
         </Route>
     )

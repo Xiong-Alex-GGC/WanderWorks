@@ -28,8 +28,10 @@ const NavBar = () => {
                         <Nav.Link as={Link} to="NewItinerary">
                             <Button variant="primary" className='mx-3'>New Adventure</Button>
                         </Nav.Link>
-                        <Nav.Link as={Link} to="Dashboard">
-                            <Image src={avatar1} alt="Avatar" style={{ width: '40px', height: '40px' }}/>
+                        <Nav.Link as={Link} to="UserProfile"> {/* Add link to UserProfile */}
+                            <Button variant="primary">
+                                <Image src={avatar1} alt="Avatar" style={{ width: '40px', height: '40px' }}/>
+                            </Button>
                         </Nav.Link>
                     </>
                 ) : (
