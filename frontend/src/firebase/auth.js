@@ -1,33 +1,22 @@
 import { useState } from "react";
-import { auth, googleProvider } from "./firebase";
+import { auth } from "./firebase";
 import { 
-    GoogleAuthProvider,
-    FacebookAuthProvider,
-    GithubAuthProvider,
     createUserWithEmailAndPassword, 
     sendEmailVerification, 
     sendPasswordResetEmail, 
-    OAuthProvider,
     signInWithPopup, 
     signOut, 
-    updatePassword 
+    updatePassword, 
+    signInWithEmailAndPassword,
+    GoogleAuthProvider,
+    FacebookAuthProvider,
+    GithubAuthProvider
 } from "firebase/auth";
 
-const specialCharacterRegex = /[!@#$%^&*(),.?":{}|<>]/;
-const numberRegex = /\d/;
-
 export const signUpWithEmailandPassword = async (email, password) => {
-    try {
-        verifyPassword(password);
-        return createUserWithEmailAndPassword(auth, email, password);
-    } catch (error) {
-        throw error;
-    }
+    return createUserWithEmailAndPassword(auth, email, password);
 };
 
-// export const signInWithEmail = (email, password) => {
-//     return signInWithEmailAndPassword(auth, email, password);
-// };
 export const signInWithEmail = async (email, password) => {
     try {
         const result = await signInWithEmailAndPassword(auth, email, password);
@@ -41,7 +30,6 @@ export const signInWithEmail = async (email, password) => {
 export const signInWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
     const result =  await signInWithPopup(auth, provider);
-
     return result;
 };
 
@@ -51,7 +39,6 @@ export const signInWithFacebook = async () => {
         const result = await signInWithPopup(auth, provider);
         return result;
     } catch (error) {
-        // Handle error
         console.error("Error signing in with Facebook:", error);
         throw error;
     }
@@ -66,18 +53,16 @@ export const signInWithGithub = async () => {
         console.error("Error signing in with GitHub:", error);
         throw error;
     }
-}; 
+};
 
 export const signUserOut = () => {
-    return auth.signOut();
-
-    
+    return signOut(auth);
 };
 
 export const signUpWithEmailAndPassword = async (email, password) => {
     try {
         const result = await createUserWithEmailAndPassword(auth, email, password);
-        await sendEmailVerification(auth.currentUser); // Send verification email
+        await sendEmailVerification(auth.currentUser);
         return result;
     } catch (error) {
         console.error("Error signing up:", error);
@@ -87,23 +72,22 @@ export const signUpWithEmailAndPassword = async (email, password) => {
 
 export const sendVerificationEmail = async () => {
     try {
-        await sendEmailVerification(auth.currentUser); // Send verification email
+        await sendEmailVerification(auth.currentUser);
     } catch (error) {
         console.error("Error sending verification email:", error);
         throw error;
     }
 };
 
- export const sendUserPasswordResetEmail = async (email) => {
+export const sendUserPasswordResetEmail = async (email) => {
     try {
-         await sendPasswordResetEmail(auth, email);
-         console.log("Link Sent!");
-   } catch (error) {
-       console.error("Error sending password reset email:", error);
+        await sendPasswordResetEmail(auth, email);
+        console.log("Reset email sent!");
+    } catch (error) {
+        console.error("Error sending password reset email:", error);
         throw error;
     }
 };
-
 
 export const updateUserPassword = async (newPassword) => {
     try {
@@ -112,6 +96,8 @@ export const updateUserPassword = async (newPassword) => {
     } catch (error) {
         console.error("Error updating password:", error);
         throw error;
+    }
+}; 
       
 //  export const sendPasswordResetEmail = async (email) => {
 //     try {
@@ -122,21 +108,21 @@ export const updateUserPassword = async (newPassword) => {
 //     }
 // };
 
-function verifyPassword(password) {
-    //check for special characters
-    if(!specialCharacterRegex.test(password)) {
-        throw "Your password must contain at least 1 special character";
-    }
-    //check for a number
-    else if(!numberRegex.test(password)) {
-        throw "Your password must contain at least 1 number";
-    }
-    //check for required length
-    else if (password.length < 8) {
-        throw "Your password must be at least 8 characters long";
-    }
-    //an error isn't thrown, password is valid
-}
+// function verifyPassword(password) {
+//     //check for special characters
+//     if(!specialCharacterRegex.test(password)) {
+//         throw "Your password must contain at least 1 special character";
+//     }
+//     //check for a number
+//     else if(!numberRegex.test(password)) {
+//         throw "Your password must contain at least 1 number";
+//     }
+//     //check for required length
+//     else if (password.length < 8) {
+//         throw "Your password must be at least 8 characters long";
+//     }
+//     //an error isn't thrown, password is valid
+// }
 
 
 
