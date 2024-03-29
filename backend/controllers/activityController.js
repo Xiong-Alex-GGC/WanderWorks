@@ -40,9 +40,12 @@ export const createActivity = async (req, res) => {
 
 //updates a new activity
 export const updateActivity = async (req, res) => {
+  //console.log("Controller reached when attempting to update and activity");
   try {
     const id = req.body.id;
+    console.log("ID of activity being updated, controller class: " + id);
     const data = req.body;
+    console.log("ID of activity being updated but pulled from data: " + data.id);
 
     await activityModel.updateActivity(id, data);
     res.send({ msg: "Activity Updated" });

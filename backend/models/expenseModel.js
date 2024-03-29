@@ -28,10 +28,13 @@ export const updateExpense = async (id, data) => {
   //get the before and after expenses
   const expenseData = await getExpenseById(id);
   const beforeExpense = expenseData.spendings;
+  //console.log("Before expense: " + beforeExpense);
   const afterExpense = data.spendings;
+  //console.log("After expense: " + afterExpense);
   const expenseChange = afterExpense - beforeExpense;
+  //console.log("Difference between expenses: " + expenseChange);
   itineraryController.addExpenses(itinID, expenseChange);
-  await updateDoc(doc(activityCollection, id), data); //update a pre-existing document
+  await updateDoc(doc(expenseCollection, id), data); //update a pre-existing document
 };
 
 export const getExpenseById = async (id) => {

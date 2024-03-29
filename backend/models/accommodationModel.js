@@ -2,6 +2,8 @@ import { addDoc, collection, getDocs, updateDoc, doc, getDoc, query, where, dele
 import db from '../firebaseConfig.js';
 import * as itineraryController from '../controllers/itineraryController.js';
 import * as itineraryModel from './itineraryModel.js';
+import * as OverlappingItemError from '../errors/OverlappingItemError.js';
+import * as ItemOutOfBoundsError from '../errors/ItemOutOfBoundsError.js';
 
 const accommodationCollection = collection(db, 'Accommodation'); //connecting to the database by specifying table name
 
@@ -38,7 +40,30 @@ function compareDates(date1, date2) { //returns -1 if date1 is before date2, 0 i
   }
 }
 
-//function isAccommodationOverlapping(existingAccommodations, newAccommodation)
+function checkOverlappingAccommodations(existingAccommodations, newAccommodation) {
+  return existingAccommodations.some(accommodation => {
+    const first = compareDates(extractDate(accommodation.startDate), extractDate(newAccommodation.startDate));
+    if(first == 0) {//they both start on the same date and thus definitely overlap
+      throw new OverlappingItemError("This accommodation would overlap with another accommodation you've set");
+    } else if(accommodation.id == newAccommodation.id) { //this accommodation is being updated, thus ignore
+      return false;
+    } else {
+      //if first is -1, the existing accommodation comes first
+      if(first == -1) {
+        if(compareDates(extractDate(accommodation.endDate), extractDate(newAccommodation.startDate)) == 1) {
+          //earlier accommodation's end date is after later accommodation's start date
+          throw new OverlappingItemError("This accommodation would overlap with another accommodation you've set");
+        }
+      } else { //first is 1, new activity comes first
+        if(compareDates(extractDate(newAccommodation.endDate), extractDate(accommodation.startDate)) == 1) {
+          throw new OverlappingItemError("This accommodation would overlap with another accommodation you've set");
+        }
+      }
+    }
+    //no fail scenarios have been met, return true
+    return false;
+  });
+}
 
 export const getAllAccommodations = async () => { //get is, well, getting; post is writing to the database
   const snapshot = await getDocs(accommodationCollection); //get current snapshot of the collection
@@ -72,7 +97,13 @@ export const createAccommodation = async (data) => {
   //ensure the accommodation does not overlap with other accommodations
   //some people may opt to stay at one hotel for the start of a trip, and stay at a different hotel for the rest, so this is
   //a scenario we should probably account for
-
+  const existingAccommodations = await getAllItineraryAccommodations(itinID);
+  try {
+    checkOverlappingAccommodations(existingAccommodations, data);
+  } catch (OverlappingItemError) {
+    console.error('Overlapping accommodations:', OverlappingItemError);
+    throw new OverlappingItemError("This accommodation would overlap with other accommodations");
+  }
 
   //throw an error if one of the fail conditions above is met, otherwise complete request
   await itineraryController.addExpenses(itinID, data.expenses); 
@@ -81,6 +112,31 @@ export const createAccommodation = async (data) => {
 
 export const updateAccommodation = async (id, data) => {
   const itinID = data.itineraryID;
+  //ensure the accommodaation will still be within the confines of the itinerary
+  const itinData = await itineraryModel.getItineraryById(itinID);
+  const itinStartDate = extractDate(itinData.startDate);
+  const itinEndDate = extractDate(itinData.endDate);
+  const accStartDate = extractDate(data.startDate);
+  const accEndDate = extractDate(data.endDate);
+  //ensure accStartDate is not before itinStartDate
+  if(compareDates(accStartDate, itinStartDate) == -1) {
+    throw new ItemOutOfBoundsError("Accommodation cannot start before your trip's start date.");
+  }
+
+  //ensure accEndDate is not after itinEndDate
+  if(compareDates(accEndDate, itinEndDate) == 1) {
+    throw new ItemOutOfBoundsError("Accommodation cannot extend beyond the duration of your trip.");
+  }
+
+  //Ensure accommodations will not overlap
+  const existingAccommodations = await getAllItineraryAccommodations(itinID);
+  try {
+    checkOverlappingAccommodations(existingAccommodations, data);
+  } catch (OverlappingItemError) {
+    console.error('Overlapping accommodations:', OverlappingItemError);
+    throw new OverlappingItemError("This accommodation would overlap with other accommodations");
+  }
+
   //get before and after expenses
   const accommodationData = await getAccommodationById(id);
   const beforeExpense = accommodationData.expenses;
