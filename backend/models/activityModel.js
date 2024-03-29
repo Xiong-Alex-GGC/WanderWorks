@@ -36,15 +36,56 @@ export const extractDate = (dateString) => {
   return dateString.split('T')[0];
 }
 
+function segmentExtractedDate(dateString) {
+  return dateString.split('-');
+}
+
+function compareDates(date1, date2) { //returns -1 if date1 is before date2, 0 if date1 and date2 are the same, and 1 if date1 is after date2
+  //extracted date format: YYYY-MM-DD
+  const date1Split = segmentExtractedDate(date1);
+  const date2Split = segmentExtractedDate(date2);
+  if(date1Split[0] == date2Split[0]) { //years are equal
+    if(date1Split[1] == date2Split[1]) { //months are equal
+      if(date1Split[2] == date2Split[2]) { //days are equal
+        return 0; //dates match up perfectly
+      } else if(date1Split[2] < date2Split[2]) { //day1 is before day2
+        return -1;
+      } else { //day 1 is after day2
+        return 1;
+      }
+    } else if(date1Split[1] < date2Split[1]) { //date1's month is before date2's
+      return -1;
+    } else { //month1 is after month2
+      return 1;
+    }
+  } else if(date1Split[0] < date2Split[0]) { //date1's year is before date2's
+    return -1;
+  } else { //year1 is after year2
+    return 1;
+  }
+}
+
 export const createActivity = async (data) => {
   const itinID = data.itineraryID;
   //ensure new activity is within the confines of the itinerary start and end dates
-  
+  const itinData = await itineraryModel.getItineraryById(itinID);
+  const itinStartDate = extractDate(itinData.startDate);
+  const itinEndDate = extractDate(itinData.endDate);
+  const activityDate = extractDate(data.date);
+
+  //check to see if the activity is set to take place before the trip starts
+  if(compareDates(activityDate, itinStartDate) == -1) {
+    throw new ItemOutOfBoundsError("Your activity cannot take place before the trip starts.");
+  }
+  //check to see if the activity takes place after the trip ends
+  if(compareDates(activityDate, itinEndDate) == 1) {
+    throw new ItemOutOfBoundsError("Your activity cannot take place after the trip ends.");
+  }
   //ensure new activity does not overlap with other activities
   const existingActivities = await getAllItineraryActivities(itinID);
   if(isActivityOverlapping(existingActivities, data)) {
-    console.error('Activity overlaps with existing activity');
-    throw new error('Activity overlaps with existing activity');
+    console.error('Activity overlaps with existing activity.');
+    throw new OverlappingItemError("Activity overlaps with existing activity.");
   }
   //throw an error if one of the fail conditions above is met, otherwise complete request
   await itineraryController.addExpenses(itinID, data.expense);
