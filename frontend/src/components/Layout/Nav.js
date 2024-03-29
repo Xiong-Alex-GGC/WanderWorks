@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navbar, Nav, Button, Image } from 'react-bootstrap';
+import { Navbar, Nav, Button, Image, Dropdown } from 'react-bootstrap';
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from '../../context/authContext';
 import { signUserOut } from '../../firebase/auth';
@@ -23,17 +23,16 @@ const NavBar = () => {
                     <Nav.Link href="#features">Features</Nav.Link>
                 </Nav>
                 {userLoggedIn ? (
-                    <>
-                        <Button variant="outline-danger" onClick={() => {signUserOut().then(() => {navigate("/")})}}>Sign Out</Button>
-                        <Nav.Link as={Link} to="NewItinerary">
-                            <Button variant="primary" className='mx-3'>New Adventure</Button>
-                        </Nav.Link>
-                        <Nav.Link as={Link} to="UserProfile"> {/* Add link to UserProfile */}
-                            <Button variant="primary">
-                                <Image src={avatar1} alt="Avatar" style={{ width: '40px', height: '40px' }}/>
-                            </Button>
-                        </Nav.Link>
-                    </>
+                    <Dropdown align="end">
+                        <Dropdown.Toggle variant="primary" id="dropdown-basic">
+                            <Image src={avatar1} alt="Avatar" style={{ width: '40px', height: '40px' }}/>
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu>
+                            <Dropdown.Item as={Link} to="UserProfile">View Profile</Dropdown.Item>
+                            <Dropdown.Item as={Link} to="EditProfile">Edit Profile</Dropdown.Item> {/* Add link to EditProfile */}
+                            <Dropdown.Item onClick={() => {signUserOut().then(() => {navigate("/")})}}>Sign Out</Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
                 ) : (
                     <>
                         <Nav.Link as={Link} to="Login">
