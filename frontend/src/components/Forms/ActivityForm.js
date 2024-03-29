@@ -34,6 +34,7 @@ const ActivityForm = ({ itineraryData, activityData, onClose }) => {
       setNotes(activityData.notes);
       setActivityID(activityData.id);
       setIsEditMode(true);
+      //setError('In Edit mode');
     }
   }, [activityData]);
   
@@ -54,14 +55,13 @@ const ActivityForm = ({ itineraryData, activityData, onClose }) => {
 
     try {
       if(isEditMode) {
-        const response = await (axios.post('https://localhost:4000/api/update-activity'), {
+        const response = await axios.post('http://localhost:4000/api/update-activity', {
           "name": activityName,
           "date": activityDate,
           "type": type,
           "startTime": startTime,
           "endTime": endTime,
           "expense": numericExpense,
-          
           "tags": tags,
           "address": location,
           "notes": notes,
@@ -108,6 +108,14 @@ const ActivityForm = ({ itineraryData, activityData, onClose }) => {
     setLocation(selectedLocation);
   };
 
+  function renderActivityID() {
+    if(isEditMode) {
+      return(
+        <div>Activity ID: {activityID}</div>
+      );
+    }
+  }
+
   return (
     <form onSubmit={handleSubmit}>
       <button onClick={closeForum}>Close</button>
@@ -117,6 +125,7 @@ const ActivityForm = ({ itineraryData, activityData, onClose }) => {
           <input type="text" value={activityName} onChange={(e) => setActivityName(e.target.value)} />
         </label>
       </div>
+      {renderActivityID()}
       <div>
         <label>
           Date:

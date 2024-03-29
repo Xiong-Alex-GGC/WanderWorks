@@ -2,6 +2,9 @@
 import { addDoc, collection, getDocs, updateDoc, doc, getDoc, query, where, deleteDoc } from 'firebase/firestore';
 import db from '../firebaseConfig.js';
 import * as itineraryController from '../controllers/itineraryController.js';
+import * as OverlappingItemError from '../errors/OverlappingItemError.js';
+import * as ItemOutOfBoundsError from '../errors/ItemOutOfBoundsError.js';
+import * as itineraryModel from './itineraryModel.js';
 
 const activityCollection = collection(db, 'Activity'); //connecting to the database by specifying table name
 
@@ -21,7 +24,13 @@ export const isActivityOverlapping = (existingActivities, newActivity) => {
     // Check for overlap using start and end times
     const existingActivityDate = extractDate(activity.date);
     const newActivityDate = extractDate(newActivity.date);
+    
+    //as part of this logic, backup activities need to be ignored
 
+    //ignore activities with matching id's.
+    if(activity.id == newActivity.id) {
+      return false;
+    }
     if(existingActivityDate != newActivityDate) {
       return false;
     } else return (
@@ -82,6 +91,7 @@ export const createActivity = async (data) => {
     throw new ItemOutOfBoundsError("Your activity cannot take place after the trip ends.");
   }
   //ensure new activity does not overlap with other activities
+  //SKIP THE BLOCK BELOW IF THIS IS A BACKUP ACTIVITY
   const existingActivities = await getAllItineraryActivities(itinID);
   if(isActivityOverlapping(existingActivities, data)) {
     console.error('Activity overlaps with existing activity.');
@@ -94,6 +104,30 @@ export const createActivity = async (data) => {
 
 export const updateActivity = async (id, data) => {
   const itinID = data.itineraryID;
+  //make sure activity would still be within the confines of the itinerary
+  //turn this block into a function later
+  const itinData = await itineraryModel.getItineraryById(itinID);
+  const itinStartDate = extractDate(itinData.startDate);
+  const itinEndDate = extractDate(itinData.endDate);
+  const activityDate = extractDate(data.date);
+
+  //check to see if the activity is set to take place before the trip starts
+  if(compareDates(activityDate, itinStartDate) == -1) {
+    throw new ItemOutOfBoundsError("Your activity cannot take place before the trip starts.");
+  }
+  //check to see if the activity takes place after the trip ends
+  if(compareDates(activityDate, itinEndDate) == 1) {
+    throw new ItemOutOfBoundsError("Your activity cannot take place after the trip ends.");
+  }
+  //
+
+  //make sure the activity wouldn't overlap with other activities
+  //SKIP THIS BLOCK IF THIS IS A BACKUP ACTIVITY
+  const existingActivities = await getAllItineraryActivities(itinID);
+  if(isActivityOverlapping(existingActivities, data)) {
+    console.error('Activity overlaps with existing activity.');
+    throw new OverlappingItemError("Activity overlaps with existing activity.");
+  }
   //get the before and after expenses
   const activityData = await getActivityById(id);
   const beforeExpense = activityData.expense;
@@ -101,9 +135,11 @@ export const updateActivity = async (id, data) => {
   const expenseChange = afterExpense - beforeExpense;
   itineraryController.addExpenses(itinID, expenseChange);
   await updateDoc(doc(activityCollection, id), data); //update a pre-existing document
+  console.log("document updated");
 };
 
 export const getActivityById = async (id) => {
+  //console.log("attempting to retrieve activity with id: " + id);
   const docSnapshot = await getDoc(doc(activityCollection, id));
   return docSnapshot.exists() ? { id: docSnapshot.id, ...docSnapshot.data() } : null;
 };

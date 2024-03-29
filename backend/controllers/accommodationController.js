@@ -36,9 +36,9 @@ export const createAccommodation = async (req, res) => {
 
 export const updateAccommodation = async (req, res) => {
   try {
-    console.log("Update request received");
+    //console.log("Update request received");
     const id = req.body.id;
-    console.log("Document ID: " + id);
+    ///console.log("Document ID: " + id);
     const data = req.body;
 
     await accommodationModel.updateAccommodation(id, data);

@@ -4,7 +4,7 @@ import ActivityForm from '../Forms/ActivityForm';
 
 
 const ActivityCard = ({ address, date, endTime, expense, name, notes, startTime, tags, id, itineraryData }) => {
-  const activityData = { address, date, endTime, expense, name, notes, startTime, tags, id, itineraryData};  
+  const activityData = { address, date, endTime, expense, name, notes, startTime, tags, id };  
   const [isDeleted, setIsDeleted] = useState(false); // New state to track deletion
   const [editMode, setEditMode] = useState(false);
   const [activityDataToEdit, setActivityDataToEdit] = useState(null);
@@ -54,6 +54,7 @@ const ActivityCard = ({ address, date, endTime, expense, name, notes, startTime,
     return(
       <div style={cardStyle}>
       <h2>{name}</h2>
+      <h2>Activity ID: {id}</h2>
       <p><strong>Date:</strong> {date}</p>
       <p><strong>Start Time:</strong> {startTime}</p>
       <p><strong>End Time:</strong> {endTime}</p>
