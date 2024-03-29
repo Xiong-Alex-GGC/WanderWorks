@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import ExpenseForm from '../Forms/ExpenseForm';
 
 
-const ExpenseCard = ({ name, date, spendings, notes, id }) => {
-    const [isDeleted, setIsDeleted] = useState(false); // New state to track deletion
+const ExpenseCard = ({ name, date, spendings, notes, id, itineraryData }) => {
+  const expenseData = { name, date, spendings, notes, id };
+  const [isDeleted, setIsDeleted] = useState(false); // New state to track deletion
+  const [editMode, setEditMode] = useState(false);
+  const [expenseDataToEdit, setExpenseDataToEdit] = useState(null);
   
     const cardStyle = {
     border: '1px solid #ddd',
@@ -13,6 +17,22 @@ const ExpenseCard = ({ name, date, spendings, notes, id }) => {
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
     backgroundColor: '#fff',
   };
+
+  const onEdit = async () => {
+    setEditMode(true);
+    setExpenseDataToEdit(expenseData);
+  }
+
+  const handleCancelEdit = () => {
+    setEditMode(false);
+    setExpenseDataToEdit(null);
+  }
+
+  const handleFormSubmit = () => {
+    //submission logic handled in form
+    setEditMode(false);
+    setExpenseDataToEdit(null);
+  }
 
   const onDelete = async () => {
     try {
@@ -30,17 +50,30 @@ const ExpenseCard = ({ name, date, spendings, notes, id }) => {
     }
   };
 
-  return (
-    <div style={cardStyle}>
+  function renderData() {
+    return(
+      <div style={cardStyle}>
       <h2>{name}</h2>
       <p><strong>Date:</strong> {date}</p>
       <p><strong>Amount Spent:$</strong> {spendings}</p>
       <p><strong>Notes:</strong> {notes}</p>
 
       <button onClick={onDelete}>Delete</button>
+      <button onClick={onEdit}>Edit</button>
 
       {/* <p><strong>Tags:</strong> {tags.join(', ')}</p> USE this for array*/}
       {/* Add more content as needed */}
+    </div>
+    );
+  }
+
+  return (
+    <div>
+      {editMode ? (
+        <ExpenseForm itineraryData={itineraryData} expenseData={expenseDataToEdit} onClose={handleCancelEdit} onSubmit={handleFormSubmit} />
+      ) : (
+        renderData()
+      )}
     </div>
   );
 };

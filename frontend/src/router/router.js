@@ -9,7 +9,7 @@ import Itinerary from '../pages/Itinerary';
 import Expenses from '../pages/Expenses';
 import ResetPassword from '../pages/ResetPassword';
 import ForgotPassword from '../pages/ForgotPassword';
-//import Explore from '../pages/Explore';
+import Explore from '../pages/Explore';
 
 
 const router = createBrowserRouter(

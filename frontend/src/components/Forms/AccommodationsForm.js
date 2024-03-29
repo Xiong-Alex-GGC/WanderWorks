@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import { Alert } from 'react-bootstrap';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 
-const AccommodationsForm = ({ itineraryData, onClose }) => {
+const AccommodationsForm = ({ itineraryData, accommodationData, onClose }) => {
     const [accommodationName, setAccommodationName] = useState('');
     const [address, setAccommodationAddress] = useState('');
     //const [rooms, setRooms] = useState('');
@@ -15,7 +15,23 @@ const AccommodationsForm = ({ itineraryData, onClose }) => {
     const [confirmation, setConfirmation] = useState('');
     const [notes, setNotes] = useState('');
     const [error, setError] = useState('');
-  
+    const [isEditMode, setIsEditMode] = useState(false);
+    const [accommodationID, setAccommodationID] = useState(null);
+
+    useEffect(() => {
+      if ( accommodationData ) {
+        setAccommodationName(accommodationData.name);
+        setAccommodationAddress(accommodationData.address);
+        setStartDate(accommodationData.startDate);
+        setEndDate(accommodationData.endDate);
+        setExpenses(accommodationData.expenses);
+        setConfirmation(accommodationData.confirmation);
+        setNotes(accommodationData.notes);
+        setAccommodationID(accommodationData.id);
+        setIsEditMode(true);
+      }
+    }, [accommodationData]);
+    
     const handleSubmit = async (event) => {
       event.preventDefault();
 
@@ -31,24 +47,46 @@ const AccommodationsForm = ({ itineraryData, onClose }) => {
       //replace start and end date in the create-accommodation request with the objects above and handle as needed within the backend
   
       try {
-        const response = await axios.post('http://localhost:4000/api/create-accommodation', { //the response after sending a request to the backend
-          "name": accommodationName,
-          "address": address,
-          //"rooms": rooms,
-          "startDate": startDate,
-          "endDate": endDate,
-          //"pricePerNight": pricePerNight,
-          "expenses": numericExpenses,
-          "confirmation": confirmation,
-          "notes": notes,
-          "itineraryID": itineraryData.id
-        });
-  
-        // Handle successful response (if needed)
-        console.log('Accommodation plan created successfully:', response.data);
-  
-        // Close the modal after successful form submission
-        onClose();
+        //const response = null;
+        if(isEditMode) {
+          //console.log("We are updating this accommodation");
+          const response = await axios.post('http://localhost:4000/api/update-accommodation', {
+            "name": accommodationName,
+            "address": address,
+            "startDate": startDate,
+            "endDate": endDate,
+            "expenses": numericExpenses,
+            "confirmation": confirmation,
+            "notes": notes,
+            "itineraryID": itineraryData.id,
+            "id": accommodationID
+          });
+          
+          // Handle successful response (if needed)
+          console.log('Accommodation plan updated successfully:', response.data);
+    
+          // Close the modal after successful form submission
+          onClose();
+        } else {
+          const response = await axios.post('http://localhost:4000/api/create-accommodation', { //the response after sending a request to the backend
+            "name": accommodationName,
+            "address": address,
+            //"rooms": rooms,
+            "startDate": startDate,
+            "endDate": endDate,
+            //"pricePerNight": pricePerNight,
+            "expenses": numericExpenses,
+            "confirmation": confirmation,
+            "notes": notes,
+            "itineraryID": itineraryData.id
+          });
+    
+          // Handle successful response (if needed)
+          console.log('Accommodation plan created successfully:', response.data);
+    
+          // Close the modal after successful form submission
+          onClose();
+        }
       } catch (error) {
         // Handle error
         console.error('Error creating accommodation plan:', error);
@@ -60,6 +98,7 @@ const AccommodationsForm = ({ itineraryData, onClose }) => {
     }
 
     return (
+      <div> 
         <form onSubmit={handleSubmit}>
           <button onClick={closeForum}>Close</button>
           <div>
@@ -107,8 +146,9 @@ const AccommodationsForm = ({ itineraryData, onClose }) => {
             </label>
           </div>
           {error && <Alert variant="danger">{error}</Alert>}
-          <button type="submit">Submit</button>
+          <button type="submit">{isEditMode ? 'Update' : 'Submit'}</button>
         </form>
+      </div>  
       );
 }
 

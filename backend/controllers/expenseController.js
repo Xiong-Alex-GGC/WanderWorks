@@ -38,7 +38,6 @@ export const createExpense = async (req, res) => {
 };
 
 //updates an expense
-/*
 export const updateExpense = async (req, res) => {
   try {
     const id = req.body.id;
@@ -51,7 +50,6 @@ export const updateExpense = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
-*/
 
 //retrieves an expense by its Id
 export const getExpenseById = async (req, res) => {
