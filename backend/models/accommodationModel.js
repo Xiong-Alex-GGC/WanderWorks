@@ -1,5 +1,6 @@
 import { addDoc, collection, getDocs, updateDoc, doc, getDoc, query, where, deleteDoc } from 'firebase/firestore';
 import db from '../firebaseConfig.js';
+import * as itineraryController from '../controllers/itineraryController.js';
 
 const accommodationCollection = collection(db, 'Accommodation'); //connecting to the database by specifying table name
 
@@ -29,8 +30,8 @@ export const createAccommodation = async (data) => {
 export const updateAccommodation = async (id, data) => {
   const itinID = data.itineraryID;
   //get before and after expenses
-  const accommodationData = getAccommodationById(id);
-  const beforeExpense = accommodationData.expense;
+  const accommodationData = await getAccommodationById(id);
+  const beforeExpense = accommodationData.expenses;
   const afterExpense = data.expenses;
   const expenseChange = afterExpense - beforeExpense;
   itineraryController.addExpenses(itinID, expenseChange);
@@ -50,7 +51,7 @@ export const deleteAccommodation = async (accommodationID) => {
 
   if (accommodationDoc.exists()) {
     //first remove the expense
-    const accommodationData = getAccommodationById(accommodationID);
+    const accommodationData = await getAccommodationById(accommodationID);
     const expense = -1 * accommodationData.expenses;
     const itinID = accommodationData.itineraryID;
     itineraryController.addExpenses(itinID, expense);

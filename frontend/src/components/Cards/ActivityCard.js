@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import ActivityForm from '../Forms/ActivityForm';
 
 
-const ActivityCard = ({ address, date, endTime, expense, name, notes, startTime, tags, id }) => {
-    const [isDeleted, setIsDeleted] = useState(false); // New state to track deletion
+const ActivityCard = ({ address, date, endTime, expense, name, notes, startTime, tags, id, itineraryData }) => {
+  const activityData = { address, date, endTime, expense, name, notes, startTime, tags, id, itineraryData};  
+  const [isDeleted, setIsDeleted] = useState(false); // New state to track deletion
+  const [editMode, setEditMode] = useState(false);
+  const [activityDataToEdit, setActivityDataToEdit] = useState(null);
   
     const cardStyle = {
     border: '1px solid #ddd',
@@ -14,6 +18,22 @@ const ActivityCard = ({ address, date, endTime, expense, name, notes, startTime,
     backgroundColor: '#fff',
   };
 
+  const onEdit = async() => {
+    setEditMode(true);
+    setActivityDataToEdit(activityData);
+  }
+
+  const handleCancelEdit = () => {
+    setEditMode(false);
+    setActivityDataToEdit(null);
+  }
+
+  const handleFormSubmit = () => {
+    //submission logic handled in form
+    setEditMode(false);
+    setActivityDataToEdit(null);
+  }
+  
   const onDelete = async () => {
     try {
       const response = await axios.delete(`http://localhost:4000/api/delete-activity`, {
@@ -30,8 +50,9 @@ const ActivityCard = ({ address, date, endTime, expense, name, notes, startTime,
     }
   };
 
-  return (
-    <div style={cardStyle}>
+  function renderData() {
+    return(
+      <div style={cardStyle}>
       <h2>{name}</h2>
       <p><strong>Date:</strong> {date}</p>
       <p><strong>Start Time:</strong> {startTime}</p>
@@ -43,9 +64,18 @@ const ActivityCard = ({ address, date, endTime, expense, name, notes, startTime,
       <p><strong>id:</strong> {id}</p>
 
       <button onClick={onDelete}>Delete</button>
+      <button onClick={onEdit}>Edit</button>
+    </div>
+    );
+  }
 
-      {/* <p><strong>Tags:</strong> {tags.join(', ')}</p> USE this for array*/}
-      {/* Add more content as needed */}
+  return (
+    <div>
+      {editMode ? (
+        <ActivityForm itineraryData={itineraryData} activityData={activityDataToEdit} onClose={handleCancelEdit} onSubmit={handleFormSubmit}/>
+      ) : (
+        renderData()
+      )}
     </div>
   );
 };

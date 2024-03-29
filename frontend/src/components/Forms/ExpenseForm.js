@@ -4,15 +4,26 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 
-const ExpenseForm = ({ itineraryData, onClose }) => {
+const ExpenseForm = ({ itineraryData, expenseData, onClose }) => {
     const [name, setName] = useState('');
     const [date, setDate] = useState(new Date());
     const [spendings, setSpendings] = useState('');
     const [notes, setNotes] = useState('');
 
     const [error, setError] = useState('');
+    const [isEditMode, setIsEditMode] = useState(false);
+    const [expenseID, setExpenseID] = useState(null);
 
-
+    useEffect(() => {
+        if( expenseData ) {
+            setName(expenseData.name);
+            setDate(expenseData.date);
+            setSpendings(expenseData.spendings);
+            setNotes(expenseData.notes);
+            setExpenseID(expenseData.id);
+            setIsEditMode(true);
+        }
+    }, [expenseData]);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -29,18 +40,34 @@ const ExpenseForm = ({ itineraryData, onClose }) => {
         }
 
         try {
-            const response = await axios.post('http://localhost:4000/api/create-expense', {
-                "name": name,
-                "date": date,
-                "spendings": numericSpendings,
-                "notes": notes,
-                "itineraryID": itineraryData.id
-                //userID: currentUser.uid
-            });
+            if(isEditMode) {
+                const response = await axios.post('http://localhost:4000/api/update-expense', {
+                    "name": name,
+                    "date": date,
+                    "spendings": numericSpendings,
+                    "notes": notes,
+                    "itineraryID": itineraryData.id,
+                    "id": expenseID
+                });
 
-            // Return TripID
-            //onTripIDReceived(response.data.id)
+                console.log('Expense updated successfully:', response.data);
+                onClose();
+            } else {
+                const response = await axios.post('http://localhost:4000/api/create-expense', {
+                    "name": name,
+                    "date": date,
+                    "spendings": numericSpendings,
+                    "notes": notes,
+                    "itineraryID": itineraryData.id
+                    //userID: currentUser.uid
+                });
 
+                // Handle successful response (if needed)
+                console.log('Expense added successfully:', response.data);
+        
+                // Close the modal after successful form submission
+                onClose();
+            }
         } catch (error) {
             console.error('Error creating Expense:', error);
             // Handle error if needed
@@ -110,7 +137,7 @@ const ExpenseForm = ({ itineraryData, onClose }) => {
                 {/* {tripID && <Alert variant="success">Trip created successfully. Trip ID: {tripID}</Alert>} */}
 
                 <Button variant="primary" type="submit">
-                    Add Expenditure
+                    {isEditMode ? 'Update' : 'Add Expenditure'}
                 </Button>
             </Form>
         </Container>

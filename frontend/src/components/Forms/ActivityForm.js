@@ -6,7 +6,7 @@ import axios from 'axios';
 import ActivityLocationSuggestion from '../Mapbox/ActivityLocationSuggeston';
 import { ActRow, ActColLeft, ActColRight } from '../../styles/Forms-Styles';
 
-const ActivityForm = ({ itineraryData, onClose }) => {
+const ActivityForm = ({ itineraryData, activityData, onClose }) => {
   const [activityName, setActivityName] = useState('');
   const [activityDate, setActivityDate] = useState(new Date());
   const [type, setActivityType] = useState('');
@@ -16,9 +16,27 @@ const ActivityForm = ({ itineraryData, onClose }) => {
   const [tags, setTags] = useState('');
   const [location, setLocation] = useState('');
   const [notes, setNotes] = useState('');
+  const [activityID, setActivityID] = useState(null);
 
+  const [isEditMode, setIsEditMode] = useState(false);
   const [error, setError] = useState('');
 
+  useEffect(() => {
+    if( activityData ) {
+      setActivityName(activityData.name);
+      setActivityDate(activityData.date);
+      setActivityType(activityData.type);
+      setStartTime(activityData.startTime);
+      setEndTime(activityData.endTime);
+      setExpenses(activityData.expense);
+      setTags(activityData.tags);
+      setLocation(activityData.address);
+      setNotes(activityData.notes);
+      setActivityID(activityData.id);
+      setIsEditMode(true);
+    }
+  }, [activityData]);
+  
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -35,28 +53,50 @@ const ActivityForm = ({ itineraryData, onClose }) => {
     //Check date to ensure it's within the confines of the itinerary it's on
 
     try {
-      const response = await axios.post('http://localhost:4000/api/create-activity', { //the response after sending a request to the backend
-        "name": activityName,
-        "date": activityDate,
-        "type": type,
-        "startTime": startTime,
-        "endTime": endTime,
-        "expense": numericExpense,
-        
-        "tags": tags,
-        "address": location,
-        "notes": notes,
-        "itineraryID": itineraryData.id
-      });
+      if(isEditMode) {
+        const response = await (axios.post('https://localhost:4000/api/update-activity'), {
+          "name": activityName,
+          "date": activityDate,
+          "type": type,
+          "startTime": startTime,
+          "endTime": endTime,
+          "expense": numericExpense,
+          
+          "tags": tags,
+          "address": location,
+          "notes": notes,
+          "itineraryID": itineraryData.id,
+          "id": activityID
+        });
 
-      // Handle successful response (if needed)
-      console.log('Activity created successfully:', response.data);
+        console.log('Activity updated successfully:', response.data);
 
-      // Close the modal after successful form submission
-      onClose();
+        onClose();
+      } else {
+        const response = await axios.post('http://localhost:4000/api/create-activity', { //the response after sending a request to the backend
+          "name": activityName,
+          "date": activityDate,
+          "type": type,
+          "startTime": startTime,
+          "endTime": endTime,
+          "expense": numericExpense,
+          
+          "tags": tags,
+          "address": location,
+          "notes": notes,
+          "itineraryID": itineraryData.id
+        });
+
+        // Handle successful response (if needed)
+        console.log('Activity created successfully:', response.data);
+
+        // Close the modal after successful form submission
+        onClose();
+      }
     } catch (error) {
       // Handle error
       console.error('Error creating activity:', error);
+      setError(error);
     }
   };
 
@@ -137,7 +177,7 @@ const ActivityForm = ({ itineraryData, onClose }) => {
         </label>
       </div>
       {error && <Alert variant="danger">{error}</Alert>}
-      <button type="submit">Submit</button>
+      <button type="submit">{isEditMode ? 'Update' : 'Submit'}</button>
     </form>
 );
 

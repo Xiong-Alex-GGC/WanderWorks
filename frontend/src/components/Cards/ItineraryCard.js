@@ -21,7 +21,7 @@ const textStyle = {
   color: '#666',
 };
 
-const ItineraryCard = ({ id, tripName, startDate, endDate, imgURL, budget, totalExpenses }) => { //renders the itinerary data
+const ItineraryCard = ({ id, tripName, startDate, endDate, location, imgURL, budget, totalExpenses }) => { //renders the itinerary data
   const [isDeleted, setIsDeleted] = useState(false); // New state to track deletion
 
   const onDelete = async () => {

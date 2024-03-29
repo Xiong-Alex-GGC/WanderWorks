@@ -54,7 +54,7 @@ export const createActivity = async (data) => {
 export const updateActivity = async (id, data) => {
   const itinID = data.itineraryID;
   //get the before and after expenses
-  const activityData = getActivityById(id);
+  const activityData = await getActivityById(id);
   const beforeExpense = activityData.expense;
   const afterExpense = data.expense;
   const expenseChange = afterExpense - beforeExpense;
@@ -69,14 +69,15 @@ export const getActivityById = async (id) => {
 
 
 export const deleteActivity = async (activityID) => {
-
+  
   //checks if activity exists
   const activityDoc = await getDoc(doc(activityCollection, activityID));
 
   if (activityDoc.exists()) {
     //first remove the expense
-    const activityData = getActivityById(activityID);
+    const activityData = await getActivityById(activityID);
     const expense = -1 * activityData.expense; //by multiplying by -1, "adding" the expense actually subtracts it
+    console.log("expense to delete: $" + expense);
     const itinID = activityData.itineraryID;
     itineraryController.addExpenses(itinID, expense);
     

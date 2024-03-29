@@ -56,7 +56,7 @@ const Itinerary = () => {
     setShowExpenseForm(false);
   };
 
-  const renderOverBudgetWarning = ({ remainingBudget }) => {
+  function renderOverBudgetWarning( remainingBudget ) {
     if(remainingBudget < 0) {
       return (
         <>
@@ -74,7 +74,7 @@ const Itinerary = () => {
       return (
         <>
           <p>${remainingBudget} of ${itineraryData.budget} budget remaining</p>
-          {renderOverBudgetWarning(remainingBudget)}
+          <p>{renderOverBudgetWarning(remainingBudget)}</p>
         </>
       );
     } else {

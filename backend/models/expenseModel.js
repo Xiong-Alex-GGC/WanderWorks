@@ -23,18 +23,16 @@ export const createExpense = async (data) => {
   await addDoc(expenseCollection, data); //add document to the collection
 };
 
-/*
 export const updateExpense = async (id, data) => {
   const itinID = data.itineraryID;
   //get the before and after expenses
-  const expenseData = getExpenseById(id);
+  const expenseData = await getExpenseById(id);
   const beforeExpense = expenseData.spendings;
-  const afterExpense = data.expense;
+  const afterExpense = data.spendings;
   const expenseChange = afterExpense - beforeExpense;
   itineraryController.addExpenses(itinID, expenseChange);
   await updateDoc(doc(activityCollection, id), data); //update a pre-existing document
 };
-*/
 
 export const getExpenseById = async (id) => {
   const docSnapshot = await getDoc(doc(expenseCollection, id));
@@ -49,7 +47,7 @@ export const deleteExpense = async (expenseID) => {
 
   if (expenseDoc.exists()) {
     //first remove the expense
-    const expenseData = getExpenseById(expenseID);
+    const expenseData = await getExpenseById(expenseID);
     const expense = -1 * expenseData.spendings; //by multiplying by -1, "adding" the expense actually subtracts it
     const itinID = expenseData.itineraryID;
     itineraryController.addExpenses(itinID, expense);

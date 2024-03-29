@@ -95,7 +95,7 @@ export const addExpenses = async (id, expense) => {
       totalExpenses: newExpenses
     };
     await itineraryModel.updateItinerary(id, data);
-    res.send({ msg: "Expense tracked for itinerary"});
+    return ("Expense tracked for itinerary");
     //console.log("Hopefully this worked?");
   } catch (error) {
     console.error('Error updating itinerary with tracked expense:', error);
