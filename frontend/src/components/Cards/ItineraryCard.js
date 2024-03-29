@@ -39,35 +39,6 @@ const ItineraryCard = ({ id, tripName, startDate, endDate, location, imgURL, bud
     }
   };
 
-  const renderOverBudgetWarning = ({ remainingBudget }) => {
-    if(remainingBudget < 0) {
-      return (
-        <>
-          <p>You are expected to go over budget by {Math.abs(remainingBudget)}</p>
-        </>
-      );
-    } else {
-      return(<></>);
-    }
-  }
-
-  const calculateRemainingBudget = () => {
-    if(budget != null) {
-      const remainingBudget = budget - totalExpenses; //need to delete any itineraries where budget and totalExpenses are currently strings
-      return (
-        <>
-          <p>${remainingBudget} of ${budget} budget remaining</p>
-          {renderOverBudgetWarning(remainingBudget)}
-        </>
-      );
-    } else {
-      return (
-        <>
-          <p>You have spent ${totalExpenses} on this trip</p>
-        </>
-      );
-    }
-  }
   // Function to format date to "Month Day" format (e.g., "Jan 13")
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -148,14 +119,7 @@ const ItineraryCard = ({ id, tripName, startDate, endDate, location, imgURL, bud
           </div>
         </Row>
       </Link>
-      <hr />
 
-      {calculateRemainingBudget()}
-
-      <hr />
-      <p>ID: {id}</p>
-      <p style={textStyle}>Start Date: {startDate}</p>
-      <p style={textStyle}>End Date: {endDate}</p>
       <Row style={{ margin: 0, padding: 0 }}>
         <Col>
           <div style={{ fontSize: 16, marginTop: 10 }}>{tripName}</div>
@@ -180,14 +144,6 @@ const ItineraryCard = ({ id, tripName, startDate, endDate, location, imgURL, bud
         </Col>
 
       </Row>
-
-
-      {/* <Link to={`/Itinerary/${id}`}>
-      </Link> */}
-
-      {/* <p style={textStyle}>Start Date: {startDate}</p>
-      <p style={textStyle}>End Date: {endDate}</p> */}
-
 
     </Row>
   );
