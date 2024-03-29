@@ -14,9 +14,13 @@ import { Link } from 'react-router-dom';
 const Itinerary = () => {
   const { id } = useParams();
   const [itineraryData, setItineraryData] = useState(null);
+  const [activitiesData, setActivitiesData] = useState(null);
   const [showActivityForm, setShowActivityForm] = useState(false);
   const [showAccommodationForm, setShowAccommodationForm] = useState(false);
   const [showExpenseForm, setShowExpenseForm] = useState(false);
+
+  const [isLoading, setIsLoading] = useState(true); // Initialize isLoading as true
+
 
   useEffect(() => {
     const fetchItineraryData = async () => {
@@ -31,6 +35,23 @@ const Itinerary = () => {
 
     fetchItineraryData();
   }, [id]);
+
+  useEffect(() => {
+    const fetchActivitiesData = async () => {
+      if (itineraryData) {
+        try {
+          const response = await axios.get(`http://localhost:4000/api/activities/${itineraryData.id}`);
+          setActivitiesData(response.data);
+          setIsLoading(false); // Data is loaded, set isLoading to false
+        } catch (error) {
+          console.error('Error fetching activity data:', error);
+          setIsLoading(false); // Ensure to handle loading state even on error
+        }
+      }
+    };
+
+    fetchActivitiesData();
+  }, [itineraryData]);
 
   const openActivityForm = () => {
     setShowActivityForm(true);
@@ -56,20 +77,20 @@ const Itinerary = () => {
     setShowExpenseForm(false);
   };
 
-  function renderOverBudgetWarning( remainingBudget ) {
-    if(remainingBudget < 0) {
+  function renderOverBudgetWarning(remainingBudget) {
+    if (remainingBudget < 0) {
       return (
         <>
           <p>You are expected to go over budget by {Math.abs(remainingBudget)}</p>
         </>
       );
     } else {
-      return(<></>);
+      return (<></>);
     }
   }
 
   const calculateRemainingBudget = () => {
-    if(itineraryData.budget != null) {
+    if (itineraryData.budget != null) {
       const remainingBudget = itineraryData.budget - itineraryData.totalExpenses; //need to delete any itineraries where budget and totalExpenses are currently strings
       return (
         <>
@@ -88,13 +109,14 @@ const Itinerary = () => {
 
   return (
     <Row>
-      {itineraryData ? (
+      {isLoading ? (
+        <Col>
+          <p>Loading itinerary data...</p>
+        </Col>
+      ) : (
         <>
           <Col>
             <Row style={{ height: '100vh' }}>
-              <Col xs={3} style={{ backgroundColor: '#f1f1f1', borderRight: '1px solid #ccc' }}>
-                Sidebar
-              </Col>
               <Col>
                 <Row style={{ height: '150px', backgroundColor: '#f4f4f4', borderBottom: '1px solid #ccc', backgroundImage: `url(${itineraryData.imgURL})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
                 </Row>
@@ -116,7 +138,7 @@ const Itinerary = () => {
                 <div>
                   {calculateRemainingBudget()}
                 </div>
-                
+
                 <div>
                   <Link to={`/Expenses/${itineraryData.id}`}>Click here to see your additional expenses</Link>
                 </div>
@@ -140,7 +162,7 @@ const Itinerary = () => {
                   <AccommodationForm itineraryData={itineraryData} onClose={closeAccommodationForm} />
                 )}
                 <hr />
-                
+
                 <AccommodationContainer itineraryData={itineraryData} />
 
                 <hr />
@@ -156,17 +178,13 @@ const Itinerary = () => {
           </Col>
 
           <Col>
-            <DemoMap />
+            <DemoMap itineraryData={itineraryData} activitiesData={activitiesData} />
           </Col>
         </>
-      ) : (
-        <Col>
-          <p>Loading itinerary data...</p>
-        </Col>
       )}
     </Row>
   );
-  
+
 };
 
 export default Itinerary;
