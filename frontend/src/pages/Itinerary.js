@@ -58,20 +58,12 @@ const Itinerary = () => {
     fetchActivitiesData();
   }, [itineraryData]);
 
-  const openActivityForm = () => {
-    setShowActivityForm(true);
-  };
-
   const closeActivityForm = () => {
     setShowActivityForm(false);
   };
 
   const closeAccommodationForm = () => {
     setShowAccommodationForm(false);
-  };
-
-  const openExpenseForm = () => {
-    setShowExpenseForm(true);
   };
 
   const closeExpenseForm = () => {
@@ -114,152 +106,159 @@ const Itinerary = () => {
   };
 
   return (
-    <Row>
-      {isLoading ? (
-        <Col>
-          <p>Loading itinerary data...</p>
-        </Col>
-      ) : (
-        <>
+    <Container fluid>
+      <Row>
+        {isLoading ? (
           <Col>
-            <Row style={{ height: "100vh" }}>
-              <Col>
-                <Row
-                  style={{
-                    height: "150px",
-                    backgroundColor: "#f4f4f4",
-                    borderBottom: "1px solid #ccc",
-                    backgroundImage: `url(${itineraryData.imgURL})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                  }}
-                ></Row>
-                <div
-                  style={{
-                    margin: "-50px 40px 30px 40px",
-                    backgroundColor: "#f4f4f4",
-                    borderRadius: "10px",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    padding: "20px",
-                    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.5)",
-                  }}
-                >
-                  <h6>{itineraryData.tripName}</h6>
-                </div>
+            <p>Loading itinerary data...</p>
+          </Col>
+        ) : (
+          <>
+            <Col
+              style={{
+                height: "100vh",
+                overflow: "auto",
+                WebkitOverflowScrolling: "touch", // Optional: For smooth scrolling on iOS
+                scrollbarWidth: "none", // Firefox
+                msOverflowStyle: "none", // IE and Edge
+                "&::-webkit-scrollbar": {
+                  display: "none", // Hide scrollbar for Chrome, Safari, and Opera
+                },
+              }}
+            >
+              <Row
+                style={{
+                  height: "150px",
+                  backgroundColor: "#f4f4f4",
+                  borderBottom: "1px solid #ccc",
+                  backgroundImage: `url(${itineraryData.imgURL})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                }}
+              ></Row>
+              <div
+                style={{
+                  margin: "-50px 40px 30px 40px",
+                  backgroundColor: "#f4f4f4",
+                  borderRadius: "10px",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  padding: "20px",
+                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.5)",
+                }}
+              >
+                <h6>{itineraryData.tripName}</h6>
+              </div>
 
-                {/* <p>Start Date: {itineraryData.startDate}</p>
+              {/* <p>Start Date: {itineraryData.startDate}</p>
                 <p>End Date: {itineraryData.endDate}</p> */}
-                <div>{calculateRemainingBudget()}</div>
+              <div>{calculateRemainingBudget()}</div>
 
-                <div>{calculateRemainingBudget()}</div>
+              <div>
+                <Link to={`/Expenses/${itineraryData.id}`}>
+                  Click here to see your additional expenses
+                </Link>
+              </div>
+              <hr />
 
-                <div>
-                  <Link to={`/Expenses/${itineraryData.id}`}>
-                    Click here to see your additional expenses
-                  </Link>
-                </div>
-                <hr />
+              {/* Use Modal to open popup */}
+              <h3>Functions</h3>
+              <Button
+                onClick={() => setShowActivityForm(true)}
+                className="me-2"
+                variant="success"
+              >
+                New Activity
+              </Button>
+              <Modal
+                size="lg"
+                show={showActivityForm}
+                onHide={() => setShowActivityForm(false)}
+                aria-labelledby="activity-modal"
+              >
+                <Modal.Header closeButton>
+                  <Modal.Title id="activity-modal">New Activity</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  <ActivityForm
+                    itineraryData={itineraryData}
+                    onClose={closeActivityForm}
+                  />
+                </Modal.Body>
+              </Modal>
 
-                {/* Use Modal to open popup */}
-                <h3>Functions</h3>
-                <Button
-                  onClick={() => setShowActivityForm(true)}
-                  className="me-2"
-                  variant="success"
-                >
-                  New Activity
-                </Button>
-                <Modal
-                  size="lg"
-                  show={showActivityForm}
-                  onHide={() => setShowActivityForm(false)}
-                  aria-labelledby="activity-modal"
-                >
-                  <Modal.Header closeButton>
-                    <Modal.Title id="activity-modal">New Activity</Modal.Title>
-                  </Modal.Header>
-                  <Modal.Body>
-                    <ActivityForm
-                      itineraryData={itineraryData}
-                      onClose={closeActivityForm}
-                    />
-                  </Modal.Body>
-                </Modal>
+              <Button
+                onClick={() => setShowAccommodationForm(true)}
+                className="me-2"
+                variant="success"
+              >
+                New Accommodation
+              </Button>
+              <Modal
+                size="lg"
+                show={showAccommodationForm}
+                onHide={() => setShowAccommodationForm(false)}
+                aria-labelledby="accomodation-modal"
+              >
+                <Modal.Header closeButton>
+                  <Modal.Title id="accomodation-modal">
+                    New Accommodation
+                  </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  <AccommodationForm
+                    itineraryData={itineraryData}
+                    onClose={closeAccommodationForm}
+                  />
+                </Modal.Body>
+              </Modal>
 
-                <Button
-                  onClick={() => setShowAccommodationForm(true)}
-                  className="me-2"
-                  variant="success"
-                >
-                  New Accommodation
-                </Button>
-                <Modal
-                  size="lg"
-                  show={showAccommodationForm}
-                  onHide={() => setShowAccommodationForm(false)}
-                  aria-labelledby="accomodation-modal"
-                >
-                  <Modal.Header closeButton>
-                    <Modal.Title id="accomodation-modal">
-                      New Accommodation
-                    </Modal.Title>
-                  </Modal.Header>
-                  <Modal.Body>
-                    <AccommodationForm
-                      itineraryData={itineraryData}
-                      onClose={closeAccommodationForm}
-                    />
-                  </Modal.Body>
-                </Modal>
+              <Button
+                onClick={() => setShowExpenseForm(true)}
+                className="me-2"
+                variant="success"
+              >
+                New Expense
+              </Button>
+              <Modal
+                size="lg"
+                show={showExpenseForm}
+                onHide={() => setShowExpenseForm(false)}
+                aria-labelledby="expense-modal"
+              >
+                <Modal.Header closeButton>
+                  <Modal.Title id="expense-modal">New Expense</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  <ExpenseForm
+                    itineraryData={itineraryData}
+                    onClose={closeExpenseForm}
+                  />
+                </Modal.Body>
+              </Modal>
+              <hr />
 
-                <Button
-                  onClick={() => setShowExpenseForm(true)}
-                  className="me-2"
-                  variant="success"
-                >
-                  New Expense
-                </Button>
-                <Modal
-                  size="lg"
-                  show={showExpenseForm}
-                  onHide={() => setShowExpenseForm(false)}
-                  aria-labelledby="expense-modal"
-                >
-                  <Modal.Header closeButton>
-                    <Modal.Title id="expense-modal">New Expense</Modal.Title>
-                  </Modal.Header>
-                  <Modal.Body>
-                    <ExpenseForm
-                      itineraryData={itineraryData}
-                      onClose={closeExpenseForm}
-                    />
-                  </Modal.Body>
-                </Modal>
-                <hr />
+              <ActivityContainer itineraryData={itineraryData} />
 
-                <ActivityContainer itineraryData={itineraryData} />
+              <hr />
 
-                <hr />
+              <AccommodationContainer itineraryData={itineraryData} />
 
-                <AccommodationContainer itineraryData={itineraryData} />
+              <hr />
+              <WeatherComponent itineraryData={itineraryData} />
+            </Col>
 
-                <hr />
-                <WeatherComponent itineraryData={itineraryData} />
-              </Col>
-            </Row>
-          </Col>
-
-          <Col>
-            <DemoMap
-              itineraryData={itineraryData}
-              activitiesData={activitiesData}
-            />
-          </Col>
-        </>
-      )}
-    </Row>
+            <Col>
+              <DemoMap
+                itineraryData={itineraryData}
+                activitiesData={activitiesData}
+              />
+            </Col>
+          </>
+        )}
+      </Row>
+    </Container>
   );
 };
 
