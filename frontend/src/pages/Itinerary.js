@@ -7,6 +7,7 @@ import ActivityContainer from '../components/Containers/ActivityContainer';
 import AccommodationForm from '../components/Forms/AccommodationsForm';
 import AccommodationContainer from '../components/Containers/AccommodationContainer';
 import ExpenseForm from '../components/Forms/ExpenseForm';
+import BackupActivityForm from '../components/Forms/BackupActivityForm';
 
 import { Container, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
@@ -18,6 +19,7 @@ const Itinerary = () => {
   const [showActivityForm, setShowActivityForm] = useState(false);
   const [showAccommodationForm, setShowAccommodationForm] = useState(false);
   const [showExpenseForm, setShowExpenseForm] = useState(false);
+  const [showBackupActivityForm, setShowBackupActivityForm] = useState(false);
 
   const [isLoading, setIsLoading] = useState(true); // Initialize isLoading as true
 
@@ -59,6 +61,15 @@ const Itinerary = () => {
 
   const closeActivityForm = () => {
     setShowActivityForm(false);
+  };
+
+  const openBackupActivityForm = () => {
+    setShowBackupActivityForm(true);
+  
+  };
+
+  const closeBackupActivityForm = () => {
+    setShowBackupActivityForm(false);
   };
 
   const openAccommodationForm = () => {
@@ -172,6 +183,15 @@ const Itinerary = () => {
                 {showExpenseForm && (
                   <ExpenseForm itineraryData={itineraryData} onClose={closeExpenseForm} />
                 )}
+
+                <hr />
+
+                <h5>Create Backup Plan</h5>
+                <button onClick={openBackupActivityForm}>Backup Activity</button>
+                {showBackupActivityForm && (
+                <BackupActivityForm itineraryData={itineraryData} onClose={closeBackupActivityForm} />
+                  )}
+
 
               </Col>
             </Row>
