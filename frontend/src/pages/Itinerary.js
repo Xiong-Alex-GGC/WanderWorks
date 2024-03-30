@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import axios from 'axios';
-import DemoMap from '../components/Mapbox/DemoMap';
-import ActivityForm from '../components/Forms/ActivityForm';
-import ActivityContainer from '../components/Containers/ActivityContainer';
-import AccommodationForm from '../components/Forms/AccommodationsForm';
-import AccommodationContainer from '../components/Containers/AccommodationContainer';
-import ExpenseForm from '../components/Forms/ExpenseForm';
-
-import { Container, Row, Col } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import DemoMap from "../components/Mapbox/DemoMap";
+import ActivityForm from "../components/Forms/ActivityForm";
+import ActivityContainer from "../components/Containers/ActivityContainer";
+import AccommodationForm from "../components/Forms/AccommodationsForm";
+import AccommodationContainer from "../components/Containers/AccommodationContainer";
+import ExpenseForm from "../components/Forms/ExpenseForm";
+import { Container, Row, Col } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import WeatherComponent from "../components/Weather/DemoWeather";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
 
 const Itinerary = () => {
   const { id } = useParams();
@@ -21,15 +23,16 @@ const Itinerary = () => {
 
   const [isLoading, setIsLoading] = useState(true); // Initialize isLoading as true
 
-
   useEffect(() => {
     const fetchItineraryData = async () => {
       try {
-        const response = await axios.get(`http://localhost:4000/api/itinerary/${id}`);
+        const response = await axios.get(
+          `http://localhost:4000/api/itinerary/${id}`
+        );
         setItineraryData(response.data);
         //
       } catch (error) {
-        console.error('Error fetching itinerary data:', error);
+        console.error("Error fetching itinerary data:", error);
       }
     };
 
@@ -40,11 +43,13 @@ const Itinerary = () => {
     const fetchActivitiesData = async () => {
       if (itineraryData) {
         try {
-          const response = await axios.get(`http://localhost:4000/api/activities/${itineraryData.id}`);
+          const response = await axios.get(
+            `http://localhost:4000/api/activities/${itineraryData.id}`
+          );
           setActivitiesData(response.data);
           setIsLoading(false); // Data is loaded, set isLoading to false
         } catch (error) {
-          console.error('Error fetching activity data:', error);
+          console.error("Error fetching activity data:", error);
           setIsLoading(false); // Ensure to handle loading state even on error
         }
       }
@@ -59,10 +64,6 @@ const Itinerary = () => {
 
   const closeActivityForm = () => {
     setShowActivityForm(false);
-  };
-
-  const openAccommodationForm = () => {
-    setShowAccommodationForm(true);
   };
 
   const closeAccommodationForm = () => {
@@ -81,20 +82,25 @@ const Itinerary = () => {
     if (remainingBudget < 0) {
       return (
         <>
-          <p>You are expected to go over budget by {Math.abs(remainingBudget)}</p>
+          <p>
+            You are expected to go over budget by {Math.abs(remainingBudget)}
+          </p>
         </>
       );
     } else {
-      return (<></>);
+      return <></>;
     }
   }
 
   const calculateRemainingBudget = () => {
     if (itineraryData.budget != null) {
-      const remainingBudget = itineraryData.budget - itineraryData.totalExpenses; //need to delete any itineraries where budget and totalExpenses are currently strings
+      const remainingBudget =
+        itineraryData.budget - itineraryData.totalExpenses; //need to delete any itineraries where budget and totalExpenses are currently strings
       return (
         <>
-          <p>${remainingBudget} of ${itineraryData.budget} budget remaining</p>
+          <p>
+            ${remainingBudget} of ${itineraryData.budget} budget remaining
+          </p>
           <p>{renderOverBudgetWarning(remainingBudget)}</p>
         </>
       );
@@ -105,7 +111,7 @@ const Itinerary = () => {
         </>
       );
     }
-  }
+  };
 
   return (
     <Row>
@@ -116,75 +122,145 @@ const Itinerary = () => {
       ) : (
         <>
           <Col>
-            <Row style={{ height: '100vh' }}>
+            <Row style={{ height: "100vh" }}>
               <Col>
-                <Row style={{ height: '150px', backgroundColor: '#f4f4f4', borderBottom: '1px solid #ccc', backgroundImage: `url(${itineraryData.imgURL})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
-                </Row>
-                <div style={{
-                  margin: '-50px 40px 30px 40px',
-                  backgroundColor: '#f4f4f4',
-                  borderRadius: '10px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  padding: '20px',
-                  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.5)',
-                }}>
+                <Row
+                  style={{
+                    height: "150px",
+                    backgroundColor: "#f4f4f4",
+                    borderBottom: "1px solid #ccc",
+                    backgroundImage: `url(${itineraryData.imgURL})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                  }}
+                ></Row>
+                <div
+                  style={{
+                    margin: "-50px 40px 30px 40px",
+                    backgroundColor: "#f4f4f4",
+                    borderRadius: "10px",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    padding: "20px",
+                    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.5)",
+                  }}
+                >
                   <h6>{itineraryData.tripName}</h6>
                 </div>
 
                 {/* <p>Start Date: {itineraryData.startDate}</p>
                 <p>End Date: {itineraryData.endDate}</p> */}
-                <div>
-                  {calculateRemainingBudget()}
-                </div>
+                <div>{calculateRemainingBudget()}</div>
+
+                <div>{calculateRemainingBudget()}</div>
 
                 <div>
-                  <Link to={`/Expenses/${itineraryData.id}`}>Click here to see your additional expenses</Link>
+                  <Link to={`/Expenses/${itineraryData.id}`}>
+                    Click here to see your additional expenses
+                  </Link>
                 </div>
                 <hr />
 
-                <h3>Activities</h3>
-                <button onClick={openActivityForm}>New Activity</button>
+                {/* Use Modal to open popup */}
+                <h3>Functions</h3>
+                <Button
+                  onClick={() => setShowActivityForm(true)}
+                  className="me-2"
+                  variant="success"
+                >
+                  New Activity
+                </Button>
+                <Modal
+                  size="lg"
+                  show={showActivityForm}
+                  onHide={() => setShowActivityForm(false)}
+                  aria-labelledby="activity-modal"
+                >
+                  <Modal.Header closeButton>
+                    <Modal.Title id="activity-modal">New Activity</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <ActivityForm
+                      itineraryData={itineraryData}
+                      onClose={closeActivityForm}
+                    />
+                  </Modal.Body>
+                </Modal>
+
+                <Button
+                  onClick={() => setShowAccommodationForm(true)}
+                  className="me-2"
+                  variant="success"
+                >
+                  New Accommodation
+                </Button>
+                <Modal
+                  size="lg"
+                  show={showAccommodationForm}
+                  onHide={() => setShowAccommodationForm(false)}
+                  aria-labelledby="accomodation-modal"
+                >
+                  <Modal.Header closeButton>
+                    <Modal.Title id="accomodation-modal">
+                      New Accommodation
+                    </Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <AccommodationForm
+                      itineraryData={itineraryData}
+                      onClose={closeAccommodationForm}
+                    />
+                  </Modal.Body>
+                </Modal>
+
+                <Button
+                  onClick={() => setShowExpenseForm(true)}
+                  className="me-2"
+                  variant="success"
+                >
+                  New Expense
+                </Button>
+                <Modal
+                  size="lg"
+                  show={showExpenseForm}
+                  onHide={() => setShowExpenseForm(false)}
+                  aria-labelledby="expense-modal"
+                >
+                  <Modal.Header closeButton>
+                    <Modal.Title id="expense-modal">New Expense</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <ExpenseForm
+                      itineraryData={itineraryData}
+                      onClose={closeExpenseForm}
+                    />
+                  </Modal.Body>
+                </Modal>
                 <hr />
-                {showActivityForm && (
-                  <ActivityForm itineraryData={itineraryData} onClose={closeActivityForm} />
-                )}
 
                 <ActivityContainer itineraryData={itineraryData} />
 
                 <hr />
 
-                <h3>Accommodation</h3>
-                <button onClick={openAccommodationForm}>New Accommodation</button>
-                <hr />
-                {showAccommodationForm && (
-                  <AccommodationForm itineraryData={itineraryData} onClose={closeAccommodationForm} />
-                )}
-                <hr />
-
                 <AccommodationContainer itineraryData={itineraryData} />
 
                 <hr />
-
-                <h5>Track Additional Purchase</h5>
-                <button onClick={openExpenseForm}>New Expense</button>
-                {showExpenseForm && (
-                  <ExpenseForm itineraryData={itineraryData} onClose={closeExpenseForm} />
-                )}
-
+                <WeatherComponent itineraryData={itineraryData} />
               </Col>
             </Row>
           </Col>
 
           <Col>
-            <DemoMap itineraryData={itineraryData} activitiesData={activitiesData} />
+            <DemoMap
+              itineraryData={itineraryData}
+              activitiesData={activitiesData}
+            />
           </Col>
         </>
       )}
     </Row>
   );
-
 };
 
 export default Itinerary;
@@ -203,4 +279,3 @@ export default Itinerary;
 
 <TransportationContainer itineraryData={itineraryData} />
 */
-
