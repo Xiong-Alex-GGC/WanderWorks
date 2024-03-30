@@ -18,9 +18,12 @@ const ProfileForm = ({ userId }) => {
 
   const fetchUserData = async () => {
     try {
-      const response = await axios.get(`/api/profile/user/${userId}`);
+      const response = await axios.get(` http://localhost:4000/api/user ${userId}`);
       setUserData(response.data);
-      setFormData(response.data); // Set form data with user data
+      // Set form data only if user data is available
+      if (response.data) {
+        setFormData(response.data); // Set form data with user data
+      }
     } catch (error) {
       console.error('Error fetching user data:', error);
     }
@@ -47,7 +50,7 @@ const ProfileForm = ({ userId }) => {
       formDataToSend.append('favoriteTravelSpot', formData.favoriteTravelSpot);
       formDataToSend.append('country', formData.country);
 
-      const response = await axios.post(`/api/profile/update/${userId}`, formDataToSend, {
+      const response = await axios.post(`http://localhost:4000/api/user/${userId}`, formDataToSend, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }

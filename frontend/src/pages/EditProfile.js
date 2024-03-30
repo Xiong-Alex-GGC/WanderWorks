@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios'; // Import Axios for making HTTP requests
 import styles  from "../styles/EditProfile-Styles"; 
+import EditProfileForm from "../components/Forms/EditProfileForm";
 
 const EditProfile = ({ userData, onSubmit }) => {
     const [formData, setFormData] = useState(userData || {

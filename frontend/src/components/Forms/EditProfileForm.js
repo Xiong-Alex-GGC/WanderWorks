@@ -32,7 +32,7 @@ const EditProfileForm = ({ userData, onSubmit }) => {
       formDataToSend.append('favoriteTravelSpot', formData.favoriteTravelSpot);
       formDataToSend.append('country', formData.country);
 
-      const response = await axios.post('/api/profile/update', formDataToSend, {
+      const response = await axios.post('http://localhost:4000/api/user', formDataToSend, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
