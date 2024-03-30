@@ -102,30 +102,6 @@ export const addExpenses = async (id, expense) => {
     //res.status(500).json({ error: 'Internal Server Error' });
   }
 }
-// Add to itineraryController.js
-
-export const addBackupPlan = async (req, res) => {
-  const itineraryID = req.body.itineraryID;
-  const backupPlan = req.body.backupPlan;
-
-  try {
-    const itineraryData = await itineraryModel.getItineraryById(itineraryID);
-    if (!itineraryData) {
-      return res.status(404).json({ error: 'Itinerary not found' });
-    }
-
-    const updatedItineraryData = {
-      ...itineraryData,
-      backupPlan: backupPlan
-    };
-
-    await itineraryModel.updateItinerary(itineraryID, updatedItineraryData);
-    res.send({ msg: "Backup plan added to itinerary" });
-  } catch (error) {
-    console.error('Error adding backup plan to itinerary:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-};
 
 /*
 export const removeExpenses = async (id, expense) => {
