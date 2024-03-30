@@ -13,6 +13,7 @@ import {
   FigureCaption,
 } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
+
 import photo from "../images/DashboardBackground.jpg";
 
 const Dashboard = () => {
@@ -38,9 +39,10 @@ const Dashboard = () => {
           >
             <h2 style={{ color: "Black" }}>
               Hello{" "}
-              {currentUser.displayName
-                ? currentUser.displayName
-                : currentUser.email}
+              {currentUser &&
+                (currentUser.displayName
+                  ? currentUser.displayName
+                  : currentUser.email)}
               !
               <br />
               Welcome to WanderWork!
