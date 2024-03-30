@@ -1,27 +1,51 @@
-
-import DashboardCalendar from '../components/Calendar/DashboardCalendar'; // Assuming this is the path to your component
 import React from 'react';
-import { render, screen } from '@testing-library/react';
-import { format, getDaysInMonth } from 'date-fns';
-import { AuthProvider } from '../context/authContext';
+import { render, fireEvent, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event';
+import '@testing-library/jest-dom/extend-expect';
+import  AuthProvider  from '../context/authContext'
+import  useAuth  from '../context/authContext';
+import DashboardCalendar from '../components/Calendar/DashboardCalendar'; // Assuming this is the path to your component
 
-describe('DashboardCalendar', () => {
-  test('renders the correct number of days for the current month', () => {
-    render(
-      <AuthProvider>
-        <DashboardCalendar />
-      </AuthProvider>
-    );
+
+
+describe('DashboardCalendar component', () => {
+
+  
+  test('renders the current month and year', () => {
+
+    const { container } = render(<DashboardCalendar />);
+
+    const monthLabel = container.querySelector('.month-label');
 
     const currentDate = new Date();
-    const daysInMonth = getDaysInMonth(currentDate);
 
-    // Find all buttons representing days in the calendar
-    const dayButtons = screen.getAllByRole('button').filter(button =>
-      button.textContent.match(/^\d+$/) // Matches buttons with only numbers (days)
-    );
+    const currentMonthYear = format(currentDate, 'MMMM yyyy');
 
-    // Check if the number of day buttons matches the number of days in the current month
-    expect(dayButtons.length).toBeGreaterThanOrEqual(daysInMonth);
+    expect(monthLabel).toHaveTextContent(currentMonthYear);
   });
+
+  test('changes the month and year when the user clicks the previous or next buttons', () => {
+
+    render(<DashboardCalendar />);
+
+    const prevButton = screen.getByLabelText('Previous Month');
+    const nextButton = screen.getByLabelText('Next Month');
+
+    const monthLabel = screen.getByText(/^\w+ \d{4}$/);
+
+    const currentDate = new Date();
+
+    const prevMonthYear = format(addMonths(currentDate, -1), 'MMMM yyyy');
+    const nextMonthYear = format(addMonths(currentDate, 1), 'MMMM yyyy');
+
+    fireEvent.click(prevButton);
+
+    expect(monthLabel).toHaveTextContent(prevMonthYear);
+
+    fireEvent.click(nextButton);
+    fireEvent.click(nextButton);
+
+    expect(monthLabel).toHaveTextContent(nextMonthYear);
+  });
+
 });
