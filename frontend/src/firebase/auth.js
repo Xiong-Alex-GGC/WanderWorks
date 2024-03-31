@@ -112,9 +112,6 @@ export const updateUserPassword = async (newPassword) => {
 
 
 
-
-
-
 //For Later
 
 // export const passwordReset = (email) => {
