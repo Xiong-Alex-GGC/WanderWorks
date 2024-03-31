@@ -94,15 +94,6 @@ const ItineraryCard = ({
     return `${month} ${day}`;
   };
 
-  // Function to format date to "MM-DD-YYYY"
-  const formatDate2 = (dateString) => {
-    const date = new Date(dateString);
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // Zero-padding the month
-    const day = String(date.getDate()).padStart(2, "0"); // Zero-padding the day
-    const year = date.getFullYear(); // Get year
-    return `${month}-${day}-${year}`;
-  };
-
   // Calculate days until the itinerary starts
   const daysUntilStart = () => {
     const today = new Date();
@@ -176,12 +167,7 @@ const ItineraryCard = ({
           </div>
         </Row>
       </Link>
-      {calculateRemainingBudget()}
-
-      <hr />
       {/* <p>ID: {id}</p> */}
-      <p style={textStyle}>Start Date: {formatDate2(startDate)}</p>
-      <p style={textStyle}>End Date: {formatDate2(endDate)}</p>
 
       <Row style={{ margin: 0, padding: 0 }}>
         <Col>
