@@ -10,6 +10,6 @@ router.post("/update", itineraryController.updateItinerary);
 router.get("/itinerary/:id", itineraryController.getItineraryById);
 router.delete("/delete-itinerary", itineraryController.deleteItinerary);
 
-// // Add to itineraryRoutes.js
+// Add to itineraryRoutes.js
 
 export default router;

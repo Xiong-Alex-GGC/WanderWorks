@@ -14,6 +14,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { ButtonGroup, DropdownButton, Dropdown } from "react-bootstrap";
 import ExpenseContainer from "../components/Containers/ExpenseContainer";
+import BackupActivityForm from "../components/Forms/BackupActivityForm";
 
 const Itinerary = () => {
   const { id } = useParams();
@@ -22,6 +23,7 @@ const Itinerary = () => {
   const [showActivityForm, setShowActivityForm] = useState(false);
   const [showAccommodationForm, setShowAccommodationForm] = useState(false);
   const [showExpenseForm, setShowExpenseForm] = useState(false);
+  const [showBackupActivityForm, setShowBackupActivityForm] = useState(false);
 
   const [isLoading, setIsLoading] = useState(true); // Initialize isLoading as true
 
@@ -76,6 +78,14 @@ const Itinerary = () => {
 
   const closeExpenseForm = () => {
     setShowExpenseForm(false);
+  };
+
+  const openBackupActivityForm = () => {
+    setShowBackupActivityForm(true);
+  };
+
+  const closeBackupActivityForm = () => {
+    setShowBackupActivityForm(false);
   };
 
   const hideShowDiv = (e) => {
@@ -333,6 +343,16 @@ const Itinerary = () => {
 
               <hr />
               <WeatherComponent itineraryData={itineraryData} />
+
+              <hr />
+              <h5>Create Backup Plan</h5>
+              <button onClick={openBackupActivityForm}>Backup Activity</button>
+              {showBackupActivityForm && (
+                <BackupActivityForm
+                  itineraryData={itineraryData}
+                  onClose={closeBackupActivityForm}
+                />
+              )}
             </Col>
 
             <Col>

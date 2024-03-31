@@ -40,7 +40,11 @@ export const isActivityOverlapping = (existingActivities, newActivity) => {
     const newActivityDate = extractDate(newActivity.date);
 
     //as part of this logic, backup activities need to be ignored
+    const isBackup = newActivity.isBackup;
 
+    if(isBackup) {
+      return false;
+    }
     //ignore activities with matching id's.
     if (activity.id == newActivity.id) {
       return false;
@@ -124,14 +128,21 @@ export const createActivity = async (data) => {
   }
   //ensure new activity does not overlap with other activities
   //SKIP THE BLOCK BELOW IF THIS IS A BACKUP ACTIVITY
+  const backupActivity = data.isBackup;
+console.log("value of isBackup: " + backupActivity);
+
+ if (backupActivity) { 
   const existingActivities = await getAllItineraryActivities(itinID);
   if (isActivityOverlapping(existingActivities, data)) {
     console.error("Activity overlaps with existing activity.");
     throw new OverlappingItemError("Activity overlaps with existing activity.");
   }
+ }
+ else {
   //throw an error if one of the fail conditions above is met, otherwise complete request
-  await itineraryController.addExpenses(itinID, data.expense);
-  await addDoc(activityCollection, data); //add document to the collection
+  await itineraryController.addExpenses(itinID, data.expense)
+ }
+ await addDoc(activityCollection, data); //add document to the collection
 };
 
 export const updateActivity = async (id, data) => {
@@ -159,17 +170,21 @@ export const updateActivity = async (id, data) => {
 
   //make sure the activity wouldn't overlap with other activities
   //SKIP THIS BLOCK IF THIS IS A BACKUP ACTIVITY
+  const backupActivity = data.isBackup;
+  if (backupActivity) {
   const existingActivities = await getAllItineraryActivities(itinID);
   if (isActivityOverlapping(existingActivities, data)) {
     console.error("Activity overlaps with existing activity.");
     throw new OverlappingItemError("Activity overlaps with existing activity.");
   }
+} else {
   //get the before and after expenses
   const activityData = await getActivityById(id);
   const beforeExpense = activityData.expense;
   const afterExpense = data.expense;
   const expenseChange = afterExpense - beforeExpense;
   itineraryController.addExpenses(itinID, expenseChange);
+}
   await updateDoc(doc(activityCollection, id), data); //update a pre-existing document
   console.log("document updated");
 };
