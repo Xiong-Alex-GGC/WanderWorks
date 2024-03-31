@@ -12,6 +12,10 @@ import { Link } from "react-router-dom";
 import WeatherComponent from "../components/Weather/DemoWeather";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import BackupActivityForm from "../components/Forms/BackupActivityForm";
+
+import { Container, Row, Col } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 const Itinerary = () => {
   const { id } = useParams();
@@ -20,6 +24,7 @@ const Itinerary = () => {
   const [showActivityForm, setShowActivityForm] = useState(false);
   const [showAccommodationForm, setShowAccommodationForm] = useState(false);
   const [showExpenseForm, setShowExpenseForm] = useState(false);
+  const [showBackupActivityForm, setShowBackupActivityForm] = useState(false);
 
   const [isLoading, setIsLoading] = useState(true); // Initialize isLoading as true
 
@@ -247,6 +252,16 @@ const Itinerary = () => {
 
               <hr />
               <WeatherComponent itineraryData={itineraryData} />
+
+              <hr />
+              <h5>Create Backup Plan</h5>
+              <button onClick={openBackupActivityForm}>Backup Activity</button>
+              {showBackupActivityForm && (
+                <BackupActivityForm
+                  itineraryData={itineraryData}
+                  onClose={closeBackupActivityForm}
+                />
+              )}
             </Col>
 
             <Col>

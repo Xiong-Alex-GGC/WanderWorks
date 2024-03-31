@@ -59,19 +59,3 @@ export const deleteItinerary = async (itineraryID) => {
 
   return false; // Itinerary not found
 };
-<<<<<<< HEAD
-=======
-
-// Add to your Itinerary schema in itineraryModel.js
-
-const itinerarySchema = new Schema({
-  // ... other fields ...
-  backupPlan: {
-    type: String,
-    default: "",
-  },
-  // ... other fields ...
-});
-
-// ... rest of your model code ...
->>>>>>> Thu
