@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import ActivityCard from '../Cards/ActivityCard';
-
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import ActivityCard from "../Cards/ActivityCard";
 
 const ActivityContainer = ({ itineraryData }) => {
   const [activities, setActivities] = useState([]);
@@ -9,10 +8,12 @@ const ActivityContainer = ({ itineraryData }) => {
   useEffect(() => {
     const fetchActivities = async () => {
       try {
-        const response = await axios.get(`http://localhost:4000/api/activities/${itineraryData.id}`);
+        const response = await axios.get(
+          `http://localhost:4000/api/activities/${itineraryData.id}`
+        );
         setActivities(response.data);
       } catch (error) {
-        console.error('Error fetching itineraries:', error);
+        console.error("Error fetching itineraries:", error);
       }
     };
 
@@ -21,28 +22,26 @@ const ActivityContainer = ({ itineraryData }) => {
 
   return (
     <div>
-        <h1>Your Activities</h1>
-        <div className="activities-container">
+      <h1 style={{ textAlign: "center" }}>Your Schedule</h1>
+      <div className="activities-container">
         {activities.map((activity) => (
-          <ActivityCard key={activity.id} itineraryData={itineraryData} {...activity} />
+          <ActivityCard
+            key={activity.id}
+            itineraryData={itineraryData}
+            {...activity}
+          />
         ))}
 
         <style jsx>{`
-            .activities-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            margin: 20px;
-            border: '1px solid #ccc';
-            padding: '15px';
-            margin: '10px';
-            borderRadius: '8px';
-            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)';
-            backgroundColor: '#fff';
-            }
-      `}</style>
-
-    </div>
+          .activities-container {
+            display: fluid;
+            margin: 0 15% 0 15%;
+            justify-content: center; /* Horizontally center the items */
+            align-items: center; /* Vertically center the items */
+            width: 100%;
+          }
+        `}</style>
+      </div>
     </div>
   );
 };
