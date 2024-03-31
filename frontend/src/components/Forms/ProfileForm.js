@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import ProfileForm from "../components/Forms/ProfileForm";
 
 const ProfileForm = ({ userId }) => {
   const [userData, setUserData] = useState(null);
@@ -18,11 +19,12 @@ const ProfileForm = ({ userId }) => {
 
   const fetchUserData = async () => {
     try {
-      const response = await axios.get(` http://localhost:4000/api/user ${userId}`);
+      const response = await axios.get(`http://localhost:4000/api/user/${userId}`); // issue 1
       setUserData(response.data);
+
       // Set form data only if user data is available
       if (response.data) {
-        setFormData(response.data); // Set form data with user data
+        setFormData(response.data);
       }
     } catch (error) {
       console.error('Error fetching user data:', error);
@@ -39,7 +41,7 @@ const ProfileForm = ({ userId }) => {
     setFormData({ ...formData, profilePicture: file });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {// Issue 1
     e.preventDefault();
     try {
       const formDataToSend = new FormData();
@@ -49,18 +51,18 @@ const ProfileForm = ({ userId }) => {
       formDataToSend.append('bio', formData.bio);
       formDataToSend.append('favoriteTravelSpot', formData.favoriteTravelSpot);
       formDataToSend.append('country', formData.country);
-
-      const response = await axios.post(`http://localhost:4000/api/user/${userId}`, formDataToSend, {
+  
+      const response = await axios.put(`http://localhost:4000/api/update-user/${userId}/UserProfile`, formDataToSend, { // issue 2
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
+      
       console.log('Profile updated successfully:', response.data);
     } catch (error) {
       console.error('Error updating profile:', error);
     }
   };
-
   if (!userData) {
     return <div>Loading...</div>;
   }
@@ -69,6 +71,7 @@ const ProfileForm = ({ userId }) => {
     <div>
       <h2>Edit Profile</h2>
       <form onSubmit={handleSubmit}>
+        {/* Populate form fields with user data */}
         <div>
           <label>Profile Picture:</label>
           <input type="file" name="profilePicture" onChange={handleFileInputChange} />

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const EditProfileForm = ({ userData, onSubmit }) => {
-  const [formData, setFormData] = useState(userData || {
+const EditProfileForm = ({ userId, onSubmit }) => { // Define userId as a prop
+  const [formData, setFormData] = useState({
     profilePicture: '',
     gender: '',
     dateOfBirth: '',
@@ -31,55 +31,29 @@ const EditProfileForm = ({ userData, onSubmit }) => {
       formDataToSend.append('bio', formData.bio);
       formDataToSend.append('favoriteTravelSpot', formData.favoriteTravelSpot);
       formDataToSend.append('country', formData.country);
-
-      const response = await axios.post('http://localhost:4000/api/user', formDataToSend, {
+  
+      // Send a POST request to create a new user profile
+      const response = await axios.post(`http://localhost:4000/api/user/${userId}`, formDataToSend, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
-      console.log('Profile updated successfully:', response.data);
+      
+      console.log('Profile created successfully:', response.data);
       if (onSubmit) {
         onSubmit(response.data); // Optional: Pass data to parent component
       }
     } catch (error) {
-      console.error('Error updating profile:', error);
+      console.error('Error creating profile:', error);
     }
   };
 
   return (
     <div>
-      <h2>Edit Profile</h2>
+      <h2>Create Profile</h2>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Profile Picture:</label>
-          <input type="file" name="profilePicture" onChange={handleFileInputChange} />
-        </div>
-        <div>
-          <label>Gender:</label>
-          <select name="gender" value={formData.gender} onChange={handleInputChange}>
-            <option value="">Select</option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-            <option value="other">Other</option>
-          </select>
-        </div>
-        <div>
-          <label>Date of Birth:</label>
-          <input type="date" name="dateOfBirth" value={formData.dateOfBirth} onChange={handleInputChange} />
-        </div>
-        <div>
-          <label>Bio:</label>
-          <textarea name="bio" value={formData.bio} onChange={handleInputChange}></textarea>
-        </div>
-        <div>
-          <label>Favorite Travel Spot:</label>
-          <input type="text" name="favoriteTravelSpot" value={formData.favoriteTravelSpot} onChange={handleInputChange} />
-        </div>
-        <div>
-          <label>Country:</label>
-          <input type="text" name="country" value={formData.country} onChange={handleInputChange} />
-        </div>
-        <button type="submit">Save Changes</button>
+        {/* Form inputs */}
+        <button type="submit">Save Profile</button>
       </form>
     </div>
   );

@@ -7,7 +7,7 @@ const UserProfile = ({ userId }) => { // Accept userId as a prop
     // Function to fetch user data from the backend based on userId
     const fetchUserData = async () => {
         try {
-            const response = await axios.get(`http://localhost:4000/api/user ${userId}`); // Use the userId parameter in the endpoint
+            const response = await axios.get(`http://localhost:4000/api/user/${userId}`); // Include the userId in the endpoint URL
             setUserData(response.data);
         } catch (error) {
             console.error('Error fetching user data:', error);
