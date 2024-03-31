@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ActivityCard from "../Cards/ActivityCard";
-import { Container, Row, Col } from "react-bootstrap";
 
 const ActivityContainer = ({ itineraryData }) => {
   const [activities, setActivities] = useState([]);

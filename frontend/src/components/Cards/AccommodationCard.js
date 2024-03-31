@@ -87,11 +87,11 @@ const AccommodationCard = ({
         border="grey"
         style={{
           width: "30rem",
-          boxShadow: "0px 0px 3px 0px rgba(0, 0, 0, 0.5)",
+          boxShadow: "5px 5px 3px 0px rgba(0, 0, 0, 0.5)",
         }}
       >
+        <Card.Header style={{ textAlign: "center" }}>{name}</Card.Header>
         <Card.Body>
-          <Card.Title style={{ textAlign: "center" }}>{name}</Card.Title>
           <Card.Subtitle className="mb-2 text-muted">{address}</Card.Subtitle>
           <Card.Text>
             <p>

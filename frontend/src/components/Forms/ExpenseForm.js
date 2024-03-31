@@ -101,7 +101,7 @@ const ExpenseForm = ({ itineraryData, expenseData, onClose }) => {
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
-            style={{ width: "210px" }}
+            style={{ width: "207px" }}
           />
         </ActColRight>
       </ActRow>
@@ -125,7 +125,7 @@ const ExpenseForm = ({ itineraryData, expenseData, onClose }) => {
             value={spendings}
             onChange={(e) => setSpendings(e.target.value)}
             required
-            style={{ width: "210px" }}
+            style={{ width: "207px" }}
           />
         </ActColRight>
       </ActRow>
@@ -137,7 +137,7 @@ const ExpenseForm = ({ itineraryData, expenseData, onClose }) => {
             type="text"
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
-            style={{ width: "210px" }}
+            style={{ width: "207px" }}
           />
         </ActColRight>
       </ActRow>

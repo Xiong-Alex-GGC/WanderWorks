@@ -132,10 +132,11 @@ const ActivityForm = ({ itineraryData, activityData, onClose }) => {
       <ActRow>
         <ActColLeft sm={5}>Activity Name:</ActColLeft>
         <ActColRight sm={7}>
-          <input
+          <Form.Control
             type="text"
             value={activityName}
             onChange={(e) => setActivityName(e.target.value)}
+            style={{ width: "207px" }}
           />
         </ActColRight>
       </ActRow>
@@ -144,6 +145,7 @@ const ActivityForm = ({ itineraryData, activityData, onClose }) => {
         <ActColLeft sm={5}>Date:</ActColLeft>
         <ActColRight sm={7}>
           <DatePicker
+            className="form-control"
             selected={activityDate}
             onChange={(date) => setActivityDate(date)}
           />
@@ -152,9 +154,10 @@ const ActivityForm = ({ itineraryData, activityData, onClose }) => {
       <ActRow>
         <ActColLeft sm={5}>Type:</ActColLeft>
         <ActColRight sm={7}>
-          <select
+          <Form.Select
             value={type}
             onChange={(e) => setActivityType(e.target.value)}
+            style={{ width: "207px" }}
           >
             <option value="">Select</option>
             <option value="transportation">Major Transportation</option>
@@ -162,46 +165,50 @@ const ActivityForm = ({ itineraryData, activityData, onClose }) => {
             <option value="restaurant">Restaurant</option>
             <option value="tour">Tour</option>
             <option value="other">Other</option>
-          </select>
+          </Form.Select>
         </ActColRight>
       </ActRow>
       <ActRow>
         <ActColLeft sm={5}>Start Time:</ActColLeft>
         <ActColRight sm={7}>
-          <input
+          <Form.Control
             type="time"
             value={startTime}
             onChange={(e) => setStartTime(e.target.value)}
+            style={{ width: "207px" }}
           />
         </ActColRight>
       </ActRow>
       <ActRow>
         <ActColLeft sm={5}>End Time:</ActColLeft>
         <ActColRight sm={7}>
-          <input
+          <Form.Control
             type="time"
             value={endTime}
             onChange={(e) => setEndTime(e.target.value)}
+            style={{ width: "207px" }}
           />
         </ActColRight>
       </ActRow>
       <ActRow>
         <ActColLeft sm={5}>Expenses:</ActColLeft>
         <ActColRight sm={7}>
-          <input
+          <Form.Control
             type="number"
             value={expenses}
             onChange={(e) => setExpenses(e.target.value)}
+            style={{ width: "207px" }}
           />
         </ActColRight>
       </ActRow>
       <ActRow>
         <ActColLeft sm={5}>Tags (custom):</ActColLeft>
         <ActColRight sm={7}>
-          <input
+          <Form.Control
             type="text"
             value={tags}
             onChange={(e) => setTags(e.target.value)}
+            style={{ width: "207px" }}
           />
           {/*change to process as a set of tags; */}
           {/* user should ideally hit enter, not submitting the form, and then rendering the tag as a removable item */}
@@ -218,7 +225,12 @@ const ActivityForm = ({ itineraryData, activityData, onClose }) => {
       <ActRow>
         <ActColLeft sm={5}>Notes:</ActColLeft>
         <ActColRight sm={7}>
-          <textarea value={notes} onChange={(e) => setNotes(e.target.value)} />
+          <textarea
+            class="form-control"
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            style={{ width: "207px" }}
+          />
         </ActColRight>
       </ActRow>
       {error && <Alert variant="danger">{error}</Alert>}
