@@ -1,19 +1,17 @@
-import axios from 'axios';
-import mapboxgl from 'mapbox-gl';
-import mapboxToken from '../../tokens/mapboxToken';
-import { FaCar, FaWalking, FaBicycle, FaPlane, FaTrain } from 'react-icons/fa';
+import axios from "axios";
+import mapboxgl from "mapbox-gl";
+import mapboxToken from "../../tokens/mapboxToken";
+import { FaCar, FaWalking, FaBicycle, FaPlane, FaTrain } from "react-icons/fa";
 
-
-import 'mapbox-gl/dist/mapbox-gl.css';
-import React, { useEffect, useState, useRef } from 'react';
-
+import "mapbox-gl/dist/mapbox-gl.css";
+import React, { useEffect, useState, useRef } from "react";
 
 // Assuming mapboxToken is correctly defined
 mapboxgl.accessToken = mapboxToken;
 
 const MapComponent = ({ itineraryData, activitiesData }) => {
   const [showRoute, setShowRoute] = useState(true);
-  const [view, setView] = useState('overall'); // Default view
+  const [view, setView] = useState("overall"); // Default view
   const mapContainer = useRef(null); // Reference to the map container
   const map = useRef(null); // Reference to the Mapbox map instance
 
@@ -21,13 +19,12 @@ const MapComponent = ({ itineraryData, activitiesData }) => {
     if (map.current) return; // Initialize map only once
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/streets-v11',
+      style: "mapbox://styles/mapbox/streets-v11",
       center: [itineraryData.coords[0], itineraryData.coords[1]],
       zoom: 9,
     });
 
-    map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
-
+    map.current.addControl(new mapboxgl.NavigationControl(), "top-right");
   }, []);
 
   const addEventMarkers = async () => {
@@ -42,7 +39,7 @@ const MapComponent = ({ itineraryData, activitiesData }) => {
           .addTo(map.current); // Add the marker to the map
       }
     });
-  }
+  };
 
   const addRoutes = async () => {
     if (!map.current || !map.current.isStyleLoaded()) return; // Check if the map's style is loaded
@@ -62,9 +59,9 @@ const MapComponent = ({ itineraryData, activitiesData }) => {
       const transportationType = nextActivity.transportationType;
       const start = activity.coords;
       const end = nextActivity.coords;
-      const sourceID = 'route' + i;
+      const sourceID = "route" + i;
 
-      if (['walking', 'driving', 'cycling'].includes(transportationType)) {
+      if (["walking", "driving", "cycling"].includes(transportationType)) {
         try {
           const url = `https://api.mapbox.com/directions/v5/mapbox/${transportationType}/${start[0]},${start[1]};${end[0]},${end[1]}?geometries=geojson&steps=true&overview=full&access_token=${mapboxgl.accessToken}`;
           const response = await fetch(url);
@@ -73,9 +70,9 @@ const MapComponent = ({ itineraryData, activitiesData }) => {
 
           // Add the new source and layer
           map.current.addSource(sourceID, {
-            type: 'geojson',
+            type: "geojson",
             data: {
-              type: 'Feature',
+              type: "Feature",
               properties: {},
               geometry: route,
             },
@@ -83,68 +80,76 @@ const MapComponent = ({ itineraryData, activitiesData }) => {
 
           map.current.addLayer({
             id: sourceID,
-            type: 'line',
+            type: "line",
             source: sourceID,
             layout: {
-              'line-join': 'round',
-              'line-cap': 'round',
+              "line-join": "round",
+              "line-cap": "round",
             },
             paint: {
-              'line-color': '#F48989',
-              'line-width': 5,
+              "line-color": "#F48989",
+              "line-width": 5,
             },
           });
         } catch (error) {
-          console.error('Error fetching route:', error);
+          console.error("Error fetching route:", error);
         }
-      } else if (['plane', 'cruise'].includes(transportationType)) {
+      } else if (["plane", "cruise"].includes(transportationType)) {
         // Check if the line crosses the antimeridian
-        const crossesAntimeridian = Math.abs(activitiesData[i].coords[0] - activitiesData[i + 1].coords[0]) > 180;
+        const crossesAntimeridian =
+          Math.abs(
+            activitiesData[i].coords[0] - activitiesData[i + 1].coords[0]
+          ) > 180;
 
         // Adjust coordinates if the line crosses the antimeridian
         const coordinates = crossesAntimeridian
           ? [
-            activitiesData[i].coords,
-            [activitiesData[i + 1].coords[0] + (activitiesData[i + 1].coords[0] < activitiesData[i].coords[0] ? 360 : -360), activitiesData[i + 1].coords[1]]
-          ]
+              activitiesData[i].coords,
+              [
+                activitiesData[i + 1].coords[0] +
+                  (activitiesData[i + 1].coords[0] < activitiesData[i].coords[0]
+                    ? 360
+                    : -360),
+                activitiesData[i + 1].coords[1],
+              ],
+            ]
           : [activitiesData[i].coords, activitiesData[i + 1].coords];
 
         // Add layer to map
         map.current.addLayer({
           id: sourceID,
-          type: 'line',
+          type: "line",
           source: {
-            type: 'geojson',
+            type: "geojson",
             data: {
-              type: 'Feature',
+              type: "Feature",
               geometry: {
-                type: 'LineString',
-                coordinates: coordinates
-              }
-            }
+                type: "LineString",
+                coordinates: coordinates,
+              },
+            },
           },
           paint: {
-            'line-color': 'red',
-            'line-opacity': 0.7,
-            'line-width': 3,
-            'line-dasharray': [2, 2],
-          }
+            "line-color": "red",
+            "line-opacity": 0.7,
+            "line-width": 3,
+            "line-dasharray": [2, 2],
+          },
         });
       }
-
     }
   };
-
 
   const removeRoutes = () => {
     if (!map.current || !map.current.isStyleLoaded()) return; // Check if the map's style is loaded
 
     // Use a more robust way to find all route-related layers and sources
-    const routeIds = map.current.getStyle().layers
-      .filter(layer => layer.id.startsWith('route'))
-      .map(layer => layer.id);
+    const routeIds = map.current
+      .getStyle()
+      .layers.filter((layer) => layer.id.startsWith("route"))
+      .map((layer) => layer.id);
 
-    routeIds.forEach(routeId => {
+    routeIds.forEach((routeId) => {
       if (map.current.getLayer(routeId)) {
         map.current.removeLayer(routeId);
       }
@@ -158,7 +163,7 @@ const MapComponent = ({ itineraryData, activitiesData }) => {
     if (!map.current) return; // Ensure map instance is available
 
     // Listen for the 'load' event on the map
-    map.current.on('load', () => {
+    map.current.on("load", () => {
       // Now that the map is loaded, it's safe to call these functions
       addRoutes();
       addEventMarkers();
@@ -167,8 +172,8 @@ const MapComponent = ({ itineraryData, activitiesData }) => {
     // Clean up event listener when component unmounts or if map instance changes
     return () => {
       if (map.current) {
-        map.current.off('load', addRoutes);
-        map.current.off('load', addEventMarkers);
+        map.current.off("load", addRoutes);
+        map.current.off("load", addEventMarkers);
       }
     };
   }, [map.current]); // Dependency array includes map.current to re-run effect if map instance changes
@@ -183,55 +188,57 @@ const MapComponent = ({ itineraryData, activitiesData }) => {
   }, [showRoute]);
 
   return (
-    <div ref={mapContainer} className="mapContainer" style={{ height: '100vh', width: '100%', }}>
-
-      <div style={{
-        position: 'absolute',
-        margin: 10,
-        zIndex: 100,
-        backgroundColor: 'white',
-        padding: 8,
-        cursor: 'pointer',
-        borderRadius: 10,
-        height: 80,
-        width: 400
-      }}>
-
+    <div
+      ref={mapContainer}
+      className="mapContainer"
+      style={{ height: "100vh", width: "100%" }}
+    >
+      <div
+        style={{
+          position: "absolute",
+          margin: 10,
+          zIndex: 100,
+          backgroundColor: "white",
+          padding: 8,
+          cursor: "pointer",
+          borderRadius: 10,
+          height: 80,
+          width: 400,
+        }}
+      >
         <button
           onClick={() => setShowRoute(!showRoute)}
           style={{
             margin: 10,
-            backgroundColor: '#f4f4f4',
+            backgroundColor: "#f4f4f4",
             padding: 8,
             borderRadius: 10,
             height: 50,
-            width: 100
+            width: 100,
           }}
         >
           Toggle Routes
         </button>
 
         <select
-        onChange={(e) => setView(e.target.value)} 
-        value={view}
-        style={{
-
-          backgroundColor: '#f4f4f4',
-          padding: 8,
-          borderRadius: 10,
-          height: 50,
-          width: 100,
-          cursor: 'pointer',
-        }}
-      >
-        <option value="day">Day</option>
-        <option value="week">Week</option>
-        <option value="month">Month</option>
-        <option value="overall">Overall</option>
-      </select>
+          onChange={(e) => setView(e.target.value)}
+          value={view}
+          style={{
+            backgroundColor: "#f4f4f4",
+            padding: 8,
+            borderRadius: 10,
+            height: 50,
+            width: 100,
+            cursor: "pointer",
+          }}
+        >
+          <option value="day">Day</option>
+          <option value="week">Week</option>
+          <option value="month">Month</option>
+          <option value="overall">Overall</option>
+        </select>
       </div>
     </div>
-
   );
 };
 

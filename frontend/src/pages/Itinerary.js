@@ -1,16 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import axios from 'axios';
-import DemoMap from '../components/Mapbox/DemoMap';
-import ActivityForm from '../components/Forms/ActivityForm';
-import ActivityContainer from '../components/Containers/ActivityContainer';
-import AccommodationForm from '../components/Forms/AccommodationsForm';
-import AccommodationContainer from '../components/Containers/AccommodationContainer';
-import ExpenseForm from '../components/Forms/ExpenseForm';
-import BackupActivityForm from '../components/Forms/BackupActivityForm';
-
-import { Container, Row, Col } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import DemoMap from "../components/Mapbox/DemoMap";
+import ActivityForm from "../components/Forms/ActivityForm";
+import ActivityContainer from "../components/Containers/ActivityContainer";
+import AccommodationForm from "../components/Forms/AccommodationsForm";
+import AccommodationContainer from "../components/Containers/AccommodationContainer";
+import ExpenseForm from "../components/Forms/ExpenseForm";
+import { Container, Row, Col } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import WeatherComponent from "../components/Weather/DemoWeather";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
+import { ButtonGroup, DropdownButton, Dropdown } from "react-bootstrap";
+import ExpenseContainer from "../components/Containers/ExpenseContainer";
+import BackupActivityForm from "../components/Forms/BackupActivityForm";
 
 const Itinerary = () => {
   const { id } = useParams();
@@ -23,15 +27,22 @@ const Itinerary = () => {
 
   const [isLoading, setIsLoading] = useState(true); // Initialize isLoading as true
 
+  const [isActive, setIsActive] = useState({ id: "schedule" }); // To handle different tabs
+
+  useEffect(() => {
+    console.log(isActive);
+  }, [isActive]);
 
   useEffect(() => {
     const fetchItineraryData = async () => {
       try {
-        const response = await axios.get(`http://localhost:4000/api/itinerary/${id}`);
+        const response = await axios.get(
+          `http://localhost:4000/api/itinerary/${id}`
+        );
         setItineraryData(response.data);
         //
       } catch (error) {
-        console.error('Error fetching itinerary data:', error);
+        console.error("Error fetching itinerary data:", error);
       }
     };
 
@@ -42,11 +53,13 @@ const Itinerary = () => {
     const fetchActivitiesData = async () => {
       if (itineraryData) {
         try {
-          const response = await axios.get(`http://localhost:4000/api/activities/${itineraryData.id}`);
+          const response = await axios.get(
+            `http://localhost:4000/api/activities/${itineraryData.id}`
+          );
           setActivitiesData(response.data);
           setIsLoading(false); // Data is loaded, set isLoading to false
         } catch (error) {
-          console.error('Error fetching activity data:', error);
+          console.error("Error fetching activity data:", error);
           setIsLoading(false); // Ensure to handle loading state even on error
         }
       }
@@ -55,57 +68,55 @@ const Itinerary = () => {
     fetchActivitiesData();
   }, [itineraryData]);
 
-  const openActivityForm = () => {
-    setShowActivityForm(true);
-  };
-
   const closeActivityForm = () => {
     setShowActivityForm(false);
-  };
-
-  const openBackupActivityForm = () => {
-    setShowBackupActivityForm(true);
-  
-  };
-
-  const closeBackupActivityForm = () => {
-    setShowBackupActivityForm(false);
-  };
-
-  const openAccommodationForm = () => {
-    setShowAccommodationForm(true);
   };
 
   const closeAccommodationForm = () => {
     setShowAccommodationForm(false);
   };
 
-  const openExpenseForm = () => {
-    setShowExpenseForm(true);
-  };
-
   const closeExpenseForm = () => {
     setShowExpenseForm(false);
+  };
+
+  const openBackupActivityForm = () => {
+    setShowBackupActivityForm(true);
+  };
+
+  const closeBackupActivityForm = () => {
+    setShowBackupActivityForm(false);
+  };
+
+  const hideShowDiv = (e) => {
+    setIsActive({
+      id: e.target.id,
+    });
   };
 
   function renderOverBudgetWarning(remainingBudget) {
     if (remainingBudget < 0) {
       return (
         <>
-          <p>You are expected to go over budget by {Math.abs(remainingBudget)}</p>
+          <p>
+            You are expected to go over budget by {Math.abs(remainingBudget)}
+          </p>
         </>
       );
     } else {
-      return (<></>);
+      return <></>;
     }
   }
 
   const calculateRemainingBudget = () => {
     if (itineraryData.budget != null) {
-      const remainingBudget = itineraryData.budget - itineraryData.totalExpenses; //need to delete any itineraries where budget and totalExpenses are currently strings
+      const remainingBudget =
+        itineraryData.budget - itineraryData.totalExpenses; //need to delete any itineraries where budget and totalExpenses are currently strings
       return (
         <>
-          <p>${remainingBudget} of ${itineraryData.budget} budget remaining</p>
+          <p>
+            ${remainingBudget} of ${itineraryData.budget} budget remaining
+          </p>
           <p>{renderOverBudgetWarning(remainingBudget)}</p>
         </>
       );
@@ -116,95 +127,245 @@ const Itinerary = () => {
         </>
       );
     }
-  }
+  };
 
   return (
-    <Row>
-      {isLoading ? (
-        <Col>
-          <p>Loading itinerary data...</p>
-        </Col>
-      ) : (
-        <>
+    <Container fluid>
+      <Row>
+        {isLoading ? (
           <Col>
-            <Row style={{ height: '100vh' }}>
-              <Col>
-                <Row style={{ height: '150px', backgroundColor: '#f4f4f4', borderBottom: '1px solid #ccc', backgroundImage: `url(${itineraryData.imgURL})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
-                </Row>
-                <div style={{
-                  margin: '-50px 40px 30px 40px',
-                  backgroundColor: '#f4f4f4',
-                  borderRadius: '10px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  padding: '20px',
-                  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.5)',
-                }}>
-                  <h6>{itineraryData.tripName}</h6>
-                </div>
+            <p>Loading itinerary data...</p>
+          </Col>
+        ) : (
+          <>
+            <Col
+              style={{
+                height: "100vh",
+                overflow: "auto",
+                WebkitOverflowScrolling: "touch", // Optional: For smooth scrolling on iOS
+                scrollbarWidth: "none", // Firefox
+                msOverflowStyle: "none", // IE and Edge
+                "&::-webkit-scrollbar": {
+                  display: "none", // Hide scrollbar for Chrome, Safari, and Opera
+                },
+              }}
+            >
+              <Row
+                style={{
+                  height: "150px",
+                  backgroundColor: "#f4f4f4",
+                  borderBottom: "1px solid #ccc",
+                  backgroundImage: `url(${itineraryData.imgURL})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                }}
+              ></Row>
+              <div
+                style={{
+                  margin: "-50px 40px 30px 40px",
+                  backgroundColor: "#f4f4f4",
+                  borderRadius: "10px",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  padding: "20px",
+                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.5)",
+                }}
+              >
+                <h6>{itineraryData.tripName}</h6>
+              </div>
 
-                {/* <p>Start Date: {itineraryData.startDate}</p>
+              {/* <p>Start Date: {itineraryData.startDate}</p>
                 <p>End Date: {itineraryData.endDate}</p> */}
-                <div>
-                  {calculateRemainingBudget()}
-                </div>
+              {/* <div>{calculateRemainingBudget()}</div>
 
-                <div>
-                  <Link to={`/Expenses/${itineraryData.id}`}>Click here to see your additional expenses</Link>
-                </div>
-                <hr />
+              <div>
+                <Link to={`/Expenses/${itineraryData.id}`}>
+                  Click here to see your additional expenses
+                </Link>
+              </div>
+              <hr /> */}
+              <hr />
+              <ButtonGroup vertical style={{ margin: "0 20px 0 18%" }}>
+                <DropdownButton
+                  as={ButtonGroup}
+                  title="New"
+                  id="bg-vertical-dropdown-1"
+                  variant="success"
+                >
+                  <Dropdown.Item eventKey="1">
+                    {" "}
+                    <Button
+                      onClick={() => setShowActivityForm(true)}
+                      className="me-2"
+                      variant="success"
+                    >
+                      Activity
+                    </Button>
+                  </Dropdown.Item>
+                  <Dropdown.Item eventKey="2">
+                    <Button
+                      onClick={() => setShowAccommodationForm(true)}
+                      className="me-2"
+                      variant="success"
+                    >
+                      Accommodation
+                    </Button>
+                  </Dropdown.Item>
+                  <Dropdown.Item eventKey="3">
+                    <Button
+                      onClick={() => setShowExpenseForm(true)}
+                      className="me-2"
+                      variant="success"
+                    >
+                      Expense
+                    </Button>
+                  </Dropdown.Item>
+                </DropdownButton>
+              </ButtonGroup>
 
-                <h3>Activities</h3>
-                <button onClick={openActivityForm}>New Activity</button>
-                <hr />
-                {showActivityForm && (
-                  <ActivityForm itineraryData={itineraryData} onClose={closeActivityForm} />
-                )}
+              <Button
+                variant="outline-success"
+                style={{ margin: "0 25px 0 25px" }}
+                id="schedule"
+                onClick={(e) => {
+                  hideShowDiv(e);
+                }}
+              >
+                Schedule
+              </Button>
+              <Button
+                variant="outline-success"
+                style={{ margin: "0 25px 0 25px" }}
+                id="accomodation"
+                onClick={(e) => {
+                  hideShowDiv(e);
+                }}
+              >
+                Accomodation
+              </Button>
+              <Button
+                variant="outline-success"
+                style={{ margin: "0 25px 0 25px" }}
+                id="expense"
+                onClick={(e) => {
+                  hideShowDiv(e);
+                }}
+              >
+                Expense
+              </Button>
+              {/* <Link to={`/Expenses/${itineraryData.id}`}>
+                <Button
+                  variant="outline-success"
+                  style={{ margin: "0 20px 0 20%" }}
+                >
+                  More Expenses
+                </Button>
+              </Link> */}
 
+              {/* Use Modal to open popup */}
+
+              <Modal
+                show={showActivityForm}
+                onHide={() => setShowActivityForm(false)}
+                aria-labelledby="activity-modal"
+              >
+                <Modal.Header closeButton>
+                  <Modal.Title id="activity-modal">New Activity</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  <ActivityForm
+                    itineraryData={itineraryData}
+                    onClose={closeActivityForm}
+                  />
+                </Modal.Body>
+              </Modal>
+
+              <Modal
+                show={showAccommodationForm}
+                onHide={() => setShowAccommodationForm(false)}
+                aria-labelledby="accomodation-modal"
+              >
+                <Modal.Header closeButton>
+                  <Modal.Title id="accomodation-modal">
+                    New Accommodation
+                  </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  <AccommodationForm
+                    itineraryData={itineraryData}
+                    onClose={closeAccommodationForm}
+                  />
+                </Modal.Body>
+              </Modal>
+
+              <Modal
+                show={showExpenseForm}
+                onHide={() => setShowExpenseForm(false)}
+                aria-labelledby="expense-modal"
+              >
+                <Modal.Header closeButton>
+                  <Modal.Title id="expense-modal">New Expenses</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  <ExpenseForm
+                    itineraryData={itineraryData}
+                    onClose={closeExpenseForm}
+                  />
+                </Modal.Body>
+              </Modal>
+              <hr />
+              <div
+                className={
+                  isActive.id === "schedule" ? `schedule` : "schedule d-none"
+                }
+              >
+                {/* d-none is a Bootstrap class that hides an element by setting display: none; */}
                 <ActivityContainer itineraryData={itineraryData} />
-
-                <hr />
-
-                <h3>Accommodation</h3>
-                <button onClick={openAccommodationForm}>New Accommodation</button>
-                <hr />
-                {showAccommodationForm && (
-                  <AccommodationForm itineraryData={itineraryData} onClose={closeAccommodationForm} />
-                )}
-                <hr />
-
+              </div>
+              <div
+                className={
+                  isActive.id === "accomodation"
+                    ? `accomodation`
+                    : "accomodation d-none"
+                }
+              >
                 <AccommodationContainer itineraryData={itineraryData} />
+              </div>
 
-                <hr />
+              <div
+                className={
+                  isActive.id === "expense" ? `expense` : "expense d-none"
+                }
+              >
+                <ExpenseContainer itineraryData={itineraryData} />
+              </div>
 
-                <h5>Track Additional Purchase</h5>
-                <button onClick={openExpenseForm}>New Expense</button>
-                {showExpenseForm && (
-                  <ExpenseForm itineraryData={itineraryData} onClose={closeExpenseForm} />
-                )}
+              <hr />
+              <WeatherComponent itineraryData={itineraryData} />
 
-                <hr />
+              <hr />
+              <h5>Create Backup Plan</h5>
+              <button onClick={openBackupActivityForm}>Backup Activity</button>
+              {showBackupActivityForm && (
+                <BackupActivityForm
+                  itineraryData={itineraryData}
+                  onClose={closeBackupActivityForm}
+                />
+              )}
+            </Col>
 
-                <h5>Create Backup Plan</h5>
-                <button onClick={openBackupActivityForm}>Backup Activity</button>
-                {showBackupActivityForm && (
-                <BackupActivityForm itineraryData={itineraryData} onClose={closeBackupActivityForm} />
-                  )}
-
-
-              </Col>
-            </Row>
-          </Col>
-
-          <Col>
-            <DemoMap itineraryData={itineraryData} activitiesData={activitiesData} />
-          </Col>
-        </>
-      )}
-    </Row>
+            <Col>
+              <DemoMap
+                itineraryData={itineraryData}
+                activitiesData={activitiesData}
+              />
+            </Col>
+          </>
+        )}
+      </Row>
+    </Container>
   );
-
 };
 
 export default Itinerary;
@@ -223,4 +384,3 @@ export default Itinerary;
 
 <TransportationContainer itineraryData={itineraryData} />
 */
-
