@@ -6,17 +6,19 @@ import { FaCar, FaWalking, FaBicycle, FaPlane, FaTrain } from "react-icons/fa";
 import "mapbox-gl/dist/mapbox-gl.css";
 import React, { useEffect, useState, useRef } from "react";
 
-// Assuming mapboxToken is correctly defined
 mapboxgl.accessToken = mapboxToken;
 
-const MapComponent = ({ itineraryData, activitiesData }) => {
+const MapComponent = ({ itineraryData, activitiesData, selectedDay }) => {
   const [showRoute, setShowRoute] = useState(true);
   const [view, setView] = useState("overall"); // Default view
   const mapContainer = useRef(null); // Reference to the map container
   const map = useRef(null); // Reference to the Mapbox map instance
 
+  const [filteredActivities, setFilteredActivities] = useState([]); // State to hold filtered activities
+
+
   useEffect(() => {
-    if (map.current) return; // Initialize map only once
+    if (map.current) return; 
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: "mapbox://styles/mapbox/streets-v11",
@@ -27,11 +29,27 @@ const MapComponent = ({ itineraryData, activitiesData }) => {
     map.current.addControl(new mapboxgl.NavigationControl(), "top-right");
   }, []);
 
+  console.log(activitiesData);
+
+  useEffect(() => {
+    //modify this to account for view type & then replace all instances of activitiesData with filteredData
+    const filtered = activitiesData.filter(activity => {
+      const activityDate = new Date(activity.date).toLocaleDateString();
+      const selectedDate = new Date(selectedDay).toLocaleDateString();
+      // Compare if the activity occurs on the same day as selectedDay
+      return activityDate === selectedDate;
+    });
+    setFilteredActivities(filtered);
+  }, [selectedDay, activitiesData]);
+
+  console.log("=======================")
+  console.log(filteredActivities);
+
   const addEventMarkers = async () => {
-    if (!map.current || !activitiesData) return; // Ensure map and activitiesData are loaded
+    if (!map.current || !activitiesData) return; 
 
     activitiesData.forEach((activity) => {
-      const { coords } = activity; // Destructure coords from the activity
+      const { coords } = activity; 
       if (coords) {
         // Create a marker for each activity
         const marker = new mapboxgl.Marker()
@@ -42,7 +60,7 @@ const MapComponent = ({ itineraryData, activitiesData }) => {
   };
 
   const addRoutes = async () => {
-    if (!map.current || !map.current.isStyleLoaded()) return; // Check if the map's style is loaded
+    if (!map.current || !map.current.isStyleLoaded()) return; 
 
     // Sort activitiesData by date and then by startTime
     activitiesData.sort((a, b) => {
@@ -104,15 +122,15 @@ const MapComponent = ({ itineraryData, activitiesData }) => {
         // Adjust coordinates if the line crosses the antimeridian
         const coordinates = crossesAntimeridian
           ? [
-              activitiesData[i].coords,
-              [
-                activitiesData[i + 1].coords[0] +
-                  (activitiesData[i + 1].coords[0] < activitiesData[i].coords[0]
-                    ? 360
-                    : -360),
-                activitiesData[i + 1].coords[1],
-              ],
-            ]
+            activitiesData[i].coords,
+            [
+              activitiesData[i + 1].coords[0] +
+              (activitiesData[i + 1].coords[0] < activitiesData[i].coords[0]
+                ? 360
+                : -360),
+              activitiesData[i + 1].coords[1],
+            ],
+          ]
           : [activitiesData[i].coords, activitiesData[i + 1].coords];
 
         // Add layer to map
@@ -187,6 +205,13 @@ const MapComponent = ({ itineraryData, activitiesData }) => {
     }
   }, [showRoute]);
 
+
+  const handleViewChange = (e) => {
+    const selectedValue = e.target.value;
+    setView(selectedValue);
+    console.log("Selected view:", selectedValue); // Log the selected value
+  };
+
   return (
     <div
       ref={mapContainer}
@@ -221,7 +246,7 @@ const MapComponent = ({ itineraryData, activitiesData }) => {
         </button>
 
         <select
-          onChange={(e) => setView(e.target.value)}
+          onChange={handleViewChange}
           value={view}
           style={{
             backgroundColor: "#f4f4f4",

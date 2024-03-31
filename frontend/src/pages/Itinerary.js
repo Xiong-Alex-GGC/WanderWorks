@@ -15,7 +15,9 @@ import Modal from "react-bootstrap/Modal";
 import { ButtonGroup, DropdownButton, Dropdown } from "react-bootstrap";
 import ExpenseContainer from "../components/Containers/ExpenseContainer";
 import BackupActivityForm from "../components/Forms/BackupActivityForm";
+import ItineraryCalendar from "../components/Calendar/ItineraryCalendar";
 import TestWeather from "../components/Weather/TestWeatherAPI";
+
 
 const Itinerary = () => {
   const { id } = useParams();
@@ -25,6 +27,8 @@ const Itinerary = () => {
   const [showAccommodationForm, setShowAccommodationForm] = useState(false);
   const [showExpenseForm, setShowExpenseForm] = useState(false);
   const [showBackupActivityForm, setShowBackupActivityForm] = useState(false);
+  const [selectedDay, setSelectedDay] = useState(null);
+
 
   const [isLoading, setIsLoading] = useState(true); // Initialize isLoading as true
 
@@ -130,6 +134,10 @@ const Itinerary = () => {
     }
   };
 
+  const handleDaySelect = (day) => {
+    setSelectedDay(day);
+  };
+
   return (
     <Container fluid>
       <Row>
@@ -175,6 +183,8 @@ const Itinerary = () => {
               >
                 <h6>{itineraryData.tripName}</h6>
               </div>
+
+              <ItineraryCalendar onSelectDay={handleDaySelect} />
 
               {/* <p>Start Date: {itineraryData.startDate}</p>
                 <p>End Date: {itineraryData.endDate}</p> */}
@@ -360,6 +370,7 @@ const Itinerary = () => {
               <DemoMap
                 itineraryData={itineraryData}
                 activitiesData={activitiesData}
+                selectedDay={selectedDay}
               />
             </Col>
           </>
