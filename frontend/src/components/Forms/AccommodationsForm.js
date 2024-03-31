@@ -118,20 +118,22 @@ const AccommodationsForm = ({ itineraryData, accommodationData, onClose }) => {
       <ActRow>
         <ActColLeft sm={5}>Name:</ActColLeft>
         <ActColRight sm={7}>
-          <input
+          <Form.Control
             type="text"
             value={accommodationName}
             onChange={(e) => setAccommodationName(e.target.value)}
+            style={{ width: "207px" }}
           />
         </ActColRight>
       </ActRow>
       <ActRow>
         <ActColLeft sm={5}>Address:</ActColLeft>
         <ActColRight sm={7}>
-          <input
+          <Form.Control
             type="text"
             value={address}
             onChange={(e) => setAccommodationAddress(e.target.value)}
+            style={{ width: "207px" }}
           />
         </ActColRight>
       </ActRow>
@@ -139,6 +141,7 @@ const AccommodationsForm = ({ itineraryData, accommodationData, onClose }) => {
         <ActColLeft sm={5}>Check-in Date:</ActColLeft>
         <ActColRight sm={7}>
           <DatePicker
+            className="form-control"
             selected={startDate}
             onChange={(date) => setStartDate(date)}
           />
@@ -148,35 +151,44 @@ const AccommodationsForm = ({ itineraryData, accommodationData, onClose }) => {
         <ActColLeft sm={5}>Check-out Date:</ActColLeft>
         <ActColRight sm={7}>
           <DatePicker
+            className="form-control"
             selected={endDate}
             onChange={(date) => setEndDate(date)}
+            style={{ width: "207px" }}
           />
         </ActColRight>
       </ActRow>
       <ActRow>
         <ActColLeft sm={5}>Total Cost:</ActColLeft>
         <ActColRight sm={7}>
-          <input
+          <Form.Control
             type="number"
             value={expenses}
             onChange={(e) => setExpenses(e.target.value)}
+            style={{ width: "207px" }}
           />
         </ActColRight>
       </ActRow>
       <ActRow>
         <ActColLeft sm={5}>Confirmation #:</ActColLeft>
         <ActColRight sm={7}>
-          <input
+          <Form.Control
             type="text"
             value={confirmation}
             onChange={(e) => setConfirmation(e.target.value)}
+            style={{ width: "207px" }}
           />
         </ActColRight>
       </ActRow>
       <ActRow>
         <ActColLeft sm={5}>Notes:</ActColLeft>
         <ActColRight sm={7}>
-          <textarea value={notes} onChange={(e) => setNotes(e.target.value)} />
+          <textarea
+            class="form-control"
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            style={{ width: "207px" }}
+          />
         </ActColRight>
       </ActRow>
       {error && (
