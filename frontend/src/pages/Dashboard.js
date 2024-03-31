@@ -18,7 +18,6 @@ import photo from "../images/DashboardBackground.jpg";
 
 const Dashboard = () => {
   const { currentUser } = useAuth();
-
   return (
     <>
       <Container fluid style={{ padding: 0 }}>

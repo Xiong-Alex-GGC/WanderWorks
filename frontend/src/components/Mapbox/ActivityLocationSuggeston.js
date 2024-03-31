@@ -1,9 +1,10 @@
-import mapboxToken from '../../tokens/mapboxToken';
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import mapboxToken from "../../tokens/mapboxToken";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Form } from "react-bootstrap";
 
-const ActivityLocationSuggestion = ({ onSuggestionSelect  }) => {
-  const [address, setAddress] = useState('');
+const ActivityLocationSuggestion = ({ onSuggestionSelect }) => {
+  const [address, setAddress] = useState("");
   const [suggestions, setSuggestions] = useState([]);
 
   const handleInputChange = (event) => {
@@ -11,7 +12,7 @@ const ActivityLocationSuggestion = ({ onSuggestionSelect  }) => {
     setAddress(inputAddress);
 
     // Call Mapbox Geocoding API for auto-suggestions
-    if (inputAddress.trim() !== '') {
+    if (inputAddress.trim() !== "") {
       fetchSuggestions(inputAddress);
     } else {
       setSuggestions([]);
@@ -27,17 +28,23 @@ const ActivityLocationSuggestion = ({ onSuggestionSelect  }) => {
       );
 
       // Extract suggestions from the response with specified place types
-      const filteredSuggestions = response.data.features.filter(
-        (feature) =>
-        ['province', 'state', 'district', 'place', 'address', 'locality'].includes(
-            feature.place_type[0]
-          )
+      const filteredSuggestions = response.data.features.filter((feature) =>
+        [
+          "province",
+          "state",
+          "district",
+          "place",
+          "address",
+          "locality",
+        ].includes(feature.place_type[0])
       );
 
-      const suggestionsList = filteredSuggestions.map((feature) => feature.place_name);
+      const suggestionsList = filteredSuggestions.map(
+        (feature) => feature.place_name
+      );
       setSuggestions(suggestionsList);
     } catch (error) {
-      console.error('Error fetching suggestions:', error);
+      console.error("Error fetching suggestions:", error);
     }
   };
 
@@ -49,14 +56,13 @@ const ActivityLocationSuggestion = ({ onSuggestionSelect  }) => {
 
   return (
     <div>
-      <input
+      <Form.Control
         type="text"
         value={address}
         onChange={handleInputChange}
         placeholder="Activity Address"
+        style={{ width: "207px" }}
       />
-      <br />
-
       {/* Display suggestions */}
       {suggestions.length > 0 && (
         <ul>

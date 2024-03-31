@@ -10,7 +10,8 @@ import Expenses from '../pages/Expenses';
 import ResetPassword from '../pages/ResetPassword';
 import ForgotPassword from '../pages/ForgotPassword';
 import Explore from '../pages/Explore';
-
+import UserProfile from '../pages/UserProfile';
+import EditProfile from '../pages/EditProfile';
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -26,6 +27,8 @@ const router = createBrowserRouter(
             <Route path="/Expenses/:id" element={<Expenses />} />
             <Route path="/ForgotPassword" element={<ForgotPassword/>} />
             <Route path="/ResetPassword" element={<ResetPassword />} />
+            <Route path="/UserProfile" element={<UserProfile />} />
+            <Route path="/EditProfile" element={<EditProfile />} />
 
         </Route>
     )

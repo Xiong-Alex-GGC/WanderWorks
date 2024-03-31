@@ -9,13 +9,15 @@ import AccommodationContainer from "../components/Containers/AccommodationContai
 import ExpenseForm from "../components/Forms/ExpenseForm";
 import { Container, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import WeatherComponent from "../components/Weather/DemoWeather";
+import WeatherComponent from "../components/Weather/WeatherComponent";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { ButtonGroup, DropdownButton, Dropdown } from "react-bootstrap";
 import ExpenseContainer from "../components/Containers/ExpenseContainer";
 import BackupActivityForm from "../components/Forms/BackupActivityForm";
 import ItineraryCalendar from "../components/Calendar/ItineraryCalendar";
+import TestWeather from "../components/Weather/TestWeatherAPI";
+
 
 const Itinerary = () => {
   const { id } = useParams();
@@ -194,6 +196,8 @@ const Itinerary = () => {
                 </Link>
               </div>
               <hr /> */}
+              <TestWeather itineraryData={itineraryData} />
+
               <hr />
               <ButtonGroup vertical style={{ margin: "0 20px 0 18%" }}>
                 <DropdownButton
@@ -349,9 +353,7 @@ const Itinerary = () => {
               >
                 <ExpenseContainer itineraryData={itineraryData} />
               </div>
-
-              <hr />
-              <WeatherComponent itineraryData={itineraryData} />
+              {/* <WeatherComponent itineraryData={itineraryData} /> */}
 
               <hr />
               <h5>Create Backup Plan</h5>
