@@ -12,6 +12,8 @@ import { Link } from "react-router-dom";
 import WeatherComponent from "../components/Weather/DemoWeather";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import { ButtonGroup, DropdownButton, Dropdown } from "react-bootstrap";
+import ExpenseContainer from "../components/Containers/ExpenseContainer";
 
 const Itinerary = () => {
   const { id } = useParams();
@@ -22,6 +24,12 @@ const Itinerary = () => {
   const [showExpenseForm, setShowExpenseForm] = useState(false);
 
   const [isLoading, setIsLoading] = useState(true); // Initialize isLoading as true
+
+  const [isActive, setIsActive] = useState({ id: "schedule" }); // To handle different tabs
+
+  useEffect(() => {
+    console.log(isActive);
+  }, [isActive]);
 
   useEffect(() => {
     const fetchItineraryData = async () => {
@@ -68,6 +76,12 @@ const Itinerary = () => {
 
   const closeExpenseForm = () => {
     setShowExpenseForm(false);
+  };
+
+  const hideShowDiv = (e) => {
+    setIsActive({
+      id: e.target.id,
+    });
   };
 
   function renderOverBudgetWarning(remainingBudget) {
@@ -153,26 +167,95 @@ const Itinerary = () => {
 
               {/* <p>Start Date: {itineraryData.startDate}</p>
                 <p>End Date: {itineraryData.endDate}</p> */}
-              <div>{calculateRemainingBudget()}</div>
+              {/* <div>{calculateRemainingBudget()}</div>
 
               <div>
                 <Link to={`/Expenses/${itineraryData.id}`}>
                   Click here to see your additional expenses
                 </Link>
               </div>
+              <hr /> */}
               <hr />
+              <ButtonGroup vertical style={{ margin: "0 20px 0 18%" }}>
+                <DropdownButton
+                  as={ButtonGroup}
+                  title="New"
+                  id="bg-vertical-dropdown-1"
+                  variant="success"
+                >
+                  <Dropdown.Item eventKey="1">
+                    {" "}
+                    <Button
+                      onClick={() => setShowActivityForm(true)}
+                      className="me-2"
+                      variant="success"
+                    >
+                      Activity
+                    </Button>
+                  </Dropdown.Item>
+                  <Dropdown.Item eventKey="2">
+                    <Button
+                      onClick={() => setShowAccommodationForm(true)}
+                      className="me-2"
+                      variant="success"
+                    >
+                      Accommodation
+                    </Button>
+                  </Dropdown.Item>
+                  <Dropdown.Item eventKey="3">
+                    <Button
+                      onClick={() => setShowExpenseForm(true)}
+                      className="me-2"
+                      variant="success"
+                    >
+                      Expense
+                    </Button>
+                  </Dropdown.Item>
+                </DropdownButton>
+              </ButtonGroup>
+
+              <Button
+                variant="outline-success"
+                style={{ margin: "0 25px 0 25px" }}
+                id="schedule"
+                onClick={(e) => {
+                  hideShowDiv(e);
+                }}
+              >
+                Schedule
+              </Button>
+              <Button
+                variant="outline-success"
+                style={{ margin: "0 25px 0 25px" }}
+                id="accomodation"
+                onClick={(e) => {
+                  hideShowDiv(e);
+                }}
+              >
+                Accomodation
+              </Button>
+              <Button
+                variant="outline-success"
+                style={{ margin: "0 25px 0 25px" }}
+                id="expense"
+                onClick={(e) => {
+                  hideShowDiv(e);
+                }}
+              >
+                Expense
+              </Button>
+              {/* <Link to={`/Expenses/${itineraryData.id}`}>
+                <Button
+                  variant="outline-success"
+                  style={{ margin: "0 20px 0 20%" }}
+                >
+                  More Expenses
+                </Button>
+              </Link> */}
 
               {/* Use Modal to open popup */}
-              <h3>Functions</h3>
-              <Button
-                onClick={() => setShowActivityForm(true)}
-                className="me-2"
-                variant="success"
-              >
-                New Activity
-              </Button>
+
               <Modal
-                size="lg"
                 show={showActivityForm}
                 onHide={() => setShowActivityForm(false)}
                 aria-labelledby="activity-modal"
@@ -188,15 +271,7 @@ const Itinerary = () => {
                 </Modal.Body>
               </Modal>
 
-              <Button
-                onClick={() => setShowAccommodationForm(true)}
-                className="me-2"
-                variant="success"
-              >
-                New Accommodation
-              </Button>
               <Modal
-                size="lg"
                 show={showAccommodationForm}
                 onHide={() => setShowAccommodationForm(false)}
                 aria-labelledby="accomodation-modal"
@@ -214,21 +289,13 @@ const Itinerary = () => {
                 </Modal.Body>
               </Modal>
 
-              <Button
-                onClick={() => setShowExpenseForm(true)}
-                className="me-2"
-                variant="success"
-              >
-                New Expense
-              </Button>
               <Modal
-                size="lg"
                 show={showExpenseForm}
                 onHide={() => setShowExpenseForm(false)}
                 aria-labelledby="expense-modal"
               >
                 <Modal.Header closeButton>
-                  <Modal.Title id="expense-modal">New Expense</Modal.Title>
+                  <Modal.Title id="expense-modal">New Expenses</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                   <ExpenseForm
@@ -238,12 +305,31 @@ const Itinerary = () => {
                 </Modal.Body>
               </Modal>
               <hr />
+              <div
+                className={
+                  isActive.id === "schedule" ? `schedule` : "schedule d-none"
+                }
+              >
+                {/* d-none is a Bootstrap class that hides an element by setting display: none; */}
+                <ActivityContainer itineraryData={itineraryData} />
+              </div>
+              <div
+                className={
+                  isActive.id === "accomodation"
+                    ? `accomodation`
+                    : "accomodation d-none"
+                }
+              >
+                <AccommodationContainer itineraryData={itineraryData} />
+              </div>
 
-              <ActivityContainer itineraryData={itineraryData} />
-
-              <hr />
-
-              <AccommodationContainer itineraryData={itineraryData} />
+              <div
+                className={
+                  isActive.id === "expense" ? `expense` : "expense d-none"
+                }
+              >
+                <ExpenseContainer itineraryData={itineraryData} />
+              </div>
 
               <hr />
               <WeatherComponent itineraryData={itineraryData} />

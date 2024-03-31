@@ -97,8 +97,8 @@ const ItineraryCard = ({
   // Function to format date to "MM-DD-YYYY"
   const formatDate2 = (dateString) => {
     const date = new Date(dateString);
-    const month = date.getMonth(); // Get month
-    const day = date.getDate(); // Get day
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Zero-padding the month
+    const day = String(date.getDate()).padStart(2, "0"); // Zero-padding the day
     const year = date.getFullYear(); // Get year
     return `${month}-${day}-${year}`;
   };

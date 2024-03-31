@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import ActivityForm from "../Forms/ActivityForm";
-import { Card, Button, Container, Col } from "react-bootstrap";
+import { Card, Button, Container, Col, Row } from "react-bootstrap";
 
 const ActivityCard = ({
   address,
@@ -65,39 +65,89 @@ const ActivityCard = ({
     }
   };
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Zero-padding the month
+    const day = String(date.getDate()).padStart(2, "0"); // Zero-padding the day
+    const year = date.getFullYear(); // Get year
+    return `${month}-${day}-${year}`;
+  };
+
   function renderData() {
     return (
       <Container>
-        <Col>Testing</Col>
-        <Col style={{ borderLeft: "1px solid black", height: "100%" }}>
-          Testing
-        </Col>
-        <Col>
-          <Card border="primary" style={{ width: "25rem" }}>
-            <Card.Header>
-              {date}: {startTime} - {endTime}
-            </Card.Header>
-            <Card.Body>
-              <Card.Title>{name}</Card.Title>
-              <Card.Text>
-                <p>
-                  <strong>Address:</strong> {address}
-                </p>
-                <p>
-                  <strong>Expense:</strong> {expense}
-                </p>
-                <p>
-                  <strong>Notes:</strong> {notes}
-                </p>
-                <p>
-                  <strong>Tags:</strong> {tags}
-                </p>
-              </Card.Text>
-              <Button onClick={onDelete}>Delete</Button>
-              <Button onClick={onEdit}>Edit</Button>
-            </Card.Body>
-          </Card>
-        </Col>
+        <Row>
+          <Col
+            xs
+            lg="2"
+            style={{
+              backgroundColor: "#F48989",
+              color: "#fff",
+              padding: "0 10px",
+              textAlign: "right",
+              boxShadow: "6px 6px 2px 0px rgba(0, 0, 0, 0.5)",
+            }}
+          >
+            <Row style={{ justifyContent: "flex-end", padding: "5px" }}>
+              <h5>{formatDate(date)}</h5>
+            </Row>
+            <Row
+              style={{ justifyContent: "flex-end", padding: "10px 5px 0 0" }}
+            >
+              <h5>-- {startTime} --</h5>
+            </Row>
+            <Row
+              style={{ justifyContent: "flex-end", padding: "150px 5px 0 0" }}
+            >
+              <h5>-- {endTime} --</h5>
+            </Row>
+          </Col>
+          <Col
+            style={{
+              height: "100%",
+              textAlign: "left",
+            }}
+          >
+            <Card
+              border="grey"
+              style={{
+                width: "25rem",
+                margin: "10px",
+                boxShadow: "10px 10px 3px 0px rgba(0, 0, 0, 0.5)",
+              }}
+            >
+              <Card.Header>{name}</Card.Header>
+              <Card.Body>
+                <Card.Title>{address}</Card.Title>
+                <Card.Text>
+                  <p>
+                    <strong>Expense:</strong> {expense}
+                  </p>
+                  <p>
+                    <strong>Notes:</strong> {notes}
+                  </p>
+                  <p>
+                    <strong>Tags:</strong> {tags}
+                  </p>
+                </Card.Text>
+                <Button
+                  onClick={onDelete}
+                  variant="outline-danger"
+                  style={{ margin: "0 0 0 220px" }}
+                >
+                  Delete
+                </Button>
+                <Button
+                  onClick={onEdit}
+                  variant="outline-primary"
+                  style={{ margin: "0 0 0 10px" }}
+                >
+                  Edit
+                </Button>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
       </Container>
     );
   }

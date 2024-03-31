@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
-import { Alert } from "react-bootstrap";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
+import { ActRow, ActColLeft, ActColRight } from "../../styles/Forms-Styles";
+import { Button, Alert, Form } from "react-bootstrap";
 
 const AccommodationsForm = ({ itineraryData, accommodationData, onClose }) => {
   const [accommodationName, setAccommodationName] = useState("");
@@ -103,81 +104,90 @@ const AccommodationsForm = ({ itineraryData, accommodationData, onClose }) => {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>
-            Name:
-            <input
-              type="text"
-              value={accommodationName}
-              onChange={(e) => setAccommodationName(e.target.value)}
-            />
-          </label>
-        </div>
-        <div>
-          <label>
-            Address:
-            <input
-              type="text"
-              value={address}
-              onChange={(e) => setAccommodationAddress(e.target.value)}
-            />
-          </label>
-        </div>
-        <div>
-          <label>
-            Check-in Date:
-            <DatePicker
-              selected={startDate}
-              onChange={(date) => setStartDate(date)}
-            />
-          </label>
-        </div>
-        <div>
-          <label>
-            Check-out Date:
-            <DatePicker
-              selected={endDate}
-              onChange={(date) => setEndDate(date)}
-            />
-          </label>
-        </div>
-        <div>
-          <label>
-            Total Cost:
-            <input
-              type="number"
-              value={expenses}
-              onChange={(e) => setExpenses(e.target.value)}
-            />
-          </label>
-          The total cost of your stay listed on your e-receipt
-        </div>
-        <div>
-          <label>
-            Confirmation number or link to email:
-            <input
-              type="text"
-              value={confirmation}
-              onChange={(e) => setConfirmation(e.target.value)}
-            />
-          </label>
-        </div>
-        <div>
-          <label>
-            Notes:
-            <br />
-            <textarea
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-            />
-          </label>
-        </div>
-        {error && <Alert variant="danger">{error}</Alert>}
-        <button type="submit">{isEditMode ? "Update" : "Submit"}</button>
-      </form>
-    </div>
+    <Form
+      style={{
+        background: "#ecf7fc",
+        border: "1px solid grey",
+        borderRadius: "5px",
+        textAlign: "center",
+        padding: "10px 0px 10px 0px",
+        width: "460px",
+      }}
+      onSubmit={handleSubmit}
+    >
+      <ActRow>
+        <ActColLeft sm={5}>Name:</ActColLeft>
+        <ActColRight sm={7}>
+          <input
+            type="text"
+            value={accommodationName}
+            onChange={(e) => setAccommodationName(e.target.value)}
+          />
+        </ActColRight>
+      </ActRow>
+      <ActRow>
+        <ActColLeft sm={5}>Address:</ActColLeft>
+        <ActColRight sm={7}>
+          <input
+            type="text"
+            value={address}
+            onChange={(e) => setAccommodationAddress(e.target.value)}
+          />
+        </ActColRight>
+      </ActRow>
+      <ActRow>
+        <ActColLeft sm={5}>Check-in Date:</ActColLeft>
+        <ActColRight sm={7}>
+          <DatePicker
+            selected={startDate}
+            onChange={(date) => setStartDate(date)}
+          />
+        </ActColRight>
+      </ActRow>
+      <ActRow>
+        <ActColLeft sm={5}>Check-out Date:</ActColLeft>
+        <ActColRight sm={7}>
+          <DatePicker
+            selected={endDate}
+            onChange={(date) => setEndDate(date)}
+          />
+        </ActColRight>
+      </ActRow>
+      <ActRow>
+        <ActColLeft sm={5}>Total Cost:</ActColLeft>
+        <ActColRight sm={7}>
+          <input
+            type="number"
+            value={expenses}
+            onChange={(e) => setExpenses(e.target.value)}
+          />
+        </ActColRight>
+      </ActRow>
+      <ActRow>
+        <ActColLeft sm={5}>Confirmation #:</ActColLeft>
+        <ActColRight sm={7}>
+          <input
+            type="text"
+            value={confirmation}
+            onChange={(e) => setConfirmation(e.target.value)}
+          />
+        </ActColRight>
+      </ActRow>
+      <ActRow>
+        <ActColLeft sm={5}>Notes:</ActColLeft>
+        <ActColRight sm={7}>
+          <textarea value={notes} onChange={(e) => setNotes(e.target.value)} />
+        </ActColRight>
+      </ActRow>
+      {error && (
+        <ActRow>
+          <Alert variant="danger">{error}</Alert>
+        </ActRow>
+      )}
+      <Button variant="primary" type="submit">
+        {isEditMode ? "Update" : "Submit"}
+      </Button>
+    </Form>
   );
 };
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Form, Button, Alert, Container, Row, Col } from "react-bootstrap";
+import { Button, Alert, Container, Row, Col, Form } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
@@ -118,30 +118,40 @@ const ActivityForm = ({ itineraryData, activityData, onClose }) => {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label>
-          Activity Name:
+    <Form
+      style={{
+        background: "#ecf7fc",
+        border: "1px solid grey",
+        borderRadius: "5px",
+        textAlign: "center",
+        padding: "10px 0px 10px 0px",
+        width: "460px",
+      }}
+      onSubmit={handleSubmit}
+    >
+      <ActRow>
+        <ActColLeft sm={5}>Activity Name:</ActColLeft>
+        <ActColRight sm={7}>
           <input
             type="text"
             value={activityName}
             onChange={(e) => setActivityName(e.target.value)}
           />
-        </label>
-      </div>
+        </ActColRight>
+      </ActRow>
       {renderActivityID()}
-      <div>
-        <label>
-          Date:
+      <ActRow>
+        <ActColLeft sm={5}>Date:</ActColLeft>
+        <ActColRight sm={7}>
           <DatePicker
             selected={activityDate}
             onChange={(date) => setActivityDate(date)}
           />
-        </label>
-      </div>
-      <div>
-        <label>
-          Type:
+        </ActColRight>
+      </ActRow>
+      <ActRow>
+        <ActColLeft sm={5}>Type:</ActColLeft>
+        <ActColRight sm={7}>
           <select
             value={type}
             onChange={(e) => setActivityType(e.target.value)}
@@ -153,67 +163,69 @@ const ActivityForm = ({ itineraryData, activityData, onClose }) => {
             <option value="tour">Tour</option>
             <option value="other">Other</option>
           </select>
-        </label>
-      </div>
-      <div>
-        <label>
-          Start Time:
+        </ActColRight>
+      </ActRow>
+      <ActRow>
+        <ActColLeft sm={5}>Start Time:</ActColLeft>
+        <ActColRight sm={7}>
           <input
             type="time"
             value={startTime}
             onChange={(e) => setStartTime(e.target.value)}
           />
-        </label>
-      </div>
-      <div>
-        <label>
-          End Time:
+        </ActColRight>
+      </ActRow>
+      <ActRow>
+        <ActColLeft sm={5}>End Time:</ActColLeft>
+        <ActColRight sm={7}>
           <input
             type="time"
             value={endTime}
             onChange={(e) => setEndTime(e.target.value)}
           />
-        </label>
-      </div>
-      <div>
-        <label>
-          Expenses:
+        </ActColRight>
+      </ActRow>
+      <ActRow>
+        <ActColLeft sm={5}>Expenses:</ActColLeft>
+        <ActColRight sm={7}>
           <input
             type="number"
             value={expenses}
             onChange={(e) => setExpenses(e.target.value)}
           />
-        </label>
-      </div>
-      <div>
-        <label>
-          Tags (custom):
+        </ActColRight>
+      </ActRow>
+      <ActRow>
+        <ActColLeft sm={5}>Tags (custom):</ActColLeft>
+        <ActColRight sm={7}>
           <input
             type="text"
             value={tags}
             onChange={(e) => setTags(e.target.value)}
-          />{" "}
+          />
           {/*change to process as a set of tags; */}
           {/* user should ideally hit enter, not submitting the form, and then rendering the tag as a removable item */}
-        </label>
-      </div>
-      <div>
-        <label>
+        </ActColRight>
+      </ActRow>
+      <ActRow>
+        <ActColLeft sm={5}>Address:</ActColLeft>
+        <ActColRight sm={7}>
           <ActivityLocationSuggestion
             onSuggestionSelect={handleLocationSelect}
           />
-        </label>
-      </div>
-      <div>
-        <label>
-          Notes:
-          <br />
+        </ActColRight>
+      </ActRow>
+      <ActRow>
+        <ActColLeft sm={5}>Notes:</ActColLeft>
+        <ActColRight sm={7}>
           <textarea value={notes} onChange={(e) => setNotes(e.target.value)} />
-        </label>
-      </div>
+        </ActColRight>
+      </ActRow>
       {error && <Alert variant="danger">{error}</Alert>}
-      <button type="submit">{isEditMode ? "Update" : "Submit"}</button>
-    </form>
+      <Button variant="primary" type="submit">
+        {isEditMode ? "Update" : "Submit"}
+      </Button>
+    </Form>
   );
 };
 

@@ -23,7 +23,7 @@ const ActivityContainer = ({ itineraryData }) => {
 
   return (
     <div>
-      <h1>Your Activities</h1>
+      <h1 style={{ textAlign: "center" }}>Your Schedule</h1>
       <div className="activities-container">
         {activities.map((activity) => (
           <ActivityCard
@@ -35,16 +35,11 @@ const ActivityContainer = ({ itineraryData }) => {
 
         <style jsx>{`
           .activities-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            margin: 20px;
-            border: "1px solid #ccc";
-            padding: "15px";
-            margin: "10px";
-            borderradius: "8px";
-            boxshadow: "0 4px 8px rgba(0, 0, 0, 0.1)";
-            backgroundcolor: "#fff";
+            display: fluid;
+            margin: 0 15% 0 15%;
+            justify-content: center; /* Horizontally center the items */
+            align-items: center; /* Vertically center the items */
+            width: 100%;
           }
         `}</style>
       </div>

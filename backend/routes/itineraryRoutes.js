@@ -12,18 +12,4 @@ router.delete("/delete-itinerary", itineraryController.deleteItinerary);
 
 // // Add to itineraryRoutes.js
 
-<<<<<<< HEAD
-=======
-// const routerz = express.Router();
-// const { addBackupPlan } = require("../controllers/itineraryController.js");
-
-// // ... other routes ...
-
-// router.post("/itineraries/:id/backupPlan", addBackupPlan);
-
-// // ... other routes ...
-
-// module.exports = router;
-
->>>>>>> Thu
 export default router;

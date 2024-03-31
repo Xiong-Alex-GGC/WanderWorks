@@ -99,11 +99,7 @@ export const addExpenses = async (id, expense) => {
     console.error("Error updating itinerary with tracked expense:", error);
     //res.status(500).json({ error: 'Internal Server Error' });
   }
-<<<<<<< HEAD
-}
-=======
 };
->>>>>>> Thu
 
 /*
 export const removeExpenses = async (id, expense) => {
