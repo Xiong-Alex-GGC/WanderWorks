@@ -2,8 +2,8 @@ import { addDoc, collection, getDocs, updateDoc, doc, getDoc, query, where, dele
 import db from '../firebaseConfig.js';
 import * as itineraryController from '../controllers/itineraryController.js';
 import * as itineraryModel from './itineraryModel.js';
-import * as OverlappingItemError from '../errors/OverlappingItemError.js';
-import * as ItemOutOfBoundsError from '../errors/ItemOutOfBoundsError.js';
+import { OverlappingItemError } from '../errors/OverlappingItemError.js';
+import { ItemOutOfBoundsError } from '../errors/ItemOutOfBoundsError.js';
 
 const accommodationCollection = collection(db, 'Accommodation'); //connecting to the database by specifying table name
 
@@ -43,10 +43,10 @@ function compareDates(date1, date2) { //returns -1 if date1 is before date2, 0 i
 function checkOverlappingAccommodations(existingAccommodations, newAccommodation) {
   return existingAccommodations.some(accommodation => {
     const first = compareDates(extractDate(accommodation.startDate), extractDate(newAccommodation.startDate));
-    if(first == 0) {//they both start on the same date and thus definitely overlap
-      throw new OverlappingItemError("This accommodation would overlap with another accommodation you've set");
-    } else if(accommodation.id == newAccommodation.id) { //this accommodation is being updated, thus ignore
+    if(newAccommodation.id == accommodation.id) {//updating an accommodation, therefore ignore itself in this check
       return false;
+    } else if(first == 0) {//they both start on the same date and thus definitely overlap
+      throw new OverlappingItemError("This accommodation would overlap with another accommodation you've set");
     } else {
       //if first is -1, the existing accommodation comes first
       if(first == -1) {
@@ -102,7 +102,7 @@ export const createAccommodation = async (data) => {
     checkOverlappingAccommodations(existingAccommodations, data);
   } catch (OverlappingItemError) {
     console.error('Overlapping accommodations:', OverlappingItemError);
-    throw new OverlappingItemError("This accommodation would overlap with other accommodations");
+    throw OverlappingItemError;
   }
 
   //throw an error if one of the fail conditions above is met, otherwise complete request
@@ -134,7 +134,7 @@ export const updateAccommodation = async (id, data) => {
     checkOverlappingAccommodations(existingAccommodations, data);
   } catch (OverlappingItemError) {
     console.error('Overlapping accommodations:', OverlappingItemError);
-    throw new OverlappingItemError("This accommodation would overlap with other accommodations");
+    throw OverlappingItemError;
   }
 
   //get before and after expenses

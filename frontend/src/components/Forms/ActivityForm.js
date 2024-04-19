@@ -49,9 +49,11 @@ const ActivityForm = ({ itineraryData, activityData, onClose }) => {
         setError("Please enter a valid positive number for expenses");
         return;
       }
+    } else {
+      numericExpense = 0;
     }
 
-    //Check date to ensure it's within the confines of the itinerary it's on
+    //Make sure end time is not before start time
 
     try {
       if (isEditMode) {
@@ -73,8 +75,8 @@ const ActivityForm = ({ itineraryData, activityData, onClose }) => {
         );
 
         console.log("Activity updated successfully:", response.data);
-
         onClose();
+
       } else {
         const response = await axios.post(
           "http://localhost:4000/api/create-activity",
@@ -94,16 +96,19 @@ const ActivityForm = ({ itineraryData, activityData, onClose }) => {
           }
         );
 
-        // Handle successful response (if needed)
         console.log("Activity created successfully:", response.data);
-
-        // Close the modal after successful form submission
         onClose();
       }
-    } catch (error) {
+      window.location.reload();
+    } catch (error) { //This block shouldn't be reachable now
       // Handle error
-      console.error("Error creating activity:", error);
-      setError(error);
+      if(error.response) {
+        console.error("Error creating activity plan:", error.response.data);
+        setError(error.response.data.error);
+      } else {
+        console.error("Error creating activity:", error);
+        setError("An unexpected error has occured. Please try again.");
+      }
     }
   };
 

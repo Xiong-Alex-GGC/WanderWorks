@@ -1,4 +1,6 @@
 import * as accommodationModel from '../models/accommodationModel.js';
+import { OverlappingItemError } from '../errors/OverlappingItemError.js';
+import { ItemOutOfBoundsError } from '../errors/ItemOutOfBoundsError.js';
 //import { createAccommodation as createAccommodationModel } from '../models/accommodationModel.js';
 
 export const getAllAccommodations = async (req, res) => {
@@ -30,7 +32,11 @@ export const createAccommodation = async (req, res) => {
     res.send({ msg: "Accommodation Added" });
   } catch (error) {
     console.error('Error creating Accommodation data:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    if(error instanceof ItemOutOfBoundsError || error instanceof OverlappingItemError) {
+      res.status(400).json({ error: error.message });
+    } else {
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
   }
 };
 
@@ -45,7 +51,11 @@ export const updateAccommodation = async (req, res) => {
     res.send({ msg: "Accommodation Updated" });
   } catch (error) {
     console.error('Error updating Accommodation data:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    if(error instanceof ItemOutOfBoundsError || error instanceof OverlappingItemError) {
+      res.status(400).json({ error: error.message });
+    } else {
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
   }
 };
 
