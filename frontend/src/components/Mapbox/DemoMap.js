@@ -18,7 +18,7 @@ const MapComponent = ({ itineraryData, activitiesData, selectedDay }) => {
 
 
   useEffect(() => {
-    if (map.current) return; 
+    if (map.current) return;
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: "mapbox://styles/mapbox/streets-v11",
@@ -28,8 +28,6 @@ const MapComponent = ({ itineraryData, activitiesData, selectedDay }) => {
 
     map.current.addControl(new mapboxgl.NavigationControl(), "top-right");
   }, []);
-
-  console.log(activitiesData);
 
   useEffect(() => {
     //modify this to account for view type & then replace all instances of activitiesData with filteredData
@@ -42,25 +40,39 @@ const MapComponent = ({ itineraryData, activitiesData, selectedDay }) => {
     setFilteredActivities(filtered);
   }, [selectedDay, activitiesData]);
 
-  console.log("=======================")
-  console.log(filteredActivities);
-
   const addEventMarkers = async () => {
-    if (!map.current || !activitiesData) return; 
+    if (!map.current || !activitiesData) return;
 
     activitiesData.forEach((activity) => {
-      const { coords } = activity; 
+      const { coords } = activity;
       if (coords) {
         // Create a marker for each activity
         const marker = new mapboxgl.Marker()
-          .setLngLat([coords[0], coords[1]]) // Set longitude and latitude
-          .addTo(map.current); // Add the marker to the map
+          .setLngLat([coords[0], coords[1]]) 
+          .addTo(map.current); 
+
+        // event listener to open the popup on click
+        marker.getElement().addEventListener("mouseenter", () => {
+          const markerPopup = new mapboxgl.Popup()
+            .setLngLat([coords[0], coords[1]])
+            .setHTML(`<p>${activity.name}</p>`)
+            .addTo(map.current);
+
+            map.current.on("mouseenter", () => {
+              markerPopup.addTo(map.current);
+            });
+  
+            // Add mouseleave event listener 
+            map.current.on("mouseleave", () => {
+              markerPopup.remove();
+            });
+        });
       }
     });
   };
 
   const addRoutes = async () => {
-    if (!map.current || !map.current.isStyleLoaded()) return; 
+    if (!map.current || !map.current.isStyleLoaded()) return;
 
     // Sort activitiesData by date and then by startTime
     activitiesData.sort((a, b) => {
@@ -74,7 +86,7 @@ const MapComponent = ({ itineraryData, activitiesData, selectedDay }) => {
     for (let i = 0; i < activitiesData.length - 1; i++) {
       const activity = activitiesData[i];
       const nextActivity = activitiesData[i + 1];
-      const transportationType = nextActivity.transportationType;
+      const transportationType = nextActivity.type;
       const start = activity.coords;
       const end = nextActivity.coords;
       const sourceID = "route" + i;
@@ -96,6 +108,7 @@ const MapComponent = ({ itineraryData, activitiesData, selectedDay }) => {
             },
           });
 
+
           map.current.addLayer({
             id: sourceID,
             type: "line",
@@ -109,6 +122,37 @@ const MapComponent = ({ itineraryData, activitiesData, selectedDay }) => {
               "line-width": 5,
             },
           });
+
+          // Calculate midpoint coordinates for the popup
+          const midPointCoordinates = [
+            (start[0] + end[0]) / 2,
+            (start[1] + end[1]) / 2,
+          ];
+
+          const distanceInKilometers = data.routes[0].distance / 1000;
+          const durationInMinutes = data.routes[0].duration / 60;
+          const popupContentStyle = "font-weight: bold;";
+
+          // Create a popup for each route
+          const popup = new mapboxgl.Popup({ offset: 25, closeButton: false })
+            .setHTML(`
+            <div style="${popupContentStyle}">
+              ${nextActivity.transportationType} | ${activity.name} - ${nextActivity.name} <br/> 
+              ${distanceInKilometers} km | 
+              Time: ${durationInMinutes} minutes
+            </div>`)
+            .setLngLat(midPointCoordinates);
+
+          // mouseenter event listener 
+          map.current.on("mouseenter", sourceID, () => {
+            popup.addTo(map.current);
+          });
+
+          // mouseleave event listener
+          map.current.on("mouseleave", sourceID, () => {
+            popup.remove();
+          });
+
         } catch (error) {
           console.error("Error fetching route:", error);
         }
@@ -154,6 +198,7 @@ const MapComponent = ({ itineraryData, activitiesData, selectedDay }) => {
             "line-dasharray": [2, 2],
           },
         });
+
       }
     }
   };
@@ -161,7 +206,6 @@ const MapComponent = ({ itineraryData, activitiesData, selectedDay }) => {
   const removeRoutes = () => {
     if (!map.current || !map.current.isStyleLoaded()) return; // Check if the map's style is loaded
 
-    // Use a more robust way to find all route-related layers and sources
     const routeIds = map.current
       .getStyle()
       .layers.filter((layer) => layer.id.startsWith("route"))
@@ -178,23 +222,20 @@ const MapComponent = ({ itineraryData, activitiesData, selectedDay }) => {
   };
 
   useEffect(() => {
-    if (!map.current) return; // Ensure map instance is available
+    if (!map.current) return;
 
-    // Listen for the 'load' event on the map
     map.current.on("load", () => {
-      // Now that the map is loaded, it's safe to call these functions
       addRoutes();
       addEventMarkers();
     });
 
-    // Clean up event listener when component unmounts or if map instance changes
     return () => {
       if (map.current) {
         map.current.off("load", addRoutes);
         map.current.off("load", addEventMarkers);
       }
     };
-  }, [map.current]); // Dependency array includes map.current to re-run effect if map instance changes
+  }, [map.current]);
 
   useEffect(() => {
     if (!map.current) return;
@@ -209,7 +250,7 @@ const MapComponent = ({ itineraryData, activitiesData, selectedDay }) => {
   const handleViewChange = (e) => {
     const selectedValue = e.target.value;
     setView(selectedValue);
-    console.log("Selected view:", selectedValue); // Log the selected value
+    console.log("Selected view:", selectedValue);
   };
 
   return (

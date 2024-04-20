@@ -6,6 +6,8 @@ import axios from "axios";
 import ActivityLocationSuggestion from "../Mapbox/ActivityLocationSuggeston";
 import { ActRow, ActColLeft, ActColRight } from "../../styles/Forms-Styles";
 
+import ItineraryLocationSuggestion from "../Mapbox/ItineraryLocationSuggestion";
+
 const ActivityForm = ({ itineraryData, activityData, onClose }) => {
   const [activityName, setActivityName] = useState("");
   const [activityDate, setActivityDate] = useState(new Date());
@@ -17,6 +19,7 @@ const ActivityForm = ({ itineraryData, activityData, onClose }) => {
   const [location, setLocation] = useState("");
   const [notes, setNotes] = useState("");
   const [activityID, setActivityID] = useState(null);
+  const [coords, setCoords] = useState([]);
 
   const [isEditMode, setIsEditMode] = useState(false);
   const [error, setError] = useState("");
@@ -71,6 +74,8 @@ const ActivityForm = ({ itineraryData, activityData, onClose }) => {
             notes: notes,
             itineraryID: itineraryData.id,
             id: activityID,
+            coords: coords
+
           }
         );
 
@@ -93,6 +98,7 @@ const ActivityForm = ({ itineraryData, activityData, onClose }) => {
             address: location,
             notes: notes,
             itineraryID: itineraryData.id,
+            coords: coords
           }
         );
 
@@ -114,7 +120,12 @@ const ActivityForm = ({ itineraryData, activityData, onClose }) => {
 
   const handleLocationSelect = (selectedLocation) => {
     setLocation(selectedLocation);
+
   };
+
+  const handleCoordsSelect = (selectedCoords) => {
+    setCoords(selectedCoords)
+  }
 
   function renderActivityID() {
     if (isEditMode) {
@@ -166,6 +177,10 @@ const ActivityForm = ({ itineraryData, activityData, onClose }) => {
           >
             <option value="">Select</option>
             <option value="transportation">Major Transportation</option>
+            <option value="plane">Plane</option>
+            <option value="driving">Driving</option>
+            <option value="cycling">Cycling</option>
+            <option value="cruise">Cruise</option>
             <option value="museum">Museum</option>
             <option value="restaurant">Restaurant</option>
             <option value="tour">Tour</option>
@@ -222,8 +237,14 @@ const ActivityForm = ({ itineraryData, activityData, onClose }) => {
       <ActRow>
         <ActColLeft sm={5}>Address:</ActColLeft>
         <ActColRight sm={7}>
-          <ActivityLocationSuggestion
+          {/* ===============Broken atm================= */}
+          {/* <ActivityLocationSuggestion
             onSuggestionSelect={handleLocationSelect}
+            onCoordsSelect={handleCoordsSelect}
+          /> */}
+          <ItineraryLocationSuggestion 
+            addressSelect={handleLocationSelect}
+            coordsSelect={handleCoordsSelect}
           />
         </ActColRight>
       </ActRow>
@@ -232,6 +253,7 @@ const ActivityForm = ({ itineraryData, activityData, onClose }) => {
         <ActColRight sm={7}>
           <textarea
             class="form-control"
+            
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             style={{ width: "207px" }}

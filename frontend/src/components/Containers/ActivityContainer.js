@@ -11,14 +11,16 @@ const ActivityContainer = ({ itineraryData }) => {
         const response = await axios.get(
           `http://localhost:4000/api/activities/${itineraryData.id}`
         );
-        setActivities(response.data);
+        // Sort activities by date before setting state
+        const sortedActivities = response.data.sort((a, b) => new Date(a.date) - new Date(b.date));
+        setActivities(sortedActivities);
       } catch (error) {
-        console.error("Error fetching itineraries:", error);
+        console.error("Error fetching activities:", error);
       }
     };
 
     fetchActivities();
-  }, []);
+  }, [itineraryData.id]);
 
   return (
     <div>
