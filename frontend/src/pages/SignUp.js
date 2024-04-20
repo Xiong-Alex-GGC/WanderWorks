@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { signUpWithEmailandPassword, signInWithGoogle, signInWithFacebook, signInWithGithub } from "../firebase/auth"; // Import signInWithGithub
+import { signUpWithEmailAndPassword, signInWithGoogle, signInWithFacebook, signInWithGithub } from "../firebase/auth"; // Import signInWithGithub
   /*
 import React from 'react';
 import { useState } from "react";
@@ -16,6 +16,7 @@ import {
   ImgCol,
   FormCol,
 } from '../styles/Auth-Styles';
+import axios from 'axios';
 
 const SignUp = () => {
     const [email, setEmail] = useState("");
@@ -27,18 +28,41 @@ const SignUp = () => {
 
     const signUp = async (e) => {
       e.preventDefault();
-      if(!isRegistering) {
+      if (!isRegistering) {
         setIsRegistering(true);
         try {
-            await signUpWithEmailandPassword(email, password);
+          const userCredential = await signUpWithEmailAndPassword(email, password);
+          const uid = userCredential.user.uid; // Accessing the UID
+
+          createUser(uid); //create new user for  user collection
         } catch (err) {
-            console.error(err);
+          console.error(err);
         } finally {
-            setIsRegistering(false); // Ensure we reset isRegistering state
-            //setError(err);
+          setIsRegistering(false); // Ensure we reset isRegistering state
+          //setError(err);
         }
       }
     };
+
+    const createUser = async (uid) => {
+
+      try {
+        await axios.post(
+          "http://localhost:4000/api/create-user", //the endpoint to create a user
+          {
+            //the response after sending a request to the backend
+
+             userID: uid,
+          }
+        );
+  
+        console.log("new user created with uid:" + uid);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+
 
     const signUpWithGoogle = async (e) => {
       e.preventDefault();

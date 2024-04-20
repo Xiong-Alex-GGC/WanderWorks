@@ -253,6 +253,7 @@ const ActivityForm = ({ itineraryData, activityData, onClose }) => {
         <ActColRight sm={7}>
           <textarea
             class="form-control"
+            
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             style={{ width: "207px" }}
