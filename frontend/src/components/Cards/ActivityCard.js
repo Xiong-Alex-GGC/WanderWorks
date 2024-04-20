@@ -8,6 +8,7 @@ const ActivityCard = ({
   date,
   endTime,
   expense,
+  type,
   name,
   notes,
   startTime,
@@ -20,6 +21,7 @@ const ActivityCard = ({
     date,
     endTime,
     expense,
+    type,
     name,
     notes,
     startTime,
@@ -44,6 +46,7 @@ const ActivityCard = ({
     //submission logic handled in form
     setEditMode(false);
     setActivityDataToEdit(null);
+    //window.location.reload();
   };
 
   const onDelete = async () => {
@@ -120,6 +123,9 @@ const ActivityCard = ({
               <Card.Body>
                 <Card.Title>{address}</Card.Title>
                 <Card.Text>
+                  <p>
+                    <strong>Activity Type:</strong> {type}
+                  </p>
                   <p>
                     <strong>Expense:</strong> {expense}
                   </p>

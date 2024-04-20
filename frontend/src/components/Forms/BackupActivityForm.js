@@ -96,6 +96,7 @@ const BackupActivityForm = ({ itineraryData, activityData, onClose }) => {
         // Close the modal after successful form submission
         onClose();
       }
+      window.location.reload();
     } catch (error) {
       // Handle error
       console.error('Error creating activity:', error);

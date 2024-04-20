@@ -1,5 +1,7 @@
 // controllers/activityController.js
 import * as activityModel from "../models/activityModel.js";
+import { OverlappingItemError } from '../errors/OverlappingItemError.js';
+import { ItemOutOfBoundsError } from '../errors/ItemOutOfBoundsError.js';
 
 //Retriseves all activities from the db and returns it
 export const getAllActivities = async (req, res) => {
@@ -32,7 +34,11 @@ export const createActivity = async (req, res) => {
     res.send({ msg: "Activity Added" });
   } catch (error) {
     console.error("Error creating Activity data:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    if(error instanceof ItemOutOfBoundsError || error instanceof OverlappingItemError) {
+      res.status(400).json({ error: error.message });
+    } else {
+      res.status(500).json({ error: "Internal Server Error" });
+    }
   }
 };
 
@@ -41,17 +47,17 @@ export const updateActivity = async (req, res) => {
   //console.log("Controller reached when attempting to update and activity");
   try {
     const id = req.body.id;
-    console.log("ID of activity being updated, controller class: " + id);
     const data = req.body;
-    console.log(
-      "ID of activity being updated but pulled from data: " + data.id
-    );
 
     await activityModel.updateActivity(id, data);
     res.send({ msg: "Activity Updated" });
   } catch (error) {
-    console.error("Error updating Activity data:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    console.error('Error updating Activity data:', error);
+    if(error instanceof ItemOutOfBoundsError || error instanceof OverlappingItemError) {
+      res.status(400).json({ error: error.message });
+    } else {
+      res.status(500).json({ error: "Internal Server Error" });
+    }
   }
 };
 
@@ -91,3 +97,11 @@ export const deleteActivity = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+/*
+  update and creaate will return a number depending on the results:
+  -1 - item set before the trip starts
+  0 - good request
+  1 - item set after trip ends
+  2 - item overlaps with other item
+*/

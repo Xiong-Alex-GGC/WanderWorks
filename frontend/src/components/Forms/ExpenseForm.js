@@ -75,6 +75,7 @@ const ExpenseForm = ({ itineraryData, expenseData, onClose }) => {
         // Close the modal after successful form submission
         onClose();
       }
+      window.location.reload();
     } catch (error) {
       console.error("Error creating Expense:", error);
       // Handle error if needed

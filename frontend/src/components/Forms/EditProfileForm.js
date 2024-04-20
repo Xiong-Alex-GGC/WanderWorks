@@ -43,6 +43,7 @@ const EditProfileForm = ({ userId, onSubmit }) => { // Define userId as a prop
       if (onSubmit) {
         onSubmit(response.data); // Optional: Pass data to parent component
       }
+      //window.location.reload();
     } catch (error) {
       console.error('Error creating profile:', error);
     }

@@ -97,9 +97,18 @@ const AccommodationsForm = ({ itineraryData, accommodationData, onClose }) => {
         // Close the modal after successful form submission
         onClose();
       }
+      window.location.reload();
     } catch (error) {
       // Handle error
-      console.error("Error creating accommodation plan:", error);
+      if(error.response) {
+        console.error("Error creating accommodation plan:", error.response.data);
+        setError(error.response.data.error);
+      } else {
+        console.error("Error creating accommodation:", error);
+        setError("An unexpected error has occured. Please try again.");
+      }
+      
+
     }
   };
 
@@ -204,19 +213,3 @@ const AccommodationsForm = ({ itineraryData, accommodationData, onClose }) => {
 };
 
 export default AccommodationsForm;
-
-/*
-<div>
-            <label>
-              Number of rooms (remove later?):
-              <input type="number" value={rooms} onChange={(e) => setRooms(e.target.value)} />
-            </label>
-          </div>
-
-<div>
-            <label>
-              Price per night (Remove later?):
-              <input type="number" value={pricePerNight} onChange={(e) => setPricePerNight(e.target.value)} />
-            </label>
-          </div>
-*/
