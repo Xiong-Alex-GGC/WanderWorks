@@ -5,7 +5,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 import ActivityLocationSuggestion from "../Mapbox/ActivityLocationSuggeston";
 import { ActRow, ActColLeft, ActColRight } from "../../styles/Forms-Styles";
-
 import ItineraryLocationSuggestion from "../Mapbox/ItineraryLocationSuggestion";
 
 const ActivityForm = ({ itineraryData, activityData, onClose }) => {
@@ -74,14 +73,12 @@ const ActivityForm = ({ itineraryData, activityData, onClose }) => {
             notes: notes,
             itineraryID: itineraryData.id,
             id: activityID,
-            coords: coords
-
+            coords: coords,
           }
         );
 
         console.log("Activity updated successfully:", response.data);
         onClose();
-
       } else {
         const response = await axios.post(
           "http://localhost:4000/api/create-activity",
@@ -98,7 +95,7 @@ const ActivityForm = ({ itineraryData, activityData, onClose }) => {
             address: location,
             notes: notes,
             itineraryID: itineraryData.id,
-            coords: coords
+            coords: coords,
           }
         );
 
@@ -106,9 +103,10 @@ const ActivityForm = ({ itineraryData, activityData, onClose }) => {
         onClose();
       }
       window.location.reload();
-    } catch (error) { //This block shouldn't be reachable now
+    } catch (error) {
+      //This block shouldn't be reachable now
       // Handle error
-      if(error.response) {
+      if (error.response) {
         console.error("Error creating activity plan:", error.response.data);
         setError(error.response.data.error);
       } else {
@@ -120,12 +118,11 @@ const ActivityForm = ({ itineraryData, activityData, onClose }) => {
 
   const handleLocationSelect = (selectedLocation) => {
     setLocation(selectedLocation);
-
   };
 
   const handleCoordsSelect = (selectedCoords) => {
-    setCoords(selectedCoords)
-  }
+    setCoords(selectedCoords);
+  };
 
   function renderActivityID() {
     if (isEditMode) {
@@ -242,7 +239,7 @@ const ActivityForm = ({ itineraryData, activityData, onClose }) => {
             onSuggestionSelect={handleLocationSelect}
             onCoordsSelect={handleCoordsSelect}
           /> */}
-          <ItineraryLocationSuggestion 
+          <ItineraryLocationSuggestion
             addressSelect={handleLocationSelect}
             coordsSelect={handleCoordsSelect}
           />
@@ -253,7 +250,6 @@ const ActivityForm = ({ itineraryData, activityData, onClose }) => {
         <ActColRight sm={7}>
           <textarea
             class="form-control"
-            
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             style={{ width: "207px" }}

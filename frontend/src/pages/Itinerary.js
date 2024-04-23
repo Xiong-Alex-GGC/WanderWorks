@@ -18,7 +18,6 @@ import BackupActivityForm from "../components/Forms/BackupActivityForm";
 import ItineraryCalendar from "../components/Calendar/ItineraryCalendar";
 import TestWeather from "../components/Weather/TestWeatherAPI";
 
-
 const Itinerary = () => {
   const { id } = useParams();
   const [itineraryData, setItineraryData] = useState(null);
@@ -28,7 +27,6 @@ const Itinerary = () => {
   const [showExpenseForm, setShowExpenseForm] = useState(false);
   const [showBackupActivityForm, setShowBackupActivityForm] = useState(false);
   const [selectedDay, setSelectedDay] = useState(null);
-
 
   const [isLoading, setIsLoading] = useState(true); // Initialize isLoading as true
 
@@ -83,10 +81,6 @@ const Itinerary = () => {
 
   const closeExpenseForm = () => {
     setShowExpenseForm(false);
-  };
-
-  const openBackupActivityForm = () => {
-    setShowBackupActivityForm(true);
   };
 
   const closeBackupActivityForm = () => {
@@ -234,6 +228,15 @@ const Itinerary = () => {
                       Expense
                     </Button>
                   </Dropdown.Item>
+                  <Dropdown.Item eventKey="4">
+                    <Button
+                      onClick={() => setShowBackupActivityForm(true)}
+                      className="me-2"
+                      variant="success"
+                    >
+                      Backup
+                    </Button>
+                  </Dropdown.Item>
                 </DropdownButton>
               </ButtonGroup>
 
@@ -327,6 +330,24 @@ const Itinerary = () => {
                   />
                 </Modal.Body>
               </Modal>
+
+              <Modal
+                show={showBackupActivityForm}
+                onHide={() => setShowBackupActivityForm(false)}
+                aria-labelledby="backup-modal"
+              >
+                <Modal.Header closeButton>
+                  <Modal.Title id="backup-modal">
+                    New Backup Activity
+                  </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  <BackupActivityForm
+                    itineraryData={itineraryData}
+                    onClose={closeBackupActivityForm}
+                  />
+                </Modal.Body>
+              </Modal>
               <hr />
               <div
                 className={
@@ -354,16 +375,6 @@ const Itinerary = () => {
                 <ExpenseContainer itineraryData={itineraryData} />
               </div>
               {/* <WeatherComponent itineraryData={itineraryData} /> */}
-
-              <hr />
-              <h5>Create Backup Plan</h5>
-              <button onClick={openBackupActivityForm}>Backup Activity</button>
-              {showBackupActivityForm && (
-                <BackupActivityForm
-                  itineraryData={itineraryData}
-                  onClose={closeBackupActivityForm}
-                />
-              )}
             </Col>
 
             <Col>
