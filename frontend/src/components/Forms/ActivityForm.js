@@ -5,6 +5,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 import ActivityLocationSuggestion from "../Mapbox/ActivityLocationSuggeston";
 import { ActRow, ActColLeft, ActColRight } from "../../styles/Forms-Styles";
+import ItineraryLocationSuggestion from "../Mapbox/ItineraryLocationSuggestion";
 
 const ActivityForm = ({ itineraryData, activityData, onClose }) => {
   const [activityName, setActivityName] = useState("");
@@ -17,6 +18,7 @@ const ActivityForm = ({ itineraryData, activityData, onClose }) => {
   const [location, setLocation] = useState("");
   const [notes, setNotes] = useState("");
   const [activityID, setActivityID] = useState(null);
+  const [coords, setCoords] = useState([]);
 
   const [isEditMode, setIsEditMode] = useState(false);
   const [error, setError] = useState("");
@@ -155,12 +157,12 @@ const ActivityForm = ({ itineraryData, activityData, onClose }) => {
             notes: notes,
             itineraryID: itineraryData.id,
             id: activityID,
+            coords: coords,
           }
         );
 
         console.log("Activity updated successfully:", response.data);
         onClose();
-
       } else {
         const response = await axios.post(
           "http://localhost:4000/api/create-activity",
@@ -177,6 +179,7 @@ const ActivityForm = ({ itineraryData, activityData, onClose }) => {
             address: location,
             notes: notes,
             itineraryID: itineraryData.id,
+            coords: coords,
           }
         );
 
@@ -184,9 +187,10 @@ const ActivityForm = ({ itineraryData, activityData, onClose }) => {
         onClose();
       }
       window.location.reload();
-    } catch (error) { //This block shouldn't be reachable now
+    } catch (error) {
+      //This block shouldn't be reachable now
       // Handle error
-      if(error.response) {
+      if (error.response) {
         console.error("Error creating activity plan:", error.response.data);
         setError(error.response.data.error);
       } else {
@@ -198,6 +202,10 @@ const ActivityForm = ({ itineraryData, activityData, onClose }) => {
 
   const handleLocationSelect = (selectedLocation) => {
     setLocation(selectedLocation);
+  };
+
+  const handleCoordsSelect = (selectedCoords) => {
+    setCoords(selectedCoords);
   };
 
   function renderActivityID() {
@@ -250,6 +258,10 @@ const ActivityForm = ({ itineraryData, activityData, onClose }) => {
           >
             <option value="">Select</option>
             <option value="transportation">Major Transportation</option>
+            <option value="plane">Plane</option>
+            <option value="driving">Driving</option>
+            <option value="cycling">Cycling</option>
+            <option value="cruise">Cruise</option>
             <option value="museum">Museum</option>
             <option value="restaurant">Restaurant</option>
             <option value="tour">Tour</option>
@@ -306,8 +318,14 @@ const ActivityForm = ({ itineraryData, activityData, onClose }) => {
       <ActRow>
         <ActColLeft sm={5}>Address:</ActColLeft>
         <ActColRight sm={7}>
-          <ActivityLocationSuggestion
+          {/* ===============Broken atm================= */}
+          {/* <ActivityLocationSuggestion
             onSuggestionSelect={handleLocationSelect}
+            onCoordsSelect={handleCoordsSelect}
+          /> */}
+          <ItineraryLocationSuggestion
+            addressSelect={handleLocationSelect}
+            coordsSelect={handleCoordsSelect}
           />
         </ActColRight>
       </ActRow>
