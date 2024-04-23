@@ -7,7 +7,7 @@ import ItineraryLocationSuggestion from '../Mapbox/ItineraryLocationSuggestion';
 import { useAuth } from '../../context/authContext';
 import { fetchDefaultPhotoByLocation } from '../../pexels/pexels';
 
-const ItineraryForm = ({ onTripIDReceived }) => {
+const ItineraryForm = ({ onTripIDReceived, itineraryData, onTripUpdated }) => {
     const [tripName, setTripName] = useState('');
     const [location, setLocation] = useState('');
     const [coords, setCoords] = useState('');
@@ -16,11 +16,23 @@ const ItineraryForm = ({ onTripIDReceived }) => {
     const [budget, setBudget] = useState('');
     const { currentUser } = useAuth();
     const [error, setError] = useState('');
+    const [itineraryID, setItineraryID] = useState(null);
 
     const [backgroundImage, setBackgroundImage] = useState(''); // State to hold the background image URL
+    const [isEditMode, setIsEditMode] = useState(false);
 
     useEffect(() => {
-      // Call the fetchPhotosByLocation function with the location
+      if(itineraryData) {
+        setStartDate(itineraryData.startDate);
+        setEndDate(itineraryData.endDate);
+        setLocation(itineraryData.location);
+        setTripName(itineraryData.tripName);
+        setBudget(itineraryData.budget);
+        setItineraryID(itineraryData.id);
+        setIsEditMode(true);
+      }
+      
+        // Call the fetchPhotosByLocation function with the location
       fetchDefaultPhotoByLocation(location)
         .then(imageUrl => {
           setBackgroundImage(imageUrl);
@@ -30,7 +42,41 @@ const ItineraryForm = ({ onTripIDReceived }) => {
         });
     }, [location]);
 
+    function extractDate(dateString) {
+        const dateString1 = dateString.split("T")[0];
+        return dateString1.split("-");
+    }
 
+    function compareDates(date1String, date2String) { //good cases: -1, 0
+        const date1 = extractDate(date1String);
+        const date2 = extractDate(date2String);
+
+        if(date1[0] == date2[0]) {
+            //years are equal
+            if(date1[1] == date2[1]) {
+                //months are equal
+                if(date1[2] == date2[2]) {
+                    //days are equal
+                    return 0;
+                } else if (date1[2] < date2[2]) {
+                    //day 1 is before day2
+                    return -1;
+                } else {
+                    //day 1 is after day2
+                    return 1;
+                }
+            } else if (date1[1] < date2[1]) {
+                //date1's month is before date2's
+                return -1;
+            } else {
+                return 1;
+            }
+        } else if (date1[0] < date2[0]) {
+            return -1;
+        } else {
+            return 1;
+        }
+    }
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -46,15 +92,34 @@ const ItineraryForm = ({ onTripIDReceived }) => {
             }
         }
         
-        //const curDate = new Date();
         if (endDate < startDate) {
             setError("End date cannot be before the start date");
             return; // Exit the function early
         }
         //check the current date
+        const currentDay = new Date().toDateString();
+        if(compareDates(startDate.toDateString(), currentDay) == 1) {
+            setError("Your trip cannot start before the current day");
+            return;
+        }
 
         try {
-            const response = await axios.post('http://localhost:4000/api/create-itinerary', {
+            if(isEditMode) {
+                const response = await axios.post('http://localhost:4000/api/update', {
+                tripName: tripName,
+                location: location,
+                coords: coords,
+                startDate: startDate,
+                endDate: endDate,
+
+                budget: numericBudget,
+                imgURL: backgroundImage,
+                id: itineraryID
+                });
+                
+                onTripUpdated();
+            } else {
+                const response = await axios.post('http://localhost:4000/api/create-itinerary', {
                 tripName: tripName,
                 location: location,
                 coords: coords,
@@ -66,10 +131,11 @@ const ItineraryForm = ({ onTripIDReceived }) => {
                 userID: currentUser.uid,
                 imgURL: backgroundImage
 
-            });
+                });
 
-            // Return TripID
-            onTripIDReceived(response.data.id)
+                // Return TripID
+                onTripIDReceived(response.data.id)
+            }
 
         } catch (error) {
             console.error('Error creating Itinerary:', error);
@@ -154,7 +220,7 @@ const ItineraryForm = ({ onTripIDReceived }) => {
                 {/* {tripID && <Alert variant="success">Trip created successfully. Trip ID: {tripID}</Alert>} */}
 
                 <Button variant="primary" type="submit">
-                    Create Itinerary
+                    {isEditMode ? "Update" : "Submit"}
                 </Button>
             </Form>
         </Container>

@@ -44,10 +44,13 @@ const AccommodationsForm = ({ itineraryData, accommodationData, onClose }) => {
       return;
     }
 
-    //const checkInDateObj = date ? new Date(startDate) : null;
-    //const checkOutDateObj = date ? new Date(endDate) : null;
-    //if for some reason the date being stored as a string in the database becomes a problem, this should fix it;
-    //replace start and end date in the create-accommodation request with the objects above and handle as needed within the backend
+    //make sure the checkout day is not before the checkin day
+    if(endDate < startDate) {
+      setError("Check-out date cannot be before the check-in date");
+      return;
+    }
+
+    //We'll ignore the possibility of the check-in date being set to before the current date in case the user decided not to track this until after or something
 
     try {
       //const response = null;
