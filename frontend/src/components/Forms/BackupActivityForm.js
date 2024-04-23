@@ -42,6 +42,64 @@ const BackupActivityForm = ({ itineraryData, activityData, onClose }) => {
     }
   }, [activityData]);
 
+  function extractDate(dateString) {
+    return dateString.split("T")[0].split("-");
+  }
+
+  function compareDates(date1String, date2String) { //good cases: -1, 0
+    const date1 = extractDate(date1String);
+    const date2 = extractDate(date2String);
+
+    if(date1[0] == date2[0]) {
+        //years are equal
+        if(date1[1] == date2[1]) {
+            //months are equal
+            if(date1[2] == date2[2]) {
+                //days are equal
+                return 0;
+            } else if (date1[2] < date2[2]) {
+                //day 1 is before day2
+                return -1;
+            } else {
+                //day 1 is after day2
+                return 1;
+            }
+        } else if (date1[1] < date2[1]) {
+            //date1's month is before date2's
+            return -1;
+        } else {
+            return 1;
+        }
+    } else if (date1[0] < date2[0]) {
+        return -1;
+    } else {
+        return 1;
+    }
+  }
+
+  function compareTimes(time1, time2) {
+    const [time1Hours, time1Minutes] = time1.split(':');
+    const [time2Hours, time2Minutes] = time2.split(':');
+
+    if(parseInt(time1Hours) == parseInt(time2Hours)) {
+      //same hour
+      if(parseInt(time1Minutes) == parseInt(time2Minutes)) {
+        return 0;
+      } else if(parseInt(time1Minutes) > parseInt(time2Minutes)) {
+        //time1 is after time2
+        return 1;
+      } else {
+        //time 1 is before time 2
+        return -1;
+      }
+    } else if(parseInt(time1Hours) > parseInt(time2Hours)) {
+      //time 1 is after time2
+      return 1;
+    } else {
+      return -1;
+    }
+  }
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -55,7 +113,32 @@ const BackupActivityForm = ({ itineraryData, activityData, onClose }) => {
       }
     }
 
-    //Check date to ensure it's within the confines of the itinerary it's on
+    const currentDay = new Date();
+    const hours = currentDay.getHours().toString().padStart(2, '0');
+    const minutes = currentDay.getMinutes().toString().padStart(2, '0');
+    const currentTime = `${hours}:${minutes}`;
+    //Make sure end time is not before start time
+    const startEndComparison = compareTimes(startTime, endTime);
+    if(startEndComparison == 0) {
+      setError("An activity cannot start and end at the same time.");
+      return;
+    } else if (startEndComparison == 1) {
+      setError("The activity's end time cannot be before the start time.");
+      return;
+    } //else good
+    const startCurrentDayComparison = compareDates(activityDate.toDateString(), currentDay.toDateString());
+    if(startCurrentDayComparison == -1) {
+      setError("The date for your activity has already passed");
+      return;
+    } else if(startCurrentDayComparison == 0) { //same day
+      const startCurrentTimeComparison = compareTimes(startTime.toString(), currentTime);
+      if(startCurrentTimeComparison == -1) {
+        setError("It is already past " + startTime + ", please set the start time for later.\n" +
+        "If this is something you're actively doing and want to track for budget purposes, you can\n" +
+        "track it as an additional expense with the expense logger");
+        return;
+      } //ignore same time and later time
+    }
 
     try {
       if (isEditMode) {

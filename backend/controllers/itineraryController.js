@@ -41,6 +41,7 @@ export const updateItinerary = async (req, res) => {
   try {
     const id = req.body.id;
     const data = req.body;
+    console.log("New Data of Itinerary ", data);
 
     await itineraryModel.updateItinerary(id, data);
     res.send({ msg: "Itinerary Updated" });
