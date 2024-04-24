@@ -31,7 +31,7 @@ const ItineraryCalendar = ({onSelectDay}) => {
     const [itineraries, setItineraries] = useState([]);
     const { currentUser } = useAuth();
     const [selectedItinerary, setSelectedItinerary] = useState(null);
-    const [mode, setMode] = useState('full'); // Track the mode of the calendar
+    const [mode, setMode] = useState('week');
 
     useEffect(() => {
         const fetchItineraries = async () => {
@@ -77,13 +77,6 @@ const ItineraryCalendar = ({onSelectDay}) => {
         });
 
         setSelectedItinerary(clickedItinerary);
-    };
-
-    const formatDate = (dateString) => {
-        const date = new Date(dateString);
-        const month = date.toLocaleString('default', { month: 'short' });
-        const day = date.getDate();
-        return `${month} ${day}`;
     };
 
     const renderCalendarWeeks = () => {

@@ -93,41 +93,6 @@ const Itinerary = () => {
     });
   };
 
-  function renderOverBudgetWarning(remainingBudget) {
-    if (remainingBudget < 0) {
-      return (
-        <>
-          <p>
-            You are expected to go over budget by {Math.abs(remainingBudget)}
-          </p>
-        </>
-      );
-    } else {
-      return <></>;
-    }
-  }
-
-  const calculateRemainingBudget = () => {
-    if (itineraryData.budget != null) {
-      const remainingBudget =
-        itineraryData.budget - itineraryData.totalExpenses; //need to delete any itineraries where budget and totalExpenses are currently strings
-      return (
-        <>
-          <p>
-            ${remainingBudget} of ${itineraryData.budget} budget remaining
-          </p>
-          <p>{renderOverBudgetWarning(remainingBudget)}</p>
-        </>
-      );
-    } else {
-      return (
-        <>
-          <p>You have spent ${itineraryData.totalExpenses} on this trip</p>
-        </>
-      );
-    }
-  };
-
   const handleDaySelect = (day) => {
     setSelectedDay(day);
   };
