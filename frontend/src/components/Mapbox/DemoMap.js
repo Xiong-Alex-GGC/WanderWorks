@@ -18,6 +18,52 @@ const MapComponent = ({ itineraryData, activitiesData, selectedDay }) => {
 
 
   useEffect(() => {
+
+    //remove any existings markers & routes
+    removeMarkers();
+    removeRoutes();
+    
+    let filtered = activitiesData;
+  
+    // Filter activities by Day
+    if (view === "day") {
+      filtered = activitiesData.filter(activity => {
+        const activityDate = new Date(activity.date).toLocaleDateString();
+        const selectedDate = selectedDay ? new Date(selectedDay).toLocaleDateString() : new Date().toLocaleDateString();
+        return activityDate === selectedDate;
+      });
+    } else if (view === "week") {
+      // Filter activities by week
+      filtered = activitiesData.filter(activity => {
+        const selectedDate = selectedDay ? new Date(selectedDay) : new Date();
+        const activityDate = new Date(activity.date);
+        const startOfWeek = new Date(selectedDate);
+        startOfWeek.setDate(selectedDate.getDate() - selectedDate.getDay());
+    
+        return (
+          activityDate >= startOfWeek &&
+          activityDate < new Date(startOfWeek.setDate(startOfWeek.getDate() + 7))
+        );
+      });
+    } else if (view === "month") {
+      // Filter activities by month
+      filtered = activitiesData.filter(activity => {
+        const selectedDate = selectedDay ? new Date(selectedDay) : new Date();
+        const activityDate = new Date(activity.date);
+        const startOfMonth = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
+        const endOfMonth = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 0);
+    
+        return activityDate >= startOfMonth && activityDate <= endOfMonth;
+      });
+    }
+  
+    setFilteredActivities(filtered);
+
+  }, [selectedDay, activitiesData, view]);
+
+
+
+  useEffect(() => {
     if (map.current) return;
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
@@ -30,26 +76,20 @@ const MapComponent = ({ itineraryData, activitiesData, selectedDay }) => {
   }, []);
 
   useEffect(() => {
-    //modify this to account for view type & then replace all instances of activitiesData with filteredData
-    const filtered = activitiesData.filter(activity => {
-      const activityDate = new Date(activity.date).toLocaleDateString();
-      const selectedDate = new Date(selectedDay).toLocaleDateString();
-      // Compare if the activity occurs on the same day as selectedDay
-      return activityDate === selectedDate;
-    });
-    setFilteredActivities(filtered);
-  }, [selectedDay, activitiesData]);
+    if (!map.current || !filteredActivities) return;
+    addEventMarkers();
+    addRoutes();
+  }, [filteredActivities]);
 
   const addEventMarkers = async () => {
-    if (!map.current || !activitiesData) return;
 
-    activitiesData.forEach((activity) => {
+    filteredActivities.forEach((activity) => {
       const { coords } = activity;
       if (coords) {
         // Create a marker for each activity
         const marker = new mapboxgl.Marker()
-          .setLngLat([coords[0], coords[1]]) 
-          .addTo(map.current); 
+          .setLngLat([coords[0], coords[1]])
+          .addTo(map.current);
 
         // event listener to open the popup on click
         marker.getElement().addEventListener("mouseenter", () => {
@@ -58,14 +98,14 @@ const MapComponent = ({ itineraryData, activitiesData, selectedDay }) => {
             .setHTML(`<p>${activity.name}</p>`)
             .addTo(map.current);
 
-            map.current.on("mouseenter", () => {
-              markerPopup.addTo(map.current);
-            });
-  
-            // Add mouseleave event listener 
-            map.current.on("mouseleave", () => {
-              markerPopup.remove();
-            });
+          map.current.on("mouseenter", () => {
+            markerPopup.addTo(map.current);
+          });
+
+          // Add mouseleave event listener 
+          map.current.on("mouseleave", () => {
+            markerPopup.remove();
+          });
         });
       }
     });
@@ -75,7 +115,7 @@ const MapComponent = ({ itineraryData, activitiesData, selectedDay }) => {
     if (!map.current || !map.current.isStyleLoaded()) return;
 
     // Sort activitiesData by date and then by startTime
-    activitiesData.sort((a, b) => {
+    filteredActivities.sort((a, b) => {
       if (a.date !== b.date) {
         return new Date(a.date) - new Date(b.date);
       } else {
@@ -83,9 +123,9 @@ const MapComponent = ({ itineraryData, activitiesData, selectedDay }) => {
       }
     });
 
-    for (let i = 0; i < activitiesData.length - 1; i++) {
-      const activity = activitiesData[i];
-      const nextActivity = activitiesData[i + 1];
+    for (let i = 0; i < filteredActivities.length - 1; i++) {
+      const activity = filteredActivities[i];
+      const nextActivity = filteredActivities[i + 1];
       const transportationType = nextActivity.type;
       const start = activity.coords;
       const end = nextActivity.coords;
@@ -160,22 +200,22 @@ const MapComponent = ({ itineraryData, activitiesData, selectedDay }) => {
         // Check if the line crosses the antimeridian
         const crossesAntimeridian =
           Math.abs(
-            activitiesData[i].coords[0] - activitiesData[i + 1].coords[0]
+            filteredActivities[i].coords[0] - filteredActivities[i + 1].coords[0]
           ) > 180;
 
         // Adjust coordinates if the line crosses the antimeridian
         const coordinates = crossesAntimeridian
           ? [
-            activitiesData[i].coords,
+            filteredActivities[i].coords,
             [
-              activitiesData[i + 1].coords[0] +
-              (activitiesData[i + 1].coords[0] < activitiesData[i].coords[0]
+              filteredActivities[i + 1].coords[0] +
+              (filteredActivities[i + 1].coords[0] < filteredActivities[i].coords[0]
                 ? 360
                 : -360),
-              activitiesData[i + 1].coords[1],
+                filteredActivities[i + 1].coords[1],
             ],
           ]
-          : [activitiesData[i].coords, activitiesData[i + 1].coords];
+          : [filteredActivities[i].coords, filteredActivities[i + 1].coords];
 
         // Add layer to map
         map.current.addLayer({
@@ -202,6 +242,7 @@ const MapComponent = ({ itineraryData, activitiesData, selectedDay }) => {
       }
     }
   };
+  
 
   const removeRoutes = () => {
     if (!map.current || !map.current.isStyleLoaded()) return; // Check if the map's style is loaded
@@ -220,6 +261,19 @@ const MapComponent = ({ itineraryData, activitiesData, selectedDay }) => {
       }
     });
   };
+
+  const removeMarkers = () => {
+    if (!map.current) return;
+  
+    // Get all map markers
+    const markers = document.querySelectorAll(".mapboxgl-marker");
+  
+    // Remove each marker from the map
+    markers.forEach(marker => {
+      marker.remove();
+    });
+  };
+  
 
   useEffect(() => {
     if (!map.current) return;
