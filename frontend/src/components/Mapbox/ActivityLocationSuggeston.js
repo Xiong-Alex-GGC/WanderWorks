@@ -9,7 +9,7 @@ const ActivityLocationSuggestion = ({ onSuggestionSelect, onCoordsSelect }) => {
 
   const [suggestions, setSuggestions] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [blurTimeout, setBlurTimeout] = useState(null); 
+  const [blurTimeout, setBlurTimeout] = useState(null);
 
   const handleInputChange = (event) => {
     const inputAddress = event.target.value;
@@ -73,18 +73,24 @@ const ActivityLocationSuggestion = ({ onSuggestionSelect, onCoordsSelect }) => {
       clearTimeout(blurTimeout);
       setBlurTimeout(null);
     }
-  }
+  };
 
   return (
-    <div>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        marginBottom: "20px",
+      }}
+    >
       <Form.Control
         type="text"
-        placeholder="Activity Address"
+        placeholder="Find Location"
         value={address}
         onChange={handleInputChange}
-        onFocus={handleInputFocus} 
+        onFocus={handleInputFocus}
         onBlur={handleInputBlur}
-        style={{ width: "207px" }}
+        style={{ width: "500px" }}
         required
       />
       {/* Display suggestions */}
