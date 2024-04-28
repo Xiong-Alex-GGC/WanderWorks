@@ -12,25 +12,79 @@ The codebase for WanderWorks is hosted on GitHub. You can access it at [WanderWo
 
 ## Progress Tracking Tool
 
-We use JIRA as our primary progress tracking tool. JIRA helps us manage tasks, track progress, and ensure a smooth workflow throughout the development process.
+We use [JIRA](https://jira.ggc.edu/projects/WAN/summary) as our primary progress tracking tool. JIRA helps us manage tasks, track progress, and ensure a smooth workflow throughout the development process.
+
 
 ## Communication
 
-Our team communicates through Discord. Feel free to join our Discord server to engage in discussions, ask questions, and stay up-to-date with the latest project developments.
+Our team communicates through Discord and Teams. Feel free to join our Discord server to engage in discussions, ask questions, and stay up-to-date with the latest project developments.
 
 ## Team Members
 
-1. **Alex Xiong**
-   - Role: Lead Developer
+1. **Alex Xiong** 🐯
+   - Role: Code Architecture
 
-2. **Augustine Ajua**
-   - Role: Testing Lead
-
-3. **Anh Thu Nguyen**
-   - Role: UI/UX Design
-
-4. **Andrew Nosa**
-   - Role: Documentation Lead & Team Manager
-
-5. **Juston Portillo**
+2. **Juston Portillo** 🐱
    - Role: Data Modeler
+
+3. **Anh Thu Nguyen** 🐻
+   - Role: UI/UX Designer
+
+4. **Andrew Nosa** 🐺
+   - Role: Documentation Lead & Team Manager
+  
+5. **Augustine Ajua** 🐹
+   - Role: Testing Lead
+  
+## About WanderWorks
+
+> A website for planning trips, creating itinerary, adding activities, routing on map and managing budget.
+
+## Requirements
+
+To operate WanderWorks, you will require a web browser with JavaScript enabled, which is the default setting for most browsers.
+
+## Build Architecture
+WanderWorks used FERN Stack technology to build website. Below are softwares you need to install
+* [VSCode](https://code.visualstudio.com/) Framework
+* [NodeJS](https://nodejs.org/en)
+* [ReactBootStrap](https://react-bootstrap.netlify.app/) CSS/JS Library
+* [FireBase](https://firebase.google.com/) Data Modeling
+
+## Developer Installation
+1. Clone the master branch of this repository
+```
+git clone https://github.com/Xiong-Alex-GGC/WanderWorks.git
+```
+2. Open back-end folder in VSCode window, open terminal
+Make sure to install all resources
+```
+npm install
+```
+Run back-end (connected to data on Firebase)
+```
+nodemon app.js
+```
+If you're getting an error about script not being allowed, open powershell and run the command
+```
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+Then go back toback-end and re-run
+```
+nodemon app.js
+```
+
+3. Open front-end folder in a separate VSCode window, open terminal
+Make sure to install all resources
+```
+npm install
+```
+Run front-end to see the website
+```
+npm start
+```
+
+## License
+
+This website is protected under the [GNU General Public License](https://www.gnu.org/licenses/gpl-3.0.html). You are free to utilize it, on the condition that any alterations you make to it are accessible for others to use and modify in a similar way.
+
