@@ -56,12 +56,13 @@ WanderWorks used FERN Stack technology to build website. Below are softwares you
 ```
 git clone https://github.com/Xiong-Alex-GGC/WanderWorks.git
 ```
-2. Open back-end folder in VSCode window, open terminal
-Make sure to install all resources
+2. Open back-end folder in VSCode window
+- Open terminal
+- Make sure to install all resources
 ```
 npm install
 ```
-Run back-end (connected to data on Firebase)
+- Run back-end (connected to data on Firebase)
 ```
 nodemon app.js
 ```
@@ -74,12 +75,13 @@ Then go back toback-end and re-run
 nodemon app.js
 ```
 
-3. Open front-end folder in a separate VSCode window, open terminal
-Make sure to install all resources
+3. Open front-end folder in a separate VSCode window
+- Open terminal
+- Make sure to install all resources
 ```
 npm install
 ```
-Run front-end to see the website
+- Run front-end to see the website
 ```
 npm start
 ```
