@@ -28,7 +28,7 @@ Our team communicates through Discord and Teams. Feel free to join our Discord s
    - Role: Data Modeler
 
 3. **Anh Thu Nguyen** 🐻
-   - Role: UI/UX Designer
+   - Role: UI/UX Designer, Documentation
 
 4. **Andrew Nosa** 🐺
    - Role: Documentation Lead & Team Manager
@@ -70,7 +70,7 @@ If you're getting an error about script not being allowed, open powershell and r
 ```
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
-Then go back toback-end and re-run
+Then go back to back-end and re-run
 ```
 nodemon app.js
 ```
